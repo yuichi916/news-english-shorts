@@ -1,0 +1,70 @@
+{
+  "id": "2026-02-28_nvidia_earnings",
+  "date": "2026-02-28",
+  "topic": "NVIDIA posts record $68B but stock drops",
+  "theme": "midnight",
+  "hook_text": "過去最高の決算なのに株価暴落？",
+  "sources": [
+    {"name": "Fortune", "url": "fortune.com/2026/02/25/nvidia-nvda-earnings-q4-results"},
+    {"name": "Bloomberg", "url": "bloomberg.com/news/videos/2026-02-26/nvidia-shares-slide"},
+    {"name": "CNBC", "url": "cnbc.com/2026/02/26/nvidia-nvda-stock-price-q4-earnings"},
+    {"name": "Investing.com", "url": "investing.com/analysis/nvidia-delivers-perfection-but-market-has-concerns"}
+  ],
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "CNBC"},
+    {"sentence_idx": 1, "source": "Fortune"},
+    {"sentence_idx": 2, "source": "Bloomberg"},
+    {"sentence_idx": 3, "source": "CNBC"},
+    {"sentence_idx": 4, "source": "Investing.com"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "COUNTER"},
+    {"sentence_idx": 3, "role": "DETAIL"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "mission": {
+    "ja": "NVIDIAの四半期売上は何十億ドル？英語で聞き取ろう",
+    "answer_ja": "答え: $68.1 billion — record quarterly revenue, up 73%（681億ドル、前年比73%増の過去最高）"
+  },
+  "narration": {
+    "text": "NVIDIA posted record quarterly revenue of sixty-eight point one billion dollars, up seventy-three percent year over year. Fortune highlights full-year revenue of two hundred fifteen billion, driven by insatiable AI chip demand. Bloomberg reports shares tumbled five point five percent after the forecast fell short of expectations. CNBC notes it was the worst single-day drop in ten months. Investing.com warns a growing disconnect between record earnings and valuations could signal trouble.",
+    "highlights": ["record quarterly revenue", "sixty-eight point one billion", "seventy-three percent", "insatiable", "tumbled", "five point five percent", "fell short of", "worst single-day drop", "disconnect", "signal trouble"]
+  },
+  "insight": {
+    "en": "Wall Street now prices AI stocks to perfection, meaning any miss triggers a selloff. This pattern suggests investors should watch guidance more closely than record revenue numbers.",
+    "ja": "ウォール街はAI株に完璧を織り込んでおり、わずかな期待外れが売りの引き金になる。投資家は過去最高の売上よりも、今後のガイダンスに注目すべきだ。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "NVIDIAが四半期売上681億ドルの過去最高を記録。前年比73%増。", "start": 0.0},
+    {"text": "Fortuneは通年売上2150億ドルとAIチップ需要の爆発的成長を強調。", "start": 5.0},
+    {"text": "Bloombergは見通しが期待外れで株価5.5%下落と報道。", "start": 9.0},
+    {"text": "CNBCは10ヶ月ぶりの最大の1日下落と指摘。", "start": 13.5},
+    {"text": "Investing.comは過去最高益と株価評価の乖離に警鐘。", "start": 16.5}
+  ],
+  "data_points": [
+    {"value": "$68.1B", "label": "quarterly revenue", "sentence_idx": 0},
+    {"value": "$215B", "label": "fiscal year total", "sentence_idx": 1},
+    {"value": "-5.5%", "label": "stock decline", "sentence_idx": 2}
+  ],
+  "key_phrases": [
+    {
+      "en": "insatiable demand",
+      "ja": "飽くなき需要、際限のない需要",
+      "example": "AI chip demand remains insatiable."
+    },
+    {
+      "en": "fall short of ~",
+      "ja": "～に届かない、～を下回る",
+      "example": "The forecast fell short of expectations."
+    },
+    {
+      "en": "disconnect",
+      "ja": "乖離、ずれ",
+      "example": "There is a disconnect between earnings and valuations."
+    }
+  ],
+  "cta": "いいねして明日のニュースも英語で聞こう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#NVIDIA", "#AI", "#株", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:08,300
+Samsung unveiled the Galaxy S twenty-six series at Unpacked in San Francisco, calling it the most intuitive AI phone yet.
+
+2
+00:00:08,250 --> 00:00:16,111
+Tom's Guide highlights an agentic AI that handles scheduling, summarizing, and research directly from conversations.
+
+3
+00:00:16,111 --> 00:00:23,166
+The Ultra features a two hundred megapixel camera and a breakthrough privacy display that blocks side views.
+
+4
+00:00:23,166 --> 00:00:29,986
+TechCrunch says the Ultra is zero point three millimeters thinner yet more powerful than its predecessor.
+
+5
+00:00:29,986 --> 00:00:35,402
+Engadget calls the lineup Samsung's strongest answer to Apple Intelligence.
+
+6
+00:00:35,402 --> 00:00:41,750
+Phones are evolving from tools you operate to assistants that act independently on your behalf.
+
+7
+00:00:41,750 --> 00:00:48,597
+This raises critical questions about privacy and how much control we are willing to hand over to machines.
+

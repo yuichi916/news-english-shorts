@@ -1,0 +1,23 @@
+[
+  {
+    "text": "AI is supercharging cyberattacks worldwide.",
+    "start_ms": 100.0,
+    "end_ms": 4300.0001,
+    "start_s": 0.1,
+    "end_s": 4.3
+  },
+  {
+    "text": "Attackers use AI for lateral movement across networks.",
+    "start_ms": 4250.0001,
+    "end_ms": 8638.8891,
+    "start_s": 4.25,
+    "end_s": 8.64
+  },
+  {
+    "text": "Traditional defenses are no match for AI threats.",
+    "start_ms": 8638.8891,
+    "end_ms": 12638.889200000001,
+    "start_s": 8.64,
+    "end_s": 12.64
+  }
+]

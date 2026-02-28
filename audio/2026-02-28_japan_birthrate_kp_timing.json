@@ -1,0 +1,23 @@
+[
+  {
+    "text": "The birth rate plunged to a record low.",
+    "start_ms": 100.0,
+    "end_ms": 3438.8889,
+    "start_s": 0.1,
+    "end_s": 3.44
+  },
+  {
+    "text": "Japan ranks alongside South Korea.",
+    "start_ms": 3388.8889,
+    "end_ms": 6847.222299999999,
+    "start_s": 3.39,
+    "end_s": 6.85
+  },
+  {
+    "text": "Experts attribute the crisis to soaring costs.",
+    "start_ms": 6847.2224,
+    "end_ms": 10888.8891,
+    "start_s": 6.85,
+    "end_s": 10.89
+  }
+]

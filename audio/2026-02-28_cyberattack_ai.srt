@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:08,300
+AI is supercharging cyberattacks, with breaches now completing in as little as seventy-two minutes, CNN reports.
+
+2
+00:00:08,250 --> 00:00:14,902
+The Hacker News reveals attackers are using AI to automate phishing and lateral movement at machine speed.
+
+3
+00:00:14,902 --> 00:00:22,541
+CyberPress documented the Conduent breach, where eight terabytes of data were stolen in a single ransomware attack.
+
+4
+00:00:22,541 --> 00:00:29,666
+SharkStriker logged over forty major incidents in February alone, with healthcare and finance hit hardest.
+
+5
+00:00:29,666 --> 00:00:34,736
+Experts say traditional firewalls are no match for machine-speed threats.
+
+6
+00:00:34,736 --> 00:00:43,527
+As attackers leverage AI for unprecedented speed, defenders must adopt AI-driven security or risk catastrophic breaches.
+
+7
+00:00:43,527 --> 00:00:50,027
+This algorithmic arms race will make traditional cybersecurity tools obsolete within years.
+

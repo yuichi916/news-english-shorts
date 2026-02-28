@@ -1,0 +1,24 @@
+# Generated audio (TTS output, large mp3 files)
+audio/*.mp3
+
+# Generated video output
+output/*.mp4
+output/*.ass
+output/*.txt
+output/*.jpg
+
+# SD-generated backgrounds (large, reproducible)
+backgrounds/sd_*.jpg
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store

@@ -1,0 +1,51 @@
+[
+  {
+    "text": "Apple has unveiled a major AI overhaul, with eighty-five percent of features running on-device.",
+    "start_ms": 100.0,
+    "end_ms": 6633.3335,
+    "start_s": 0.1,
+    "end_s": 6.63
+  },
+  {
+    "text": "Bloomberg reports a twenty billion dollar investment, doubling last year's budget.",
+    "start_ms": 6583.3335,
+    "end_ms": 12375.0003,
+    "start_s": 6.58,
+    "end_s": 12.38
+  },
+  {
+    "text": "CEO Tim Cook called it the biggest leap since Siri.",
+    "start_ms": 12375.0003,
+    "end_ms": 16638.8893,
+    "start_s": 12.38,
+    "end_s": 16.64
+  },
+  {
+    "text": "The Electronic Frontier Foundation, however, warns cloud processing still raises privacy concerns.",
+    "start_ms": 16638.8893,
+    "end_ms": 23694.445,
+    "start_s": 16.64,
+    "end_s": 23.69
+  },
+  {
+    "text": "Morgan Stanley predicts a twelve percent boost in iPhone sales, intensifying the AI arms race.",
+    "start_ms": 23694.445,
+    "end_ms": 30625.0007,
+    "start_s": 23.69,
+    "end_s": 30.63
+  },
+  {
+    "text": "The takeaway is clear: tech giants now compete on privacy, not just features.",
+    "start_ms": 30625.0008,
+    "end_ms": 36486.112,
+    "start_s": 30.63,
+    "end_s": 36.49
+  },
+  {
+    "text": "Apple's on-device strategy could force the entire industry to follow, reshaping how AI reaches one billion users.",
+    "start_ms": 36486.112,
+    "end_ms": 44263.8899,
+    "start_s": 36.49,
+    "end_s": 44.26
+  }
+]

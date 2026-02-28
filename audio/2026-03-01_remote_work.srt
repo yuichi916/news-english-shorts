@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:07,286
+Major corporations are ordering full-time office returns, sparking fierce backlash, AP News reports.
+
+2
+00:00:07,236 --> 00:00:15,472
+Harvard Business Review found hybrid models boost productivity by fifteen percent, contradicting several CEOs.
+
+3
+00:00:15,472 --> 00:00:20,972
+Gallup says sixty percent of workers prefer hybrid and would consider quitting.
+
+4
+00:00:20,972 --> 00:00:26,625
+McKinsey estimates remote work saves ten thousand dollars per employee annually.
+
+5
+00:00:26,625 --> 00:00:30,291
+The debate shows no signs of settling down.
+
+6
+00:00:30,291 --> 00:00:36,125
+The data overwhelmingly favors hybrid work on both productivity and retention.
+
+7
+00:00:36,125 --> 00:00:42,388
+Companies that resist flexibility risk losing top talent to competitors who embrace it.
+

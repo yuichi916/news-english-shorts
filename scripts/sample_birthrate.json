@@ -1,0 +1,70 @@
+{
+  "id": "2026-02-28_japan_birthrate",
+  "date": "2026-02-28",
+  "topic": "Japan birth rate hits record low",
+  "theme": "ocean",
+  "hook_text": "日本の出生率、また過去最低に…",
+  "sources": [
+    {"name": "NHK World", "url": "www3.nhk.or.jp/nhkworld/en/news/20260228"},
+    {"name": "The Japan Times", "url": "japantimes.co.jp/news/2026/02/birthrate"},
+    {"name": "WHO", "url": "who.int/data/fertility-rates"},
+    {"name": "Nikkei Asia", "url": "asia.nikkei.com/japan-demographics-2026"}
+  ],
+  "mission": {
+    "ja": "日本の出生率はいくつに下がった？英語で聞き取ろう",
+    "answer_ja": "答え: 1.20 — a record low for the 8th year（8年連続で過去最低の1.20）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "NHK World"},
+    {"sentence_idx": 1, "source": "The Japan Times"},
+    {"sentence_idx": 2, "source": "Nikkei Asia"},
+    {"sentence_idx": 3, "source": "WHO"},
+    {"sentence_idx": 4, "source": "The Japan Times"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "COUNTER"},
+    {"sentence_idx": 3, "role": "DETAIL"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "Japan's fertility rate has plunged to one point two zero, the eighth consecutive decline, according to NHK. The government plans to allocate three trillion yen to childcare. Yet Nikkei Asia argues financial incentives alone won't reverse the trend. The WHO ranks Japan alongside South Korea among the world's lowest. Experts attribute the crisis to soaring costs and a fundamental shift in attitudes toward marriage.",
+    "highlights": ["plunged", "one point two zero", "consecutive decline", "allocate", "three trillion yen", "argues", "reverse the trend", "ranks", "alongside", "attribute", "soaring costs", "fundamental shift"]
+  },
+  "insight": {
+    "en": "Financial incentives alone cannot reverse decades of cultural shift. Japan must transform its workplace culture, not just its policy, if it hopes to reverse this trend.",
+    "ja": "金銭的支援だけでは数十年にわたる文化の変化は覆せない。日本がこの傾向を逆転させるには、政策だけでなく職場文化そのものを変える必要がある。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "NHKによると出生率は1.20に急落。8年連続の低下。", "start": 0.0},
+    {"text": "政府は育児支援に3兆円を投じる計画。", "start": 4.5},
+    {"text": "日経アジアは金銭的インセンティブだけでは逆転できないと指摘。", "start": 7.5},
+    {"text": "WHOは日本を韓国と並ぶ世界最低水準にランク付け。", "start": 12.0},
+    {"text": "専門家は生活費高騰と結婚観の根本的変化を原因に挙げる。", "start": 16.0}
+  ],
+  "data_points": [
+    {"value": "1.20", "label": "fertility rate", "sentence_idx": 0},
+    {"value": "¥3T", "label": "childcare budget", "sentence_idx": 1},
+    {"value": "#3", "label": "lowest worldwide", "sentence_idx": 3}
+  ],
+  "key_phrases": [
+    {
+      "en": "plunge to ~",
+      "ja": "～に急落する",
+      "example": "The birth rate plunged to a record low."
+    },
+    {
+      "en": "alongside ~",
+      "ja": "～と並んで",
+      "example": "Japan ranks alongside South Korea."
+    },
+    {
+      "en": "attribute A to B",
+      "ja": "AをBの原因とする",
+      "example": "Experts attribute the crisis to soaring costs."
+    }
+  ],
+  "cta": "フォローして明日のニュースも英語で聞こう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#日本", "#少子化", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

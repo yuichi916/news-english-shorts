@@ -1,0 +1,51 @@
+[
+  {
+    "text": "AI is supercharging cyberattacks, with breaches now completing in as little as seventy-two minutes, CNN reports.",
+    "start_ms": 100.0,
+    "end_ms": 8300.0002,
+    "start_s": 0.1,
+    "end_s": 8.3
+  },
+  {
+    "text": "The Hacker News reveals attackers are using AI to automate phishing and lateral movement at machine speed.",
+    "start_ms": 8250.0002,
+    "end_ms": 14902.7781,
+    "start_s": 8.25,
+    "end_s": 14.9
+  },
+  {
+    "text": "CyberPress documented the Conduent breach, where eight terabytes of data were stolen in a single ransomware attack.",
+    "start_ms": 14902.7781,
+    "end_ms": 22541.6671,
+    "start_s": 14.9,
+    "end_s": 22.54
+  },
+  {
+    "text": "SharkStriker logged over forty major incidents in February alone, with healthcare and finance hit hardest.",
+    "start_ms": 22541.6672,
+    "end_ms": 29666.6673,
+    "start_s": 22.54,
+    "end_s": 29.67
+  },
+  {
+    "text": "Experts say traditional firewalls are no match for machine-speed threats.",
+    "start_ms": 29666.6674,
+    "end_ms": 34736.111899999996,
+    "start_s": 29.67,
+    "end_s": 34.74
+  },
+  {
+    "text": "As attackers leverage AI for unprecedented speed, defenders must adopt AI-driven security or risk catastrophic breaches.",
+    "start_ms": 34736.112,
+    "end_ms": 43527.7788,
+    "start_s": 34.74,
+    "end_s": 43.53
+  },
+  {
+    "text": "This algorithmic arms race will make traditional cybersecurity tools obsolete within years.",
+    "start_ms": 43527.7789,
+    "end_ms": 50027.778999999995,
+    "start_s": 43.53,
+    "end_s": 50.03
+  }
+]

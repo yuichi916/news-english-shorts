@@ -1,0 +1,70 @@
+{
+  "id": "2026-03-01_remote_work",
+  "date": "2026-03-01",
+  "topic": "Return to office sparks backlash",
+  "theme": "ember",
+  "hook_text": "出社 vs リモート、データが語る真実",
+  "sources": [
+    {"name": "AP News", "url": "apnews.com/article/return-to-office-2026"},
+    {"name": "Harvard Business Review", "url": "hbr.org/2026/02/hybrid-productivity"},
+    {"name": "Gallup", "url": "gallup.com/workplace/remote-work-2026"},
+    {"name": "McKinsey", "url": "mckinsey.com/future-of-work-report"}
+  ],
+  "mission": {
+    "ja": "ハイブリッド型の生産性向上は何%？英語で聞き取ろう",
+    "answer_ja": "答え: 15% — hybrid models boost productivity（ハイブリッド型で生産性15%向上）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "AP News"},
+    {"sentence_idx": 1, "source": "Harvard Business Review"},
+    {"sentence_idx": 2, "source": "Gallup"},
+    {"sentence_idx": 3, "source": "McKinsey"},
+    {"sentence_idx": 4, "source": "AP News"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "DETAIL"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "Major corporations are ordering full-time office returns, sparking fierce backlash, AP News reports. Harvard Business Review found hybrid models boost productivity by fifteen percent, contradicting several CEOs. Gallup says sixty percent of workers prefer hybrid and would consider quitting. McKinsey estimates remote work saves ten thousand dollars per employee annually. The debate shows no signs of settling down.",
+    "highlights": ["sparking fierce backlash", "boost productivity", "fifteen percent", "contradicting", "sixty percent", "prefer hybrid", "would consider quitting", "estimates", "ten thousand dollars", "shows no signs of", "settling down"]
+  },
+  "insight": {
+    "en": "The data overwhelmingly favors hybrid work on both productivity and retention. Companies that resist flexibility risk losing top talent to competitors who embrace it.",
+    "ja": "データは生産性と人材定着の両面でハイブリッドの優位を圧倒的に示している。柔軟性を拒む企業は、それを受け入れる競合に人材を奪われるリスクがある。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "AP通信によると大企業が完全出社を命じ、激しい反発を招いている。", "start": 0.0},
+    {"text": "HBRはハイブリッド型が生産性15%向上と報告。CEOの主張と矛盾。", "start": 4.0},
+    {"text": "Gallupでは60%がハイブリッドを希望、完全出社なら退職も検討。", "start": 9.0},
+    {"text": "McKinseyはリモートで従業員1人当たり年1万ドル節約と推計。", "start": 14.0},
+    {"text": "議論は収まる気配がない。", "start": 18.5}
+  ],
+  "data_points": [
+    {"value": "+15%", "label": "productivity boost", "sentence_idx": 1},
+    {"value": "60%", "label": "prefer hybrid", "sentence_idx": 2},
+    {"value": "$10K", "label": "savings/employee", "sentence_idx": 3}
+  ],
+  "key_phrases": [
+    {
+      "en": "spark backlash",
+      "ja": "反発を招く",
+      "example": "The mandate sparked fierce backlash."
+    },
+    {
+      "en": "contradict",
+      "ja": "矛盾する、反論する",
+      "example": "The study contradicts claims by CEOs."
+    },
+    {
+      "en": "dig in",
+      "ja": "譲らない、固持する",
+      "example": "Both sides are digging in."
+    }
+  ],
+  "cta": "コメントであなたの意見を教えて",
+  "hashtags": ["#英語学習", "#英語ニュース", "#リモートワーク", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

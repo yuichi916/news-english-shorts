@@ -1,0 +1,70 @@
+{
+  "id": "2026-02-27_apple_ai",
+  "date": "2026-02-27",
+  "topic": "Apple doubles down on AI",
+  "theme": "purple",
+  "hook_text": "AppleがAIに200億ドル投入！",
+  "sources": [
+    {"name": "Reuters", "url": "reuters.com/technology/apple-ai-2026"},
+    {"name": "Bloomberg", "url": "bloomberg.com/news/apple-ai-investment"},
+    {"name": "EFF", "url": "eff.org/deeplinks/apple-ai-privacy"},
+    {"name": "Morgan Stanley", "url": "morganstanley.com/research/apple"}
+  ],
+  "mission": {
+    "ja": "AppleはAIにいくら投資した？英語で聞き取ろう",
+    "answer_ja": "答え: $20 billion — doubling its budget（200億ドル、予算を倍増）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Reuters"},
+    {"sentence_idx": 1, "source": "Bloomberg"},
+    {"sentence_idx": 2, "source": "Reuters"},
+    {"sentence_idx": 3, "source": "EFF"},
+    {"sentence_idx": 4, "source": "Morgan Stanley"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "Apple has unveiled a major AI overhaul, with eighty-five percent of features running on-device. Bloomberg reports a twenty billion dollar investment, doubling last year's budget. CEO Tim Cook called it the biggest leap since Siri. The Electronic Frontier Foundation, however, warns cloud processing still raises privacy concerns. Morgan Stanley predicts a twelve percent boost in iPhone sales, intensifying the AI arms race.",
+    "highlights": ["unveiled", "overhaul", "on-device", "twenty billion dollar", "doubling", "the biggest leap", "warns", "raises privacy concerns", "boost", "intensifying", "arms race"]
+  },
+  "insight": {
+    "en": "The takeaway is clear: tech giants now compete on privacy, not just features. Apple's on-device strategy could force the entire industry to follow, reshaping how AI reaches one billion users.",
+    "ja": "テック企業は機能ではなくプライバシーで競争する時代に突入した。Appleのオンデバイス戦略は業界全体を動かし、10億人へのAIの届け方を変える可能性がある。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "Appleが大規模なAI刷新を発表。85%がオンデバイスで動作。", "start": 0.0},
+    {"text": "Bloombergによると200億ドルの投資で予算を倍増。", "start": 4.5},
+    {"text": "クックCEOは「Siri以来最大の飛躍」と表現。", "start": 8.5},
+    {"text": "電子フロンティア財団はプライバシー懸念を警告。", "start": 12.0},
+    {"text": "モルガン・スタンレーはiPhone売上12%増を予測。AI競争が激化。", "start": 16.0}
+  ],
+  "data_points": [
+    {"value": "85%", "label": "on-device AI", "sentence_idx": 0},
+    {"value": "$20B", "label": "AI investment", "sentence_idx": 1},
+    {"value": "+12%", "label": "sales forecast", "sentence_idx": 4}
+  ],
+  "key_phrases": [
+    {
+      "en": "overhaul",
+      "ja": "大改革、全面刷新",
+      "example": "Apple unveiled a major AI overhaul."
+    },
+    {
+      "en": "double one's budget",
+      "ja": "予算を倍増させる",
+      "example": "The company doubled its AI budget."
+    },
+    {
+      "en": "arms race",
+      "ja": "（し烈な）競争",
+      "example": "The AI arms race is intensifying."
+    }
+  ],
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#Apple", "#AI", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

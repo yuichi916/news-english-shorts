@@ -1,0 +1,23 @@
+[
+  {
+    "text": "The mandate sparked fierce backlash.",
+    "start_ms": 100.0,
+    "end_ms": 3300.0,
+    "start_s": 0.1,
+    "end_s": 3.3
+  },
+  {
+    "text": "The study contradicts claims by CEOs.",
+    "start_ms": 3250.0,
+    "end_ms": 7083.3333999999995,
+    "start_s": 3.25,
+    "end_s": 7.08
+  },
+  {
+    "text": "Both sides are digging in.",
+    "start_ms": 7083.3335,
+    "end_ms": 9652.778,
+    "start_s": 7.08,
+    "end_s": 9.65
+  }
+]

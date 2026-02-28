@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:07,466
+A global memory chip shortage has driven smartphone component costs up thirty percent, IDC reports.
+
+2
+00:00:07,416 --> 00:00:13,861
+CNN says the average selling price will hit a record five hundred twenty-three dollars this year.
+
+3
+00:00:13,861 --> 00:00:21,388
+Bloomberg blames the crisis on data center builders hoarding DRAM chips, leaving little for consumer electronics.
+
+4
+00:00:21,388 --> 00:00:29,111
+IDC also forecasts shipments will plunge twelve point nine percent, the sharpest annual decline ever recorded.
+
+5
+00:00:29,111 --> 00:00:35,875
+CNBC notes the shortage could permanently reshape the industry, favoring Apple and Samsung.
+
+6
+00:00:35,875 --> 00:00:43,305
+The AI boom has created a zero-sum game for memory chips, where data centers win and consumers pay the price.
+
+7
+00:00:43,305 --> 00:00:49,319
+This digital divide between corporations and individuals is widening faster than ever.
+

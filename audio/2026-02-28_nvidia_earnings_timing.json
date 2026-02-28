@@ -1,0 +1,51 @@
+[
+  {
+    "text": "NVIDIA posted record quarterly revenue of sixty-eight point one billion dollars, up seventy-three percent year over year.",
+    "start_ms": 100.0,
+    "end_ms": 8188.8891,
+    "start_s": 0.1,
+    "end_s": 8.19
+  },
+  {
+    "text": "Fortune highlights full-year revenue of two hundred fifteen billion, driven by insatiable AI chip demand.",
+    "start_ms": 8138.8891,
+    "end_ms": 15305.5559,
+    "start_s": 8.14,
+    "end_s": 15.31
+  },
+  {
+    "text": "Bloomberg reports shares tumbled five point five percent after the forecast fell short of expectations.",
+    "start_ms": 15305.5559,
+    "end_ms": 22055.556,
+    "start_s": 15.31,
+    "end_s": 22.06
+  },
+  {
+    "text": "CNBC notes it was the worst single-day drop in ten months.",
+    "start_ms": 22055.5561,
+    "end_ms": 26750.0006,
+    "start_s": 22.06,
+    "end_s": 26.75
+  },
+  {
+    "text": "Investing.com warns a growing disconnect between record earnings and valuations could signal trouble.",
+    "start_ms": 26750.0007,
+    "end_ms": 33597.2231,
+    "start_s": 26.75,
+    "end_s": 33.6
+  },
+  {
+    "text": "Wall Street now prices AI stocks to perfection, meaning any miss triggers a selloff.",
+    "start_ms": 33597.2231,
+    "end_ms": 39569.445400000004,
+    "start_s": 33.6,
+    "end_s": 39.57
+  },
+  {
+    "text": "This pattern suggests investors should watch guidance more closely than record revenue numbers.",
+    "start_ms": 39569.4454,
+    "end_ms": 45694.445499999994,
+    "start_s": 39.57,
+    "end_s": 45.69
+  }
+]

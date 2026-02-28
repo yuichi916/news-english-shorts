@@ -1,0 +1,69 @@
+{
+  "id": "2026-02-28_galaxy_s26",
+  "date": "2026-02-28",
+  "topic": "Samsung Galaxy S26 brings agentic AI",
+  "theme": "purple",
+  "hook_text": "Galaxy S26、AIが勝手に動く時代へ",
+  "sources": [
+    {"name": "Samsung Newsroom", "url": "news.samsung.com/global/samsung-unveils-galaxy-s26-series"},
+    {"name": "Tom's Guide", "url": "tomsguide.com/phones/live/samsung-galaxy-unpacked-2026-live"},
+    {"name": "TechCrunch", "url": "techcrunch.com/2026/02/26/everything-announced-at-samsungs-galaxy-unpacked"},
+    {"name": "Engadget", "url": "engadget.com/mobile/samsung-galaxy-unpacked-2026-live"}
+  ],
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Samsung Newsroom"},
+    {"sentence_idx": 1, "source": "Tom's Guide"},
+    {"sentence_idx": 2, "source": "Samsung Newsroom"},
+    {"sentence_idx": 3, "source": "TechCrunch"},
+    {"sentence_idx": 4, "source": "Engadget"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "DETAIL"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "mission": {
+    "ja": "Galaxy S26 Ultraのカメラは何メガピクセル？英語で聞き取ろう",
+    "answer_ja": "答え: 200 megapixels — with 5x optical zoom（2億画素、5倍光学ズーム搭載）"
+  },
+  "narration": {
+    "text": "Samsung unveiled the Galaxy S twenty-six series at Unpacked in San Francisco, calling it the most intuitive AI phone yet. Tom's Guide highlights an agentic AI that handles scheduling, summarizing, and research directly from conversations. The Ultra features a two hundred megapixel camera and a breakthrough privacy display that blocks side views. TechCrunch says the Ultra is zero point three millimeters thinner yet more powerful than its predecessor. Engadget calls the lineup Samsung's strongest answer to Apple Intelligence.",
+    "highlights": ["unveiled", "most intuitive", "agentic AI", "scheduling", "summarizing", "two hundred megapixel", "breakthrough privacy display", "blocks side views", "thinner", "more powerful", "strongest answer"]
+  },
+  "insight": {
+    "en": "Phones are evolving from tools you operate to assistants that act independently on your behalf. This raises critical questions about privacy and how much control we are willing to hand over to machines.",
+    "ja": "スマホは「操作するツール」から「自律的に動くアシスタント」へ進化している。これはプライバシーと、私たちが機械にどこまで委ねるかという重要な問いを突きつける。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "SamsungがGalaxy S26シリーズを発表。「最も直感的なAIスマホ」。", "start": 0.0},
+    {"text": "Tom's Guideはスケジュール管理や調査を行うエージェントAIに注目。", "start": 5.0},
+    {"text": "Ultraは2億画素カメラと横からの覗き見を防ぐプライバシー画面を搭載。", "start": 9.5},
+    {"text": "TechCrunchは0.3mm薄型化しつつ性能向上と報道。", "start": 14.5},
+    {"text": "EngadgetはApple Intelligence対抗の最強ラインナップと評価。", "start": 18.0}
+  ],
+  "data_points": [
+    {"value": "200MP", "label": "ultra camera", "sentence_idx": 2},
+    {"value": "-0.3mm", "label": "slimmer design", "sentence_idx": 3}
+  ],
+  "key_phrases": [
+    {
+      "en": "unveil",
+      "ja": "発表する、公開する",
+      "example": "Samsung unveiled the Galaxy S26 series."
+    },
+    {
+      "en": "agentic AI",
+      "ja": "自律行動型AI",
+      "example": "The phone features agentic AI that acts on your behalf."
+    },
+    {
+      "en": "breakthrough",
+      "ja": "画期的な、革新的な",
+      "example": "The privacy display is a breakthrough feature."
+    }
+  ],
+  "cta": "コメントであなたの意見を教えて",
+  "hashtags": ["#英語学習", "#英語ニュース", "#Samsung", "#GalaxyS26", "#AI", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

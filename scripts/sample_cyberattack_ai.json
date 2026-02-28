@@ -1,0 +1,70 @@
+{
+  "id": "2026-02-28_cyberattack_ai",
+  "date": "2026-02-28",
+  "topic": "AI cyberattacks now complete in 72 minutes",
+  "theme": "forest",
+  "hook_text": "AIサイバー攻撃、たった72分で完了",
+  "sources": [
+    {"name": "CNN", "url": "edition.cnn.com/2026/02/ai-cyberattacks-accelerating"},
+    {"name": "The Hacker News", "url": "thehackernews.com/2026/02/ai-powered-attacks"},
+    {"name": "CyberPress", "url": "cyberpress.org/conduent-data-breach-steals-8-tb"},
+    {"name": "SharkStriker", "url": "sharkstriker.com/blog/today-data-breaches-in-february-2026"}
+  ],
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "CNN"},
+    {"sentence_idx": 1, "source": "The Hacker News"},
+    {"sentence_idx": 2, "source": "CyberPress"},
+    {"sentence_idx": 3, "source": "SharkStriker"},
+    {"sentence_idx": 4, "source": "The Hacker News"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "DETAIL"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "mission": {
+    "ja": "AIサイバー攻撃は最短何分で完了する？英語で聞き取ろう",
+    "answer_ja": "答え: 72 minutes — from breach to data exfiltration（侵入からデータ窃取までわずか72分）"
+  },
+  "narration": {
+    "text": "AI is supercharging cyberattacks, with breaches now completing in as little as seventy-two minutes, CNN reports. The Hacker News reveals attackers are using AI to automate phishing and lateral movement at machine speed. CyberPress documented the Conduent breach, where eight terabytes of data were stolen in a single ransomware attack. SharkStriker logged over forty major incidents in February alone, with healthcare and finance hit hardest. Experts say traditional firewalls are no match for machine-speed threats.",
+    "highlights": ["supercharging", "seventy-two minutes", "automate", "lateral movement", "machine speed", "eight terabytes", "ransomware attack", "forty major incidents", "no match", "machine-speed threats"]
+  },
+  "insight": {
+    "en": "As attackers leverage AI for unprecedented speed, defenders must adopt AI-driven security or risk catastrophic breaches. This algorithmic arms race will make traditional cybersecurity tools obsolete within years.",
+    "ja": "攻撃者がAIで未曾有の速度を得る中、防御側もAIセキュリティの導入が不可欠だ。このアルゴリズム軍拡競争により、従来のセキュリティツールは数年で時代遅れになるだろう。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "CNN: AIサイバー攻撃はわずか72分で侵入から窃取まで完了。", "start": 0.0},
+    {"text": "The Hacker Newsはフィッシングや横展開がAIで自動化と指摘。", "start": 4.5},
+    {"text": "CyberPressはConduent社から8TBのデータが窃取された事件を報道。", "start": 9.0},
+    {"text": "SharkStrikerは2月だけで40件超の重大インシデントを記録。", "start": 14.0},
+    {"text": "専門家は従来のファイアウォールではAI攻撃に対抗不可能と警告。", "start": 17.5}
+  ],
+  "data_points": [
+    {"value": "72min", "label": "breach to exfil", "sentence_idx": 0},
+    {"value": "8TB", "label": "data stolen", "sentence_idx": 2},
+    {"value": "40+", "label": "Feb incidents", "sentence_idx": 3}
+  ],
+  "key_phrases": [
+    {
+      "en": "supercharge",
+      "ja": "加速させる、大幅に強化する",
+      "example": "AI is supercharging cyberattacks worldwide."
+    },
+    {
+      "en": "lateral movement",
+      "ja": "横展開（ネットワーク内の水平移動）",
+      "example": "Attackers use AI for lateral movement across networks."
+    },
+    {
+      "en": "no match for ~",
+      "ja": "～にはかなわない、太刀打ちできない",
+      "example": "Traditional defenses are no match for AI threats."
+    }
+  ],
+  "cta": "フォローしてセキュリティ英語も学ぼう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#サイバーセキュリティ", "#AI", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

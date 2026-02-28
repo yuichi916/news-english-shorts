@@ -1,0 +1,70 @@
+{
+  "id": "2026-02-28_chip_shortage",
+  "date": "2026-02-28",
+  "topic": "AI chip crisis pushes phone prices to record",
+  "theme": "ember",
+  "hook_text": "スマホがまた値上がり！原因はAI？",
+  "sources": [
+    {"name": "IDC", "url": "idc.com/resource-center/blog/global-memory-shortage-crisis"},
+    {"name": "CNN", "url": "edition.cnn.com/2026/02/27/tech/ai-memory-chips-smartphones"},
+    {"name": "Bloomberg", "url": "bloomberg.com/news/articles/2026-02-15/rampant-ai-demand-for-memory"},
+    {"name": "CNBC", "url": "cnbc.com/2026/02/27/smartphone-market-poised-for-sharpest-decline"}
+  ],
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "IDC"},
+    {"sentence_idx": 1, "source": "CNN"},
+    {"sentence_idx": 2, "source": "Bloomberg"},
+    {"sentence_idx": 3, "source": "IDC"},
+    {"sentence_idx": 4, "source": "CNBC"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "DETAIL"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "mission": {
+    "ja": "スマホの平均価格は何ドルに上がる？英語で聞き取ろう",
+    "answer_ja": "答え: $523 — a record high, up 14%（14%上昇で過去最高の523ドル）"
+  },
+  "narration": {
+    "text": "A global memory chip shortage has driven smartphone component costs up thirty percent, IDC reports. CNN says the average selling price will hit a record five hundred twenty-three dollars this year. Bloomberg blames the crisis on data center builders hoarding DRAM chips, leaving little for consumer electronics. IDC also forecasts shipments will plunge twelve point nine percent, the sharpest annual decline ever recorded. CNBC notes the shortage could permanently reshape the industry, favoring Apple and Samsung.",
+    "highlights": ["shortage", "thirty percent", "record", "five hundred twenty-three dollars", "hoarding", "leaving little", "plunge", "twelve point nine percent", "sharpest annual decline", "permanently reshape"]
+  },
+  "insight": {
+    "en": "The AI boom has created a zero-sum game for memory chips, where data centers win and consumers pay the price. This digital divide between corporations and individuals is widening faster than ever.",
+    "ja": "AIブームはメモリチップの争奪戦を生み出し、データセンターが勝ち消費者が代償を払う構図だ。企業と個人のデジタル格差はかつてないスピードで拡大している。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "IDCによるとメモリチップ不足でスマホ部品コストが30%上昇。", "start": 0.0},
+    {"text": "CNNは平均販売価格が過去最高の523ドルに達すると報道。", "start": 4.5},
+    {"text": "Bloombergはデータセンター向けDRAMチップ買い占めが原因と指摘。", "start": 8.5},
+    {"text": "IDCは出荷台数12.9%減を予測。過去最大の年間落ち込み。", "start": 13.0},
+    {"text": "CNBCはAppleとSamsungが有利になり業界再編の可能性を指摘。", "start": 17.0}
+  ],
+  "data_points": [
+    {"value": "+30%", "label": "component cost rise", "sentence_idx": 0},
+    {"value": "$523", "label": "record avg price", "sentence_idx": 1},
+    {"value": "-12.9%", "label": "shipment plunge", "sentence_idx": 3}
+  ],
+  "key_phrases": [
+    {
+      "en": "shortage",
+      "ja": "不足、品不足",
+      "example": "A global memory chip shortage is reshaping the market."
+    },
+    {
+      "en": "hoarding",
+      "ja": "買い占め、備蓄",
+      "example": "Data center builders are hoarding DRAM chips."
+    },
+    {
+      "en": "reshape",
+      "ja": "再編する、一変させる",
+      "example": "The crisis could permanently reshape the industry."
+    }
+  ],
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#スマホ", "#半導体", "#AI", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

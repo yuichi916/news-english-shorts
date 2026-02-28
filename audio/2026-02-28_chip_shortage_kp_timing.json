@@ -1,0 +1,23 @@
+[
+  {
+    "text": "A global memory chip shortage is reshaping the market.",
+    "start_ms": 100.0,
+    "end_ms": 4327.7778,
+    "start_s": 0.1,
+    "end_s": 4.33
+  },
+  {
+    "text": "Data center builders are hoarding DRAM chips.",
+    "start_ms": 4277.7778,
+    "end_ms": 7861.111199999999,
+    "start_s": 4.28,
+    "end_s": 7.86
+  },
+  {
+    "text": "The crisis could permanently reshape the industry.",
+    "start_ms": 7861.1113,
+    "end_ms": 11819.4447,
+    "start_s": 7.86,
+    "end_s": 11.82
+  }
+]

@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:06,633
+Apple has unveiled a major AI overhaul, with eighty-five percent of features running on-device.
+
+2
+00:00:06,583 --> 00:00:12,375
+Bloomberg reports a twenty billion dollar investment, doubling last year's budget.
+
+3
+00:00:12,375 --> 00:00:16,638
+CEO Tim Cook called it the biggest leap since Siri.
+
+4
+00:00:16,638 --> 00:00:23,694
+The Electronic Frontier Foundation, however, warns cloud processing still raises privacy concerns.
+
+5
+00:00:23,694 --> 00:00:30,625
+Morgan Stanley predicts a twelve percent boost in iPhone sales, intensifying the AI arms race.
+
+6
+00:00:30,625 --> 00:00:36,486
+The takeaway is clear: tech giants now compete on privacy, not just features.
+
+7
+00:00:36,486 --> 00:00:44,263
+Apple's on-device strategy could force the entire industry to follow, reshaping how AI reaches one billion users.
+

@@ -1,0 +1,51 @@
+[
+  {
+    "text": "Major corporations are ordering full-time office returns, sparking fierce backlash, AP News reports.",
+    "start_ms": 100.0,
+    "end_ms": 7286.1113,
+    "start_s": 0.1,
+    "end_s": 7.29
+  },
+  {
+    "text": "Harvard Business Review found hybrid models boost productivity by fifteen percent, contradicting several CEOs.",
+    "start_ms": 7236.1113,
+    "end_ms": 15472.222600000001,
+    "start_s": 7.24,
+    "end_s": 15.47
+  },
+  {
+    "text": "Gallup says sixty percent of workers prefer hybrid and would consider quitting.",
+    "start_ms": 15472.2226,
+    "end_ms": 20972.2227,
+    "start_s": 15.47,
+    "end_s": 20.97
+  },
+  {
+    "text": "McKinsey estimates remote work saves ten thousand dollars per employee annually.",
+    "start_ms": 20972.2227,
+    "end_ms": 26625.0006,
+    "start_s": 20.97,
+    "end_s": 26.63
+  },
+  {
+    "text": "The debate shows no signs of settling down.",
+    "start_ms": 26625.0007,
+    "end_ms": 30291.667400000002,
+    "start_s": 26.63,
+    "end_s": 30.29
+  },
+  {
+    "text": "The data overwhelmingly favors hybrid work on both productivity and retention.",
+    "start_ms": 30291.6674,
+    "end_ms": 36125.0008,
+    "start_s": 30.29,
+    "end_s": 36.13
+  },
+  {
+    "text": "Companies that resist flexibility risk losing top talent to competitors who embrace it.",
+    "start_ms": 36125.0009,
+    "end_ms": 42388.8899,
+    "start_s": 36.13,
+    "end_s": 42.39
+  }
+]

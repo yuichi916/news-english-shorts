@@ -1,0 +1,51 @@
+[
+  {
+    "text": "Samsung unveiled the Galaxy S twenty-six series at Unpacked in San Francisco, calling it the most intuitive AI phone yet.",
+    "start_ms": 100.0,
+    "end_ms": 8300.0002,
+    "start_s": 0.1,
+    "end_s": 8.3
+  },
+  {
+    "text": "Tom's Guide highlights an agentic AI that handles scheduling, summarizing, and research directly from conversations.",
+    "start_ms": 8250.0002,
+    "end_ms": 16111.111499999999,
+    "start_s": 8.25,
+    "end_s": 16.11
+  },
+  {
+    "text": "The Ultra features a two hundred megapixel camera and a breakthrough privacy display that blocks side views.",
+    "start_ms": 16111.1115,
+    "end_ms": 23166.6672,
+    "start_s": 16.11,
+    "end_s": 23.17
+  },
+  {
+    "text": "TechCrunch says the Ultra is zero point three millimeters thinner yet more powerful than its predecessor.",
+    "start_ms": 23166.6672,
+    "end_ms": 29986.1118,
+    "start_s": 23.17,
+    "end_s": 29.99
+  },
+  {
+    "text": "Engadget calls the lineup Samsung's strongest answer to Apple Intelligence.",
+    "start_ms": 29986.1119,
+    "end_ms": 35402.7787,
+    "start_s": 29.99,
+    "end_s": 35.4
+  },
+  {
+    "text": "Phones are evolving from tools you operate to assistants that act independently on your behalf.",
+    "start_ms": 35402.7787,
+    "end_ms": 41750.001000000004,
+    "start_s": 35.4,
+    "end_s": 41.75
+  },
+  {
+    "text": "This raises critical questions about privacy and how much control we are willing to hand over to machines.",
+    "start_ms": 41750.0011,
+    "end_ms": 48597.2235,
+    "start_s": 41.75,
+    "end_s": 48.6
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "text": "AI chip demand remains insatiable.",
+    "start_ms": 100.0,
+    "end_ms": 3675.0,
+    "start_s": 0.1,
+    "end_s": 3.67
+  },
+  {
+    "text": "The forecast fell short of expectations.",
+    "start_ms": 3625.0,
+    "end_ms": 7083.3333999999995,
+    "start_s": 3.62,
+    "end_s": 7.08
+  },
+  {
+    "text": "There is a disconnect between earnings and valuations.",
+    "start_ms": 7083.3335,
+    "end_ms": 11277.777999999998,
+    "start_s": 7.08,
+    "end_s": 11.28
+  }
+]
