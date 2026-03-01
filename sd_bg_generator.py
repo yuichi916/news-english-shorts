@@ -5,7 +5,7 @@ Falls back gracefully when API is unavailable.
 
 Features:
 - Auto-generates prompts from script topic/theme
-- 768x1344 generation → 1080x1920 resize
+- 832x1472 SDXL generation → 1080x1920 resize
 - Post-processing: darken + blur + vignette for text readability
 - Caches by script ID to avoid regeneration
 """
@@ -21,8 +21,8 @@ import anthropic
 from PIL import Image, ImageDraw, ImageFilter
 
 SD_API_URL = "http://localhost:7860"
-GEN_WIDTH = 768
-GEN_HEIGHT = 1344
+GEN_WIDTH = 832
+GEN_HEIGHT = 1472
 FINAL_WIDTH = 1080
 FINAL_HEIGHT = 1920
 
@@ -38,18 +38,19 @@ THEME_PROMPTS = {
 NEGATIVE_PROMPT = (
     "text, watermark, logo, words, letters, numbers, signature, "
     "person, face, human, hand, fingers, bright, overexposed, "
-    "blurry, low quality, jpeg artifacts, cartoon, anime"
+    "blurry, low quality, cartoon, anime, 3d render"
 )
 
 SMART_PROMPT_MODEL = "claude-haiku-4-5-20251001"
 
 SMART_PROMPT_SYSTEM = """\
-You are a Stable Diffusion prompt engineer. Generate detailed, \
-evocative image prompts for abstract/atmospheric background images. \
-Output ONLY the prompt text, nothing else."""
+You are an SDXL prompt engineer specializing in news-themed background images. \
+Your goal is to translate news topics into concrete, visually striking scenes \
+that immediately evoke the subject matter. Use natural language descriptions \
+(not tag-based). Output ONLY the prompt text, nothing else."""
 
 SMART_PROMPT_TEMPLATE = """\
-Generate a Stable Diffusion prompt for an abstract background image.
+Generate an SDXL prompt for a background image that visually represents this news topic.
 
 NEWS TOPIC: {topic}
 NARRATION: {narration_text}
@@ -58,15 +59,20 @@ KEY TERMS: {highlights}
 
 THEME PALETTE: {theme_style}
 
-REQUIREMENTS:
-- Describe a VISUAL SCENE/ATMOSPHERE, not the news itself
-- DARK background suitable for white text overlay
-- Use theme palette colors
-- Abstract/symbolic visual elements evoking the topic
-- Cinematic lighting, depth of field, bokeh
-- Quality tags: 8k, ultra detailed, professional
-- MUST include: "no text, no people, no faces, no letters, no words"
-- Under 120 words, single paragraph"""
+CRITICAL RULES:
+1. Identify the ICONIC OBJECTS, SYMBOLS, or SETTINGS of this topic and describe them concretely.
+   - Economy/finance → stock tickers, currency, trading floor, graphs
+   - Technology/AI → circuit boards, neural networks, server rooms, glowing data streams
+   - Climate/environment → glaciers, forests, weather phenomena, smokestacks
+   - Politics/diplomacy → capitol buildings, flags, conference tables, gavels
+   - Health/medicine → laboratory equipment, molecular structures, hospital scenes
+   - War/conflict → military equipment silhouettes, maps, barbed wire
+2. Place these objects in a DARK, MOODY scene with {theme_style} color palette.
+3. Use NATURAL LANGUAGE descriptions, not comma-separated tags.
+4. Include cinematic lighting with dramatic shadows and depth of field.
+5. The scene must be DARK enough for white text overlay.
+6. End with: masterpiece, best quality, no text, no people, no faces, no letters, no words
+7. Under 100 words, single paragraph."""
 
 
 def _load_cached_prompt(cache_path: str) -> str | None:
@@ -122,12 +128,12 @@ def _build_prompt(script: dict) -> str:
     topic_keywords = topic.lower().replace("'", "").replace('"', "")
 
     prompt = (
-        f"abstract background for news about {topic_keywords}, "
-        f"{base_style}, "
-        "cinematic lighting, moody atmosphere, bokeh, "
-        "dark background suitable for text overlay, "
-        "professional news broadcast feel, 8k quality, "
-        "ultra detailed, no text, no people"
+        f"A dark cinematic scene representing {topic_keywords}, "
+        f"featuring symbolic objects and settings related to the topic, "
+        f"dramatic {base_style}, "
+        "moody atmosphere with volumetric lighting and deep shadows, "
+        "dark background suitable for text overlay, depth of field, "
+        "masterpiece, best quality, no text, no people, no faces"
     )
     return prompt
 
@@ -169,9 +175,9 @@ def _call_sd_api(prompt: str, negative_prompt: str = NEGATIVE_PROMPT) -> Image.I
         "negative_prompt": negative_prompt,
         "width": GEN_WIDTH,
         "height": GEN_HEIGHT,
-        "steps": 20,
-        "cfg_scale": 7,
-        "sampler_name": "DPM++ 2M",
+        "steps": 28,
+        "cfg_scale": 6,
+        "sampler_name": "DPM++ 2M SDE",
         "scheduler": "Karras",
         "seed": -1,
     }

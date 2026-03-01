@@ -19,6 +19,10 @@ __pycache__/
 .vscode/
 .idea/
 
+# YouTube API credentials
+client_secret.json
+youtube_token.json
+
 # OS
 Thumbs.db
 .DS_Store

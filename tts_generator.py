@@ -106,24 +106,20 @@ async def generate_audio_elevenlabs(
         output_format="mp3_44100_128",
     )
 
-    # Collect audio chunks and alignment data
-    audio_chunks = []
+    # Extract audio and alignment from response (single object, not stream)
+    audio_data = base64.b64decode(response.audio_base_64)
+
     all_chars = []
     all_char_starts = []
     all_char_ends = []
-
-    for item in response:
-        if item.audio_base64:
-            audio_chunks.append(base64.b64decode(item.audio_base64))
-        if item.alignment:
-            all_chars.extend(item.alignment.characters)
-            all_char_starts.extend(item.alignment.character_start_times_seconds)
-            all_char_ends.extend(item.alignment.character_end_times_seconds)
+    if response.alignment:
+        all_chars = list(response.alignment.characters)
+        all_char_starts = list(response.alignment.character_start_times_seconds)
+        all_char_ends = list(response.alignment.character_end_times_seconds)
 
     # Save MP3
     with open(output_audio_path, "wb") as f:
-        for chunk in audio_chunks:
-            f.write(chunk)
+        f.write(audio_data)
 
     # Build sentence boundaries from character-level alignment
     # Detect sentence ends: period followed by space (or end of text)

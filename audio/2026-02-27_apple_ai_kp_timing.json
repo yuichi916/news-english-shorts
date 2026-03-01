@@ -2,22 +2,22 @@
   {
     "text": "Apple unveiled a major AI overhaul.",
     "start_ms": 100.0,
-    "end_ms": 3536.1112,
+    "end_ms": 3369.4445,
     "start_s": 0.1,
-    "end_s": 3.54
+    "end_s": 3.37
   },
   {
     "text": "The company doubled its AI budget.",
-    "start_ms": 3486.1112,
-    "end_ms": 6736.111199999999,
-    "start_s": 3.49,
-    "end_s": 6.74
+    "start_ms": 3319.4445,
+    "end_ms": 6402.7779,
+    "start_s": 3.32,
+    "end_s": 6.4
   },
   {
     "text": "The AI arms race is intensifying.",
-    "start_ms": 6736.1112,
-    "end_ms": 10138.889,
-    "start_s": 6.74,
-    "end_s": 10.14
+    "start_ms": 6402.7779,
+    "end_ms": 9722.2224,
+    "start_s": 6.4,
+    "end_s": 9.72
   }
 ]

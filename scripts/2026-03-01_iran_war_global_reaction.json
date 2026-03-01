@@ -1,0 +1,66 @@
+{
+  "id": "2026-03-01_iran_war_global_reaction",
+  "date": "2026-03-01",
+  "topic": "World Reacts to Escalating US-Israel War on Iran",
+  "theme": "ember",
+  "hook_text": "世界はイラン戦争にどう反応？",
+  "sources": [
+    {"name": "Al Jazeera", "url": "aljazeera.com/news/2026/3/1/world-reacts-khamenei-killing"},
+    {"name": "The Guardian", "url": "theguardian.com/world/2026/mar/01/us-israel-new-wave-attacks-iran"},
+    {"name": "Financial Times", "url": "ft.com/content/iran-war-global-economy"},
+    {"name": "France 24", "url": "france24.com/en/middle-east/afghanistan-warns-iran-war-region"}
+  ],
+  "mission": {
+    "ja": "各国が最も懸念していることは？英語で聞き取ろう",
+    "answer_ja": "答え: a wider regional conflict（より広い地域紛争）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "The Guardian"},
+    {"sentence_idx": 1, "source": "Al Jazeera"},
+    {"sentence_idx": 2, "source": "France 24"},
+    {"sentence_idx": 3, "source": "Financial Times"},
+    {"sentence_idx": 4, "source": "Al Jazeera"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "FACT"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "The United States and Israel launched a new wave of strikes on Iran Saturday night, escalating a conflict that has already killed Iran's Supreme Leader Khamenei. World leaders are now warning that the strikes risk triggering a wider regional conflict, with European allies stressing they did not join the operation. Afghanistan's Taliban government said the war will destabilize the entire region and called for an immediate ceasefire. Oil prices surged past one hundred and twenty dollars a barrel as markets fear the biggest energy shock in decades. Analysts say the coming days will determine whether this becomes a contained operation or spirals into a full-scale Middle Eastern war.",
+    "highlights": ["new wave of strikes", "escalating", "Supreme Leader", "wider regional conflict", "European allies", "destabilize", "ceasefire", "oil prices surged", "energy shock", "contained operation", "full-scale", "spirals"]
+  },
+  "insight": {
+    "en": "The killing of Khamenei has left Iran without its top decision-maker at a critical moment. With no clear successor and retaliatory strikes ongoing, the power vacuum could either push Iran toward negotiations or toward an even more aggressive response.",
+    "ja": "ハメネイ師の殺害でイランは重要な局面で最高意思決定者を失った。後継者が不明確で報復攻撃が続く中、権力の空白はイランを交渉に向かわせるか、さらに攻撃的な対応に走らせる可能性がある。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "米イスラエルがイランに新たな攻撃。ハメネイ師殺害後も紛争拡大。", "start": 0.0},
+    {"text": "各国首脳は地域紛争の拡大を警告。欧州は作戦への不参加を強調。", "start": 4.5},
+    {"text": "アフガン政府は地域不安定化を警告し、即時停戦を要求。", "start": 9.0},
+    {"text": "原油価格が急騰。数十年ぶりのエネルギーショックへの懸念。", "start": 13.5},
+    {"text": "限定作戦か全面戦争か、今後数日が分岐点になると専門家。", "start": 17.5}
+  ],
+  "data_points": [],
+  "key_phrases": [
+    {
+      "en": "wider regional conflict",
+      "ja": "より広い地域紛争",
+      "example": "Leaders warned the strikes could trigger a wider regional conflict."
+    },
+    {
+      "en": "energy shock",
+      "ja": "エネルギーショック",
+      "example": "Markets fear the biggest energy shock in decades."
+    },
+    {
+      "en": "spiral into",
+      "ja": "〜に発展する・悪化する",
+      "example": "The situation could spiral into a full-scale war."
+    }
+  ],
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#イラン", "#中東", "#英語リスニング", "#Shorts"]
+}

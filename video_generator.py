@@ -29,6 +29,7 @@ OUTRO_DURATION = 3.0
 WORDS_PER_GROUP = 10
 CAPTION_LINGER = 0.8         # extra display time per word group for readability
 SECTION_CARD_DURATION = 1.5  # section transition card overlay duration
+JA_CHARS_PER_LINE = 20       # max Japanese characters per line before wrapping
 
 FONT_EN = "Arial"
 FONT_JA = "Noto Sans JP"
@@ -53,6 +54,36 @@ ROLE_LABELS = {
     "COUNTER": {"icon": "\u25C6", "color": "&H004466FF&"},
     "OUTLOOK": {"icon": "\u2605", "color": "&H00AAFFAA&"},
 }
+
+
+def _wrap_ja(text: str, limit: int = JA_CHARS_PER_LINE) -> str:
+    """Wrap Japanese text with ASS line breaks (\\N) at character limit."""
+    if len(text) <= limit:
+        return text
+    lines = []
+    while text:
+        # Allow slight overflow to avoid orphan chars (e.g. lone "。")
+        if len(text) <= limit + 2:
+            lines.append(text)
+            break
+        # Priority 1: break at "。" anywhere in the first `limit` chars
+        best = -1
+        for i in range(min(limit, len(text)) - 1, -1, -1):
+            if text[i] == "。":
+                best = i + 1
+                break
+        # Priority 2: break at other punctuation within last 12 chars
+        if best == -1:
+            for i in range(min(limit, len(text)) - 1, max(limit - 12, 0) - 1, -1):
+                if text[i] in "、！？）」』】～…・":
+                    best = i + 1
+                    break
+        # Fallback: break at limit
+        if best == -1:
+            best = limit
+        lines.append(text[:best])
+        text = text[best:]
+    return "\\N".join(lines)
 
 
 def _ass_time(seconds: float) -> str:
@@ -258,7 +289,7 @@ Style: HookLabel,{FONT_EN},32,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,
 Style: PhaseLabel,{FONT_EN},22,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,2,0,1,1,0,8,20,100,540,1
 Style: Progress,{FONT_EN},24,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,6,0,1,0,0,7,30,100,152,1
 Style: WordEN,{FONT_EN},42,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,4,2,8,50,50,660,1
-Style: JASub,{FONT_JA},30,&H0000FFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,50,80,800,1
+Style: JASub,{FONT_JA},36,&H0000FFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,50,80,800,1
 Style: KPNum,{FONT_EN},90,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,3,8,20,100,440,1
 Style: KPPhrase,{FONT_EN},50,{highlight_clr},&H000000FF,&H80000000,&H80000000,1,0,0,0,100,100,0,0,1,4,2,8,60,120,620,1
 Style: KPTrans,{FONT_JA},34,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,2,8,80,120,740,1
@@ -389,7 +420,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             f"{{\\fscx105\\fscy105\\t(0,300,\\fscx100\\fscy100)\\fad(200,150)}}{display_text}"
         )
 
-    # --- Japanese subtitles (auto font-size for long text) ---
+    # --- Japanese subtitles (line-wrapped) ---
     for i, seg in enumerate(ja_segments):
         if i < len(narr_timing):
             start = narr_timing[i]["start_s"] + NARRATION_OFFSET
@@ -400,17 +431,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         else:
             start = narr_end - 1.0
             end = narr_end
-        ja_text = seg["text"]
-        ja_len = len(ja_text)
-        if ja_len > 36:
-            fs_tag = "\\fs22"
-        elif ja_len > 28:
-            fs_tag = "\\fs26"
-        else:
-            fs_tag = ""
+        ja_text = _wrap_ja(seg["text"])
         events.append(
             f"Dialogue: 10,{_ass_time(start)},{_ass_time(end)},JASub,,0,0,0,,"
-            f"{{\\fad(300,200){fs_tag}}}  {ja_text}  "
+            f"{{\\fad(300,200)}}  {ja_text}  "
         )
 
     # ================================================================
@@ -442,18 +466,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 f"{{\\fscx105\\fscy105\\t(0,300,\\fscx100\\fscy100)\\fad(200,150)}}{display}"
             )
 
-        # Insight JA subtitle (auto-sized for long text)
+        # Insight JA subtitle (line-wrapped)
         if insight_ja:
-            ins_ja_len = len(insight_ja)
-            if ins_ja_len > 40:
-                ins_fs = "\\fs20"
-            elif ins_ja_len > 30:
-                ins_fs = "\\fs24"
-            else:
-                ins_fs = "\\fs26"
+            ins_ja_wrapped = _wrap_ja(insight_ja)
             events.append(
                 f"Dialogue: 10,{_ass_time(ins_start + 0.15)},{_ass_time(ins_end)},JASub,,70,100,0,,"
-                f"{{\\fad(400,300){ins_fs}}}  {insight_ja}  "
+                f"{{\\fad(400,300)}}  {ins_ja_wrapped}  "
             )
 
         # Connector bar
@@ -561,24 +579,24 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     outro_end = outro_start + OUTRO_DURATION
 
     # All elements appear simultaneously for clean, unified presentation
-    # Main engagement question (centered, big)
+    # Main engagement question (centered within dark overlay)
     events.append(
         f"Dialogue: 15,{_ass_time(outro_start)},{_ass_time(outro_end - 0.5)},Replay,,0,0,0,,"
-        f"{{\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(300,400)}}"
+        f"{{\\an5\\pos(540,820)\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(300,400)}}"
         f"  何問聞き取れた？  "
     )
 
-    # KP recap with checkmarks (centered, below question)
+    # KP recap (centered, below question, within dark overlay)
     kp_recap_lines = "  /  ".join(kp["en"] for kp in key_phrases)
     events.append(
         f"Dialogue: 10,{_ass_time(outro_start)},{_ass_time(outro_end - 0.3)},OutroSub,,0,0,0,,"
-        f"{{\\an5\\pos(540,1080)\\fad(300,400)}}  {kp_recap_lines}  "
+        f"{{\\an5\\pos(540,940)\\fad(300,400)}}  {kp_recap_lines}  "
     )
 
-    # Engagement CTA (comment + follow)
+    # Engagement CTA (centered, below KP recap, within dark overlay)
     events.append(
         f"Dialogue: 10,{_ass_time(outro_start)},{_ass_time(outro_end)},OutroCTA,,0,0,0,,"
-        f"{{\\an5\\pos(540,1200)\\fad(300,400)}}保存 + フォローで毎日英語！"
+        f"{{\\an5\\pos(540,1020)\\fad(300,400)}}保存 + フォローで毎日英語！"
     )
 
     # Loop hint: hook fades back in for seamless loop
@@ -748,25 +766,29 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
             audio_inputs += ["-i", kp_audio_path]
 
         audio_filter = (
-            f"[0:a]atrim=end={insight_audio_start:.3f},asetpts=PTS-STARTPTS,"
-            f"adelay={narr_delay_ms}|{narr_delay_ms},apad=whole_dur={total_duration:.2f}[narr];"
+            f"[0:a]atrim=end={insight_audio_start:.3f},"
+            f"afade=t=out:st={max(0, insight_audio_start - 0.08):.3f}:d=0.08,"
+            f"asetpts=PTS-STARTPTS,"
+            f"adelay={narr_delay_ms}|{narr_delay_ms},afade=t=in:d=0.015,"
+            f"apad=whole_dur={total_duration:.2f}[narr];"
             f"[1:a]atrim=start={insight_audio_start:.3f},asetpts=PTS-STARTPTS,"
+            f"afade=t=in:d=0.08,"
             f"adelay={insight_delay_ms}|{insight_delay_ms}[ins];"
             f"[2:a]volume=0.10,afade=t=in:d=1.5,afade=t=out:st={total_duration - 2.5:.1f}:d=2.5[bgm];"
-            f"[3:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5[sfx1];"
-            f"[4:a]adelay={max(0, insight_card_ms - 150)}|{max(0, insight_card_ms - 150)},volume=0.5[sfx2];"
-            f"[5:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5[sfx3];"
-            f"[6:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6[sfx4];"
+            f"[3:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5,afade=t=in:d=0.015[sfx1];"
+            f"[4:a]adelay={max(0, insight_card_ms - 150)}|{max(0, insight_card_ms - 150)},volume=0.5,afade=t=in:d=0.015[sfx2];"
+            f"[5:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5,afade=t=in:d=0.015[sfx3];"
+            f"[6:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6,afade=t=in:d=0.015[sfx4];"
         )
         if has_kp_audio:
             audio_filter += (
-                f"[{kp_input_idx}:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3[kpaudio];"
-                f"[narr][ins][bgm][sfx1][sfx2][sfx3][sfx4][kpaudio]amix=inputs=8:duration=first:dropout_transition=2,"
+                f"[{kp_input_idx}:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3,afade=t=in:d=0.015[kpaudio];"
+                f"[narr][ins][bgm][sfx1][sfx2][sfx3][sfx4][kpaudio]amix=inputs=8:duration=first:dropout_transition=0:normalize=0,"
                 f"apad=whole_dur={total_duration:.2f}[aout]"
             )
         else:
             audio_filter += (
-                f"[narr][ins][bgm][sfx1][sfx2][sfx3][sfx4]amix=inputs=7:duration=first:dropout_transition=2,"
+                f"[narr][ins][bgm][sfx1][sfx2][sfx3][sfx4]amix=inputs=7:duration=first:dropout_transition=0:normalize=0,"
                 f"apad=whole_dur={total_duration:.2f}[aout]"
             )
     else:
@@ -783,21 +805,22 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
             audio_inputs += ["-i", kp_audio_path]
 
         audio_filter = (
-            f"[0:a]adelay={narr_delay_ms}|{narr_delay_ms},apad=whole_dur={total_duration:.2f}[narr];"
+            f"[0:a]adelay={narr_delay_ms}|{narr_delay_ms},afade=t=in:d=0.015,"
+            f"apad=whole_dur={total_duration:.2f}[narr];"
             f"[1:a]volume=0.10,afade=t=in:d=1.5,afade=t=out:st={total_duration - 2.5:.1f}:d=2.5[bgm];"
-            f"[2:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5[sfx1];"
-            f"[3:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5[sfx2];"
-            f"[4:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6[sfx3];"
+            f"[2:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5,afade=t=in:d=0.015[sfx1];"
+            f"[3:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5,afade=t=in:d=0.015[sfx2];"
+            f"[4:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6,afade=t=in:d=0.015[sfx3];"
         )
         if has_kp_audio:
             audio_filter += (
-                f"[{kp_input_idx}:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3[kpaudio];"
-                f"[narr][bgm][sfx1][sfx2][sfx3][kpaudio]amix=inputs=6:duration=first:dropout_transition=2,"
+                f"[{kp_input_idx}:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3,afade=t=in:d=0.015[kpaudio];"
+                f"[narr][bgm][sfx1][sfx2][sfx3][kpaudio]amix=inputs=6:duration=first:dropout_transition=0:normalize=0,"
                 f"apad=whole_dur={total_duration:.2f}[aout]"
             )
         else:
             audio_filter += (
-                f"[narr][bgm][sfx1][sfx2][sfx3]amix=inputs=5:duration=first:dropout_transition=2,"
+                f"[narr][bgm][sfx1][sfx2][sfx3]amix=inputs=5:duration=first:dropout_transition=0:normalize=0,"
                 f"apad=whole_dur={total_duration:.2f}[aout]"
             )
 
