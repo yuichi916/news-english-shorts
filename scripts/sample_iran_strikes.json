@@ -1,0 +1,66 @@
+{
+  "id": "2026-03-01_iran_strikes",
+  "date": "2026-03-01",
+  "topic": "US and Israel launch massive strikes on Iran",
+  "theme": "midnight",
+  "hook_text": "米イスラエルがイランに大規模攻撃！",
+  "sources": [
+    {"name": "Al Jazeera", "url": "aljazeera.com/news/2026/2/28/us-and-israel-attack-iran"},
+    {"name": "NBC News", "url": "nbcnews.com/world/iran/us-israel-attacks-iran"},
+    {"name": "CNBC", "url": "cnbc.com/2026/02/28/trump-iran-strikes-live-updates.html"},
+    {"name": "Bloomberg", "url": "bloomberg.com/news/articles/2026-02-28/iran-khamenei"}
+  ],
+  "mission": {
+    "ja": "米イスラエルの作戦名は？英語で聞き取ろう",
+    "answer_ja": "答え: Operation Epic Fury（エピック・フューリー作戦）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Al Jazeera"},
+    {"sentence_idx": 1, "source": "NBC News"},
+    {"sentence_idx": 2, "source": "Bloomberg"},
+    {"sentence_idx": 3, "source": "Al Jazeera"},
+    {"sentence_idx": 4, "source": "CNBC"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "FACT"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "The United States and Israel launched a massive joint military operation against Iran on Saturday, striking targets across the country. The Pentagon confirmed that Operation Epic Fury hit Revolutionary Guard command centers, air defenses, and missile launch sites. Iran's state media reported that Supreme Leader Ayatollah Khamenei was killed in the strikes, marking a historic turning point. Tehran retaliated by firing missiles at Israel and at US bases across the Middle East, including Qatar and Bahrain. World leaders warned the escalation could destabilize the entire region, with France calling it a grave threat to international peace.",
+    "highlights": ["massive", "joint military operation", "Operation Epic Fury", "Revolutionary Guard", "air defenses", "Supreme Leader", "killed", "turning point", "retaliated", "firing missiles", "destabilize", "grave threat"]
+  },
+  "insight": {
+    "en": "This is the largest US military operation in the Middle East since the Iraq War. With Iran's supreme leader gone and retaliatory strikes spreading across the region, the risk of a wider conflict is now at its highest point in decades.",
+    "ja": "これはイラク戦争以来最大の米軍事作戦。最高指導者の死亡と報復攻撃の連鎖で、中東全域が数十年ぶりの紛争拡大リスクに直面している。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "米国とイスラエルがイランに大規模な共同軍事作戦を開始。", "start": 0.0},
+    {"text": "「エピック・フューリー作戦」で革命防衛隊の拠点などを攻撃。", "start": 4.5},
+    {"text": "最高指導者ハメネイ師が攻撃で死亡。歴史的転換点に。", "start": 9.0},
+    {"text": "イランはイスラエルや中東の米軍基地にミサイルで報復。", "start": 13.5},
+    {"text": "各国首脳は地域の不安定化を警告。仏は「国際平和への脅威」と。", "start": 17.5}
+  ],
+  "data_points": [],
+  "key_phrases": [
+    {
+      "en": "launch an operation",
+      "ja": "作戦を開始する",
+      "example": "The US launched a massive military operation."
+    },
+    {
+      "en": "turning point",
+      "ja": "転換点、転機",
+      "example": "His death marked a historic turning point."
+    },
+    {
+      "en": "destabilize",
+      "ja": "不安定化させる",
+      "example": "The conflict could destabilize the entire region."
+    }
+  ],
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#イラン", "#中東", "#TOEIC", "#英語リスニング", "#Shorts"]
+}
