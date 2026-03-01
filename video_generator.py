@@ -631,6 +631,7 @@ def generate_youtube_description(script: dict) -> str:
 
 def generate_video(script_path: str, audio_path: str, timing_path: str,
                     output_path: str, use_sd: bool = True,
+                    smart_bg: bool = False,
                     narr_sentence_count: int | None = None,
                     kp_audio_path: str | None = None,
                     kp_timing_path: str | None = None):
@@ -686,7 +687,7 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     if use_sd:
         try:
             from sd_bg_generator import ensure_sd_bg
-            bg_path = ensure_sd_bg(script, BG_DIR)
+            bg_path = ensure_sd_bg(script, BG_DIR, smart_bg=smart_bg)
         except Exception as e:
             print(f"SD background unavailable ({e}), using gradient fallback")
     if bg_path is None:

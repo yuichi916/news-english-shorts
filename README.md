@@ -26,34 +26,75 @@ YouTube Shorts向けの英語ニュース学習動画を自動生成するパイ
 ### インストール
 
 ```bash
-pip install edge-tts Pillow
+pip install edge-tts Pillow anthropic streamlit
 ```
 
-### オプション: Stable Diffusion 背景
+### オプション
 
-SD WebUI reForge が `localhost:7860` で起動している場合、トピックに合わせたAI背景画像を自動生成します。未起動の場合はグラデーション背景にフォールバックします。
+- **Stable Diffusion 背景**: SD WebUI reForge が `localhost:7860` で起動している場合、トピックに合わせたAI背景画像を自動生成。未起動の場合はグラデーション背景にフォールバック。
+- **ElevenLabs TTS**: `ELEVENLABS_API_KEY` を設定すると高品質音声を利用可能。
+- **スクリプト自動生成**: `ANTHROPIC_API_KEY` を設定するとClaude APIでスクリプトJSONを自動生成。
 
 ## 使い方
 
-### 単一スクリプトから動画生成
+### Streamlit Web UI（推奨）
+
+```bash
+streamlit run app.py
+```
+
+ブラウザでGUIが開き、以下の機能を利用できます：
+
+| タブ | 機能 |
+|---|---|
+| 📝 スクリプト生成 | トピック入力 → ニュース検索 → Claude APIでスクリプトJSON自動生成 |
+| 📂 スクリプト管理 | スクリプトの閲覧・編集・バリデーション・削除 |
+| 🎬 動画生成 | TTS設定・背景設定を選んで動画生成、プレーヤーで確認 |
+| ⚡ バッチ処理 | 複数スクリプトを一括処理、進捗バー付き |
+
+サイドバーにSD WebUI接続状態・APIキー設定状態・統計情報を表示。
+
+### CLI
+
+#### スクリプト自動生成
+
+```bash
+python script_generator.py --topic "AI regulation" --days 3
+python script_generator.py --topic "Apple AI" --theme ocean --run
+python script_generator.py --dry-run scripts/sample_iran_strikes.json  # バリデーションのみ
+```
+
+#### 単一スクリプトから動画生成
 
 ```bash
 python main.py scripts/sample_iran_strikes.json
 ```
 
-### 全スクリプトをバッチ処理
+#### 全スクリプトをバッチ処理
 
 ```bash
 python main.py --batch scripts
 ```
 
-### SD背景なしで生成（高速）
+#### SD背景なしで生成（高速）
 
 ```bash
 python main.py --batch scripts --no-sd
 ```
 
-### 音声の変更
+#### Smart背景（Claude AIでSDプロンプト生成）
+
+```bash
+python main.py scripts/sample_iran_strikes.json --smart-bg
+```
+
+#### ElevenLabs TTSで生成
+
+```bash
+python main.py scripts/sample_iran_strikes.json --tts elevenlabs
+```
+
+#### 音声の変更
 
 ```bash
 python main.py scripts/sample_apple_ai.json --voice female_us
@@ -111,11 +152,13 @@ output/
 
 ```
 news-english-shorts/
+├── app.py                # Streamlit Web UI
 ├── main.py               # エントリポイント（CLI）
+├── script_generator.py   # スクリプト自動生成（Google News + Claude API）
 ├── video_generator.py    # 動画生成（ASS字幕 + FFmpeg合成）
-├── tts_generator.py      # 音声生成（edge-tts + タイミングデータ）
+├── tts_generator.py      # 音声生成（edge-tts / ElevenLabs + タイミングデータ）
 ├── bg_generator.py       # グラデーション背景生成（Pillow）
-├── sd_bg_generator.py    # SD WebUI API 背景生成
+├── sd_bg_generator.py    # SD WebUI API 背景生成 + Smart BG（Claude AI）
 ├── scripts/              # ニューススクリプト（JSON）
 ├── backgrounds/          # 背景画像
 ├── audio/                # 生成された音声（.gitignore）
@@ -136,12 +179,24 @@ news-english-shorts/
 
 ## TTS 音声オプション
 
+### edge-tts（デフォルト）
+
 | キー | 音声 |
 |---|---|
 | `male_us` | en-US-GuyNeural（デフォルト） |
 | `female_us` | en-US-JennyNeural |
 | `male_uk` | en-GB-RyanNeural |
 | `female_uk` | en-GB-SoniaNeural |
+
+### ElevenLabs（`--tts elevenlabs`）
+
+| キー | 音声 |
+|---|---|
+| `el_brian` | Male, clear narrator（デフォルト） |
+| `el_daniel` | Male, British |
+| `el_adam` | Male, deep |
+| `el_rachel` | Female, classic |
+| `el_sarah` | Female, professional |
 
 ## ライセンス
 

@@ -15,7 +15,7 @@ import os
 import sys
 import time
 
-from tts_generator import generate_from_script, VOICES, DEFAULT_VOICE, DEFAULT_RATE
+from tts_generator import generate_from_script, VOICES, ELEVENLABS_VOICES, DEFAULT_VOICE, DEFAULT_RATE
 from video_generator import generate_video
 
 
@@ -26,7 +26,9 @@ OUTPUT_DIR = os.path.join(PROJECT_DIR, "output")
 
 
 def process_script(script_path: str, voice: str = DEFAULT_VOICE,
-                    rate: str = DEFAULT_RATE, use_sd: bool = True) -> str:
+                    rate: str = DEFAULT_RATE, use_sd: bool = True,
+                    smart_bg: bool = False,
+                    tts_engine: str = "edge") -> str:
     """Run full pipeline on a single script file."""
     with open(script_path, "r", encoding="utf-8") as f:
         script = json.load(f)
@@ -41,10 +43,11 @@ def process_script(script_path: str, voice: str = DEFAULT_VOICE,
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # Step 1: Generate TTS audio (narration + insight + KP examples)
-    print("\n[1/2] Generating TTS audio...")
+    engine_label = f"ElevenLabs" if tts_engine == "elevenlabs" else "edge-tts"
+    print(f"\n[1/2] Generating TTS audio ({engine_label})...")
     t0 = time.time()
     audio_path, srt_path, timing_path, _, narr_sentence_count, kp_audio_path, kp_timing_path = generate_from_script(
-        script_path, AUDIO_DIR, voice=voice, rate=rate
+        script_path, AUDIO_DIR, voice=voice, rate=rate, tts_engine=tts_engine
     )
     print(f"  Done in {time.time() - t0:.1f}s")
 
@@ -55,6 +58,7 @@ def process_script(script_path: str, voice: str = DEFAULT_VOICE,
     generate_video(
         script_path, audio_path, timing_path, output_path,
         use_sd=use_sd,
+        smart_bg=smart_bg,
         narr_sentence_count=narr_sentence_count,
         kp_audio_path=kp_audio_path,
         kp_timing_path=kp_timing_path,
@@ -90,6 +94,14 @@ def main():
         help="Disable Stable Diffusion backgrounds (use gradient fallback)"
     )
     parser.add_argument(
+        "--smart-bg", action="store_true",
+        help="Use Claude AI to generate contextual SD background prompts"
+    )
+    parser.add_argument(
+        "--tts", choices=["edge", "elevenlabs"], default="edge",
+        help="TTS engine (default: edge)"
+    )
+    parser.add_argument(
         "--list-voices", action="store_true",
         help="List available TTS voices"
     )
@@ -97,8 +109,11 @@ def main():
     args = parser.parse_args()
 
     if args.list_voices:
-        print("Available voices:")
+        print("Available voices (edge-tts):")
         for name, voice_id in VOICES.items():
+            print(f"  {name}: {voice_id}")
+        print("\nAvailable voices (ElevenLabs):")
+        for name, voice_id in ELEVENLABS_VOICES.items():
             print(f"  {name}: {voice_id}")
         return
 
@@ -106,6 +121,8 @@ def main():
     voice = VOICES.get(args.voice, args.voice)
 
     use_sd = not args.no_sd
+    smart_bg = args.smart_bg
+    tts_engine = args.tts
 
     if args.batch:
         scripts = sorted(glob.glob(os.path.join(args.batch, "*.json")))
@@ -116,10 +133,16 @@ def main():
         print(f"Batch processing {len(scripts)} scripts...")
         if not use_sd:
             print("  (SD backgrounds disabled)")
+        if smart_bg:
+            print("  (Smart SD backgrounds: Claude AI)")
+        if tts_engine == "elevenlabs":
+            print("  (TTS: ElevenLabs)")
         outputs = []
         for script_path in scripts:
             try:
-                output = process_script(script_path, voice=voice, rate=args.rate, use_sd=use_sd)
+                output = process_script(script_path, voice=voice, rate=args.rate,
+                                        use_sd=use_sd, smart_bg=smart_bg,
+                                        tts_engine=tts_engine)
                 outputs.append(output)
             except Exception as e:
                 print(f"ERROR processing {script_path}: {e}")
@@ -133,7 +156,9 @@ def main():
         if not os.path.exists(args.script):
             print(f"Script not found: {args.script}")
             sys.exit(1)
-        process_script(args.script, voice=voice, rate=args.rate, use_sd=use_sd)
+        process_script(args.script, voice=voice, rate=args.rate,
+                       use_sd=use_sd, smart_bg=smart_bg,
+                       tts_engine=tts_engine)
 
     else:
         parser.print_help()
