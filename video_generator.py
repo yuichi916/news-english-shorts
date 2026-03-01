@@ -1,14 +1,16 @@
-"""Video generation pipeline v8.6 - Smooth transitions + JA char limit.
+"""Video generation pipeline v8.8 - Full INSIGHT transition + visual cleanup.
 
-v8.6 changes:
-- Section cards 0.8→1.5s for clear phase boundaries
-- All fad/animation speeds ~2x slower for smooth, calm transitions
-- Per-sentence flashes softened (alpha + duration)
-- JA subtitle auto font-size reduction for long text (>28 chars)
-- CAPTION_LINGER 0.6→0.8 for longer word display
+v8.8 changes:
+- INSIGHT section card now has full 1.5s duration with audio gap
+- Audio split into narration/insight tracks for proper transition
+- Removed DataVal/DataLabel overlays (200MP etc.)
+- Removed SentRole labels, per-sentence flashes, word coloring
+- Cleaner, less cluttered viewing experience
 
-v8.5: Section transition cards (LISTEN/INSIGHT/KEY PHRASES/ANSWER)
-v8.4: WORDS_PER_GROUP 10, WordEN 42pt, JASub 30pt, layout overhaul
+v8.7: Section cards finish before content, subtle keyword highlights
+v8.6: Smooth transitions, JA char limit
+v8.5: Section transition cards
+v8.4: WORDS_PER_GROUP 10, layout overhaul
 """
 
 import json
@@ -188,7 +190,7 @@ def _add_section_card(events, t, num, total, title_en, title_ja, accent, duratio
 
 def _generate_ass(script: dict, timing_data: list, total_duration: float,
                   narr_sentence_count: int, kp_timing_data: list | None = None,
-                  kp_phase_start: float = 0, insight_phase_start: float = 0) -> str:
+                  kp_phase_start: float = 0, insight_offset: float = 0) -> str:
     """Generate v8 ASS subtitle file."""
     narration = script["narration"]
     ja_segments = script["japanese_subtitle_segments"]
@@ -197,7 +199,6 @@ def _generate_ass(script: dict, timing_data: list, total_duration: float,
     topic = script["topic"]
     cta = script.get("cta", "")
     sources = script.get("sources", [])
-    data_points = script.get("data_points", [])
     highlights = narration.get("highlights", [])
     theme = script.get("theme", "midnight")
     hook_text = script.get("hook_text", "")
@@ -208,7 +209,6 @@ def _generate_ass(script: dict, timing_data: list, total_duration: float,
         sources = [{"name": script["source"], "url": script.get("source_url", "")}]
 
     source_mentions = script.get("source_mentions", [])
-    narration_structure = script.get("narration_structure", [])
 
     colors = _get_theme_colors(theme)
     accent = colors["accent"]
@@ -218,10 +218,6 @@ def _generate_ass(script: dict, timing_data: list, total_duration: float,
     sent_source_map = {}
     for sm in source_mentions:
         sent_source_map[sm["sentence_idx"]] = sm["source"]
-    sent_role_map = {}
-    for ns in narration_structure:
-        sent_role_map[ns["sentence_idx"]] = ns["role"]
-
     # Split timing into narration vs insight
     narr_timing = timing_data[:narr_sentence_count]
     insight_timing = timing_data[narr_sentence_count:]
@@ -256,8 +252,6 @@ Style: Topic,{FONT_EN},30,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,10
 Style: AccentBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,100,120,1
 Style: Source,{FONT_EN},18,&HA0FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,1,30,30,48,1
 Style: SourceTag,{FONT_EN},20,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,1,0,7,30,100,176,1
-Style: DataVal,{FONT_EN},80,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,3,8,60,120,400,1
-Style: DataLabel,{FONT_EN},26,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,10,0,8,80,120,500,1
 Style: IntroHook,{FONT_JA},48,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,100,100,0,0,3,20,0,8,60,120,500,1
 Style: HookQ,{FONT_JA},50,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,100,100,0,0,3,20,0,5,60,120,0,1
 Style: HookLabel,{FONT_EN},32,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,3,0,1,3,0,8,20,100,560,1
@@ -275,7 +269,6 @@ Style: AnswerText,{FONT_JA},38,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0
 Style: CTA,{FONT_JA},30,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,0,8,20,100,740,1
 Style: Replay,{FONT_JA},40,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,16,0,5,60,120,0,1
 Style: SourceCurrent,{FONT_EN},20,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,1,0,3,8,0,7,30,100,200,1
-Style: SentRole,{FONT_EN},16,&H80FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,2,0,1,1,0,7,30,100,228,1
 Style: ConnBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,80,775,1
 Style: SectionTitle,{FONT_EN},56,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,4,0,1,4,3,5,0,0,0,1
 Style: SectionSub,{FONT_JA},28,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,1,5,0,0,0,1
@@ -372,39 +365,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 f"{{\\fad(350,250)\\c{src_color}}}  \u25C9 {src_name}  "
             )
 
-        # Role label
-        role = sent_role_map.get(si)
-        if role and role in ROLE_LABELS:
-            rl = ROLE_LABELS[role]
-            events.append(
-                f"Dialogue: 6,{_ass_time(s_start)},{_ass_time(s_end)},SentRole,,0,0,0,,"
-                f"{{\\fad(350,250)\\c{rl['color']}}}{rl['icon']} {role}"
-            )
-
         # Connector bar
         events.append(
             f"Dialogue: 4,{_ass_time(s_start)},{_ass_time(s_end)},ConnBar,,0,0,0,,"
             f"{{\\fad(350,250)\\p1}}m 0 0 l 800 0 l 800 2 l 0 2{{\\p0}}"
         )
-
-    # Per-sentence colored flash (softened)
-    for si in range(1, num_narr_sentences):
-        flash_t = narr_timing[si]["start_s"] + NARRATION_OFFSET
-        src_name = sent_source_map.get(si)
-        flash_color = source_color_map.get(src_name, "&H00FFFFFF&") if src_name else "&H00FFFFFF&"
-        events.append(
-            f"Dialogue: 25,{_ass_time(flash_t - 0.02)},{_ass_time(flash_t + 0.22)},Flash,,0,0,0,,"
-            f"{{\\c{flash_color}\\3c{flash_color}\\4c{flash_color}"
-            f"\\alpha&HC8&\\t(0,220,\\alpha&HFF&)\\p1}}"
-            f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
-        )
-
-    # Source name color map for word captions
-    _source_word_colors = {}
-    for src in sources:
-        src_color = source_color_map.get(src["name"], accent)
-        for w in src["name"].split():
-            _source_word_colors[w.lower()] = src_color
 
     # Word-by-word English captions (with linger for readability)
     for gi, group in enumerate(word_groups):
@@ -416,42 +381,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             end = min(raw_end + CAPTION_LINGER, next_start + 0.12)
         else:
             end = min(raw_end + CAPTION_LINGER, narr_end)
-        parts = []
-        for word, is_hl in zip(group["words"], group["highlighted"]):
-            clean = word.strip(".,;:!?\"'()").lower()
-            src_clr = _source_word_colors.get(clean)
-            if is_hl:
-                parts.append(
-                    "{\\c&HE0DDFF&}" + word +
-                    "{\\c&HFFFFFF&}"
-                )
-            elif src_clr:
-                parts.append(
-                    "{\\c&HE8E0E0&}" + word +
-                    "{\\c&HFFFFFF&}"
-                )
-            else:
-                parts.append(word)
-        display_text = " ".join(parts)
+        display_text = " ".join(group["words"])
         events.append(
             f"Dialogue: 10,{_ass_time(start)},{_ass_time(end)},WordEN,,0,0,0,,"
             f"{{\\fscx105\\fscy105\\t(0,300,\\fscx100\\fscy100)\\fad(200,150)}}{display_text}"
         )
-
-    # Data point overlays
-    for dp in data_points:
-        si = dp.get("sentence_idx", 0)
-        if si < len(narr_timing):
-            dp_start = narr_timing[si]["start_s"] + NARRATION_OFFSET
-            dp_end = narr_timing[si]["end_s"] + NARRATION_OFFSET
-            events.append(
-                f"Dialogue: 20,{_ass_time(dp_start)},{_ass_time(dp_end)},DataVal,,0,0,0,,"
-                f"{{\\fscx130\\fscy130\\t(0,500,\\fscx100\\fscy100)\\fad(400,350)}}{dp['value']}"
-            )
-            events.append(
-                f"Dialogue: 20,{_ass_time(dp_start + 0.2)},{_ass_time(dp_end)},DataLabel,,0,0,0,,"
-                f"{{\\fad(450,350)}}  {dp['label']}  "
-            )
 
     # --- Japanese subtitles (auto font-size for long text) ---
     for i, seg in enumerate(ja_segments):
@@ -481,23 +415,22 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # PHASE 2.5: INSIGHT (after narration, before key phrases)
     # ================================================================
     if insight_timing:
-        ins_start = insight_timing[0]["start_s"] + NARRATION_OFFSET
-        ins_end = insight_timing[-1]["end_s"] + NARRATION_OFFSET
+        ins_start = insight_timing[0]["start_s"] + insight_offset
+        ins_end = insight_timing[-1]["end_s"] + insight_offset
 
-        # Section card: INSIGHT (short card at narration end, before insight audio)
-        _add_section_card(events, narr_end, 2, 4, "INSIGHT", "\u8003\u5bdf\u30bf\u30a4\u30e0",
-                          accent, duration=0.8)
+        # Section card: INSIGHT (full card, plays during audio gap)
+        _add_section_card(events, narr_end, 2, 4, "INSIGHT", "\u8003\u5bdf\u30bf\u30a4\u30e0", accent)
         events.append(
-            f"Dialogue: 5,{_ass_time(ins_start + SECTION_CARD_DURATION)},{_ass_time(ins_end)},PhaseLabel,,0,0,0,,"
+            f"Dialogue: 5,{_ass_time(ins_start)},{_ass_time(ins_end)},PhaseLabel,,0,0,0,,"
             f"{{\\fad(400,300)}}INSIGHT"
         )
 
         # Insight word groups (EN) with linger
         for gi, group in enumerate(insight_word_groups):
-            g_start = group["start"] + NARRATION_OFFSET
-            g_raw_end = group["end"] + NARRATION_OFFSET
+            g_start = group["start"] + insight_offset
+            g_raw_end = group["end"] + insight_offset
             if gi + 1 < len(insight_word_groups):
-                g_next = insight_word_groups[gi + 1]["start"] + NARRATION_OFFSET
+                g_next = insight_word_groups[gi + 1]["start"] + insight_offset
                 g_end = min(g_raw_end + CAPTION_LINGER, g_next + 0.12)
             else:
                 g_end = min(g_raw_end + CAPTION_LINGER, ins_end)
@@ -678,9 +611,17 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
         with open(kp_timing_path, "r", encoding="utf-8") as f:
             kp_timing_data = json.load(f)
 
+    # Calculate insight offset (audio gap for section card)
+    if insight_timing:
+        insight_audio_start = insight_timing[0]["start_s"]
+        insight_offset = narr_end + SECTION_CARD_DURATION - insight_audio_start
+        all_audio_end = insight_timing[-1]["end_s"] + insight_offset
+    else:
+        insight_offset = NARRATION_OFFSET
+        # all_audio_end already set above
+
     # Calculate phase starts (section card gaps included)
     kp_phase_start = all_audio_end + 0.15 + SECTION_CARD_DURATION  # card, then KP content
-    insight_phase_start = narr_end + 0.15 if insight_timing else narr_end
 
     # KP duration
     if kp_timing_data:
@@ -719,7 +660,7 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     ass_content = _generate_ass(
         script, timing_data, total_duration,
         narr_sentence_count, kp_timing_data,
-        kp_phase_start, insight_phase_start
+        kp_phase_start, insight_offset
     )
     ass_path = output_path.replace(".mp4", ".ass")
     with open(ass_path, "w", encoding="utf-8-sig") as f:
@@ -729,46 +670,88 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     bg_ffmpeg = bg_path.replace("\\", "/").replace(":", "\\:")
 
     # ================================================================
-    # AUDIO MIX (5 or 6 inputs)
+    # AUDIO MIX (split narration/insight for proper transition gap)
     # ================================================================
     narr_delay_ms = int(NARRATION_OFFSET * 1000)
     # SFX plays when section card appears (before content starts)
     listen_card_ms = int(HOOK_DURATION * 1000)
+    insight_card_ms = int(narr_end * 1000) if insight_timing else 0
     kp_card_ms = int((all_audio_end + 0.15) * 1000)
     kp_start_ms = int(kp_phase_start * 1000)
     ans_card_ms = int((kp_end + 0.15) * 1000)
 
-    audio_inputs = [
-        "-i", audio_path,       # [0] narration + insight
-        "-i", bgm_path,         # [1] bgm
-        "-i", sfx_transition,   # [2] LISTEN card SFX
-        "-i", sfx_transition,   # [3] KEY PHRASES card SFX
-        "-i", sfx_reveal,       # [4] ANSWER card SFX
-    ]
-
     has_kp_audio = kp_audio_path and os.path.exists(kp_audio_path)
-    if has_kp_audio:
-        audio_inputs += ["-i", kp_audio_path]   # [5] KP example audio
+    has_insight = bool(insight_timing)
 
-    audio_filter = (
-        f"[0:a]adelay={narr_delay_ms}|{narr_delay_ms},apad=whole_dur={total_duration:.2f}[narr];"
-        f"[1:a]volume=0.10,afade=t=in:d=1.5,afade=t=out:st={total_duration - 2.5:.1f}:d=2.5[bgm];"
-        f"[2:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5[sfx1];"
-        f"[3:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5[sfx2];"
-        f"[4:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6[sfx3];"
-    )
+    if has_insight:
+        # Split audio: narration and insight are separate tracks
+        insight_delay_ms = int((narr_end + SECTION_CARD_DURATION) * 1000)
+        audio_inputs = [
+            "-i", audio_path,       # [0] narration portion (trimmed)
+            "-i", audio_path,       # [1] insight portion (trimmed, delayed)
+            "-i", bgm_path,         # [2] bgm
+            "-i", sfx_transition,   # [3] LISTEN card SFX
+            "-i", sfx_transition,   # [4] INSIGHT card SFX
+            "-i", sfx_transition,   # [5] KEY PHRASES card SFX
+            "-i", sfx_reveal,       # [6] ANSWER card SFX
+        ]
+        kp_input_idx = 7
+        if has_kp_audio:
+            audio_inputs += ["-i", kp_audio_path]
 
-    if has_kp_audio:
-        audio_filter += (
-            f"[5:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3[kpaudio];"
-            f"[narr][bgm][sfx1][sfx2][sfx3][kpaudio]amix=inputs=6:duration=first:dropout_transition=2,"
-            f"apad=whole_dur={total_duration:.2f}[aout]"
+        audio_filter = (
+            f"[0:a]atrim=end={insight_audio_start:.3f},asetpts=PTS-STARTPTS,"
+            f"adelay={narr_delay_ms}|{narr_delay_ms},apad=whole_dur={total_duration:.2f}[narr];"
+            f"[1:a]atrim=start={insight_audio_start:.3f},asetpts=PTS-STARTPTS,"
+            f"adelay={insight_delay_ms}|{insight_delay_ms}[ins];"
+            f"[2:a]volume=0.10,afade=t=in:d=1.5,afade=t=out:st={total_duration - 2.5:.1f}:d=2.5[bgm];"
+            f"[3:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5[sfx1];"
+            f"[4:a]adelay={max(0, insight_card_ms - 150)}|{max(0, insight_card_ms - 150)},volume=0.5[sfx2];"
+            f"[5:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5[sfx3];"
+            f"[6:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6[sfx4];"
         )
+        if has_kp_audio:
+            audio_filter += (
+                f"[{kp_input_idx}:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3[kpaudio];"
+                f"[narr][ins][bgm][sfx1][sfx2][sfx3][sfx4][kpaudio]amix=inputs=8:duration=first:dropout_transition=2,"
+                f"apad=whole_dur={total_duration:.2f}[aout]"
+            )
+        else:
+            audio_filter += (
+                f"[narr][ins][bgm][sfx1][sfx2][sfx3][sfx4]amix=inputs=7:duration=first:dropout_transition=2,"
+                f"apad=whole_dur={total_duration:.2f}[aout]"
+            )
     else:
-        audio_filter += (
-            f"[narr][bgm][sfx1][sfx2][sfx3]amix=inputs=5:duration=first:dropout_transition=2,"
-            f"apad=whole_dur={total_duration:.2f}[aout]"
+        # No insight: simple single audio track
+        audio_inputs = [
+            "-i", audio_path,       # [0] narration
+            "-i", bgm_path,         # [1] bgm
+            "-i", sfx_transition,   # [2] LISTEN card SFX
+            "-i", sfx_transition,   # [3] KEY PHRASES card SFX
+            "-i", sfx_reveal,       # [4] ANSWER card SFX
+        ]
+        kp_input_idx = 5
+        if has_kp_audio:
+            audio_inputs += ["-i", kp_audio_path]
+
+        audio_filter = (
+            f"[0:a]adelay={narr_delay_ms}|{narr_delay_ms},apad=whole_dur={total_duration:.2f}[narr];"
+            f"[1:a]volume=0.10,afade=t=in:d=1.5,afade=t=out:st={total_duration - 2.5:.1f}:d=2.5[bgm];"
+            f"[2:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5[sfx1];"
+            f"[3:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5[sfx2];"
+            f"[4:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6[sfx3];"
         )
+        if has_kp_audio:
+            audio_filter += (
+                f"[{kp_input_idx}:a]adelay={kp_start_ms}|{kp_start_ms},volume=1.3[kpaudio];"
+                f"[narr][bgm][sfx1][sfx2][sfx3][kpaudio]amix=inputs=6:duration=first:dropout_transition=2,"
+                f"apad=whole_dur={total_duration:.2f}[aout]"
+            )
+        else:
+            audio_filter += (
+                f"[narr][bgm][sfx1][sfx2][sfx3]amix=inputs=5:duration=first:dropout_transition=2,"
+                f"apad=whole_dur={total_duration:.2f}[aout]"
+            )
 
     # ================================================================
     # VIDEO: Background + zoom + dark overlay + ASS + progress bar
