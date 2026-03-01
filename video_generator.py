@@ -20,7 +20,7 @@ HEIGHT = 1920
 
 # Phase timing
 HOOK_DURATION = 3.5
-NARRATION_OFFSET = 3.5       # = HOOK_DURATION
+NARRATION_OFFSET = 5.0       # HOOK_DURATION + SECTION_CARD_DURATION (card finishes before audio)
 KEY_PHRASES_FALLBACK = 6.0   # fallback when no KP audio
 ANSWER_DURATION = 3.5
 OUTRO_DURATION = 3.0
@@ -138,37 +138,50 @@ def _estimate_word_groups(timing_data: list, highlights: list, group_size: int =
     return all_groups
 
 
-def _add_section_card(events, t, num, total, title_en, title_ja, accent):
+def _add_section_card(events, t, num, total, title_en, title_ja, accent, duration=None):
     """Add a section transition card overlay (dark scrim + title + JA)."""
-    t_end = t + SECTION_CARD_DURATION
-    fade_out_start = int((SECTION_CARD_DURATION - 0.5) * 1000)
-    fade_out_end = int(SECTION_CARD_DURATION * 1000)
+    dur = duration if duration is not None else SECTION_CARD_DURATION
+    t_end = t + dur
 
-    # Dark scrim (full screen, gradual fade out over last 500ms)
+    if dur >= 1.2:
+        # Full card (1.5s) - leisurely pace
+        scrim_t = f"\\t(1000,1500,\\alpha&HFF&)"
+        num_fad = "\\fad(200,350)"
+        title_fad = "\\fad(150,400)"
+        title_anim = "\\fscx120\\fscy120\\t(0,450,\\fscx100\\fscy100)"
+        sub_fad = "\\fad(250,400)\\alpha&H40&"
+        sub_delay = 0.25
+    else:
+        # Short card (0.8s) - quick label
+        scrim_t = f"\\t(480,800,\\alpha&HFF&)"
+        num_fad = "\\fad(100,200)"
+        title_fad = "\\fad(80,250)"
+        title_anim = "\\fscx115\\fscy115\\t(0,250,\\fscx100\\fscy100)"
+        sub_fad = "\\fad(120,250)\\alpha&H40&"
+        sub_delay = 0.12
+
+    # Dark scrim
     events.append(
-        f"Dialogue: 35,{_ass_time(t - 0.15)},{_ass_time(t_end)},Flash,,0,0,0,,"
-        f"{{\\alpha&H10&\\t({fade_out_start},{fade_out_end},\\alpha&HFF&)\\p1}}"
+        f"Dialogue: 35,{_ass_time(t - 0.1)},{_ass_time(t_end)},Flash,,0,0,0,,"
+        f"{{\\alpha&H10&{scrim_t}\\p1}}"
         f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
     )
-
-    # Section number: "━━ 01 / 04 ━━"
+    # Section number
     events.append(
-        f"Dialogue: 40,{_ass_time(t + 0.1)},{_ass_time(t_end - 0.2)},SectionTitle,,0,0,0,,"
-        f"{{\\an5\\pos(540,840)\\fs22\\c{accent}\\fad(200,350)}}"
+        f"Dialogue: 40,{_ass_time(t + 0.08)},{_ass_time(t_end - 0.1)},SectionTitle,,0,0,0,,"
+        f"{{\\an5\\pos(540,840)\\fs22\\c{accent}{num_fad}}}"
         f"\u2501\u2501  {num:02d} / {total:02d}  \u2501\u2501"
     )
-
-    # Main title (gentle pop-in)
+    # Main title
     events.append(
-        f"Dialogue: 40,{_ass_time(t + 0.1)},{_ass_time(t_end - 0.15)},SectionTitle,,0,0,0,,"
-        f"{{\\an5\\pos(540,910)\\fscx120\\fscy120\\t(0,450,\\fscx100\\fscy100)\\fad(150,400)}}"
+        f"Dialogue: 40,{_ass_time(t + 0.08)},{_ass_time(t_end - 0.05)},SectionTitle,,0,0,0,,"
+        f"{{\\an5\\pos(540,910){title_anim}{title_fad}}}"
         f"{title_en}"
     )
-
     # Japanese subtitle
     events.append(
-        f"Dialogue: 40,{_ass_time(t + 0.25)},{_ass_time(t_end - 0.15)},SectionSub,,0,0,0,,"
-        f"{{\\an5\\pos(540,985)\\fad(250,400)\\alpha&H40&}}"
+        f"Dialogue: 40,{_ass_time(t + sub_delay)},{_ass_time(t_end - 0.05)},SectionSub,,0,0,0,,"
+        f"{{\\an5\\pos(540,985){sub_fad}}}"
         f"{title_ja}"
     )
 
@@ -325,8 +338,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     narr_start = NARRATION_OFFSET
     narr_end = narr_timing[-1]["end_s"] + NARRATION_OFFSET if narr_timing else 28
 
-    # Section card: LISTEN
-    _add_section_card(events, narr_start, 1, 4, "LISTEN", "\u30cb\u30e5\u30fc\u30b9\u3092\u8074\u3053\u3046", accent)
+    # Section card: LISTEN (plays during gap before narration audio starts)
+    _add_section_card(events, narr_start - SECTION_CARD_DURATION, 1, 4,
+                      "LISTEN", "\u30cb\u30e5\u30fc\u30b9\u3092\u8074\u3053\u3046", accent)
     events.append(
         f"Dialogue: 5,{_ass_time(narr_start + SECTION_CARD_DURATION)},{_ass_time(narr_end)},PhaseLabel,,0,0,0,,"
         f"{{\\fad(400,300)}}LISTEN"
@@ -408,13 +422,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             src_clr = _source_word_colors.get(clean)
             if is_hl:
                 parts.append(
-                    "{\\c" + highlight_clr + "\\fscx115\\fscy115}" + word +
-                    "{\\c&HFFFFFF&\\fscx100\\fscy100}"
+                    "{\\c&HE0DDFF&}" + word +
+                    "{\\c&HFFFFFF&}"
                 )
             elif src_clr:
                 parts.append(
-                    "{\\c" + src_clr + "\\fscx110\\fscy110}" + word +
-                    "{\\c&HFFFFFF&\\fscx100\\fscy100}"
+                    "{\\c&HE8E0E0&}" + word +
+                    "{\\c&HFFFFFF&}"
                 )
             else:
                 parts.append(word)
@@ -470,8 +484,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         ins_start = insight_timing[0]["start_s"] + NARRATION_OFFSET
         ins_end = insight_timing[-1]["end_s"] + NARRATION_OFFSET
 
-        # Section card: INSIGHT
-        _add_section_card(events, ins_start, 2, 4, "INSIGHT", "\u8003\u5bdf\u30bf\u30a4\u30e0", accent)
+        # Section card: INSIGHT (short card at narration end, before insight audio)
+        _add_section_card(events, narr_end, 2, 4, "INSIGHT", "\u8003\u5bdf\u30bf\u30a4\u30e0",
+                          accent, duration=0.8)
         events.append(
             f"Dialogue: 5,{_ass_time(ins_start + SECTION_CARD_DURATION)},{_ass_time(ins_end)},PhaseLabel,,0,0,0,,"
             f"{{\\fad(400,300)}}INSIGHT"
@@ -517,8 +532,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # ================================================================
     kp_start = kp_phase_start
 
-    # Section card: KEY PHRASES
-    _add_section_card(events, kp_start, 3, 4, "KEY PHRASES", "\u91cd\u8981\u30d5\u30ec\u30fc\u30ba", accent)
+    # Section card: KEY PHRASES (card plays before kp_start, content starts at kp_start)
+    _add_section_card(events, kp_start - SECTION_CARD_DURATION, 3, 4,
+                      "KEY PHRASES", "\u91cd\u8981\u30d5\u30ec\u30fc\u30ba", accent)
     events.append(
         f"Dialogue: 5,{_ass_time(kp_start + SECTION_CARD_DURATION)},{_ass_time(kp_end)},PhaseLabel,,0,0,0,,"
         f"{{\\fad(400,300)}}KEY PHRASES"
@@ -572,23 +588,23 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # ================================================================
     # PHASE 4: ANSWER
     # ================================================================
-    ans_start = kp_end + 0.15
+    # Card plays first, then answer content starts
+    ans_card_time = kp_end + 0.15
+    ans_start = ans_card_time + SECTION_CARD_DURATION
     ans_end = ans_start + ANSWER_DURATION
 
-    # Section card: ANSWER
-    _add_section_card(events, ans_start, 4, 4, "ANSWER", "\u7b54\u3048\u5408\u308f\u305b", accent)
-    # Answer content appears after card fades
-    card_end = ans_start + SECTION_CARD_DURATION
+    # Section card: ANSWER (card finishes at ans_start)
+    _add_section_card(events, ans_card_time, 4, 4, "ANSWER", "\u7b54\u3048\u5408\u308f\u305b", accent)
     events.append(
-        f"Dialogue: 15,{_ass_time(card_end - 0.1)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
+        f"Dialogue: 15,{_ass_time(ans_start)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
         f"{{\\fscx160\\fscy160\\t(0,800,\\fscx100\\fscy100)\\blur2\\t(0,800,\\blur0)}}ANSWER"
     )
     events.append(
-        f"Dialogue: 15,{_ass_time(card_end + 0.25)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
+        f"Dialogue: 15,{_ass_time(ans_start + 0.3)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
         f"{{\\fscx90\\fscy90\\t(0,600,\\fscx100\\fscy100)\\fad(450,500)}}  {mission['answer_ja']}  "
     )
     events.append(
-        f"Dialogue: 10,{_ass_time(card_end + 0.7)},{_ass_time(ans_end)},CTA,,0,0,0,,"
+        f"Dialogue: 10,{_ass_time(ans_start + 0.7)},{_ass_time(ans_end)},CTA,,0,0,0,,"
         f"{{\\fad(500,500)}}{cta}"
     )
 
@@ -662,8 +678,8 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
         with open(kp_timing_path, "r", encoding="utf-8") as f:
             kp_timing_data = json.load(f)
 
-    # Calculate phase starts
-    kp_phase_start = all_audio_end + 0.15
+    # Calculate phase starts (section card gaps included)
+    kp_phase_start = all_audio_end + 0.15 + SECTION_CARD_DURATION  # card, then KP content
     insight_phase_start = narr_end + 0.15 if insight_timing else narr_end
 
     # KP duration
@@ -674,7 +690,8 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
 
     kp_end = kp_phase_start + kp_duration
 
-    total_duration = kp_end + ANSWER_DURATION + OUTRO_DURATION + 0.40
+    # Answer: card gap + content + outro
+    total_duration = kp_end + 0.15 + SECTION_CARD_DURATION + ANSWER_DURATION + OUTRO_DURATION + 0.25
 
     # Ensure background
     bg_path = None
@@ -715,15 +732,18 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     # AUDIO MIX (5 or 6 inputs)
     # ================================================================
     narr_delay_ms = int(NARRATION_OFFSET * 1000)
+    # SFX plays when section card appears (before content starts)
+    listen_card_ms = int(HOOK_DURATION * 1000)
+    kp_card_ms = int((all_audio_end + 0.15) * 1000)
     kp_start_ms = int(kp_phase_start * 1000)
-    ans_start_ms = int((kp_end + 0.15) * 1000)
+    ans_card_ms = int((kp_end + 0.15) * 1000)
 
     audio_inputs = [
         "-i", audio_path,       # [0] narration + insight
         "-i", bgm_path,         # [1] bgm
-        "-i", sfx_transition,   # [2] hook→narration transition
-        "-i", sfx_transition,   # [3] narration→kp transition
-        "-i", sfx_reveal,       # [4] answer reveal
+        "-i", sfx_transition,   # [2] LISTEN card SFX
+        "-i", sfx_transition,   # [3] KEY PHRASES card SFX
+        "-i", sfx_reveal,       # [4] ANSWER card SFX
     ]
 
     has_kp_audio = kp_audio_path and os.path.exists(kp_audio_path)
@@ -733,9 +753,9 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     audio_filter = (
         f"[0:a]adelay={narr_delay_ms}|{narr_delay_ms},apad=whole_dur={total_duration:.2f}[narr];"
         f"[1:a]volume=0.10,afade=t=in:d=1.5,afade=t=out:st={total_duration - 2.5:.1f}:d=2.5[bgm];"
-        f"[2:a]adelay={max(0, narr_delay_ms - 150)}|{max(0, narr_delay_ms - 150)},volume=0.5[sfx1];"
-        f"[3:a]adelay={kp_start_ms - 150}|{kp_start_ms - 150},volume=0.5[sfx2];"
-        f"[4:a]adelay={ans_start_ms}|{ans_start_ms},volume=0.6[sfx3];"
+        f"[2:a]adelay={max(0, listen_card_ms - 150)}|{max(0, listen_card_ms - 150)},volume=0.5[sfx1];"
+        f"[3:a]adelay={max(0, kp_card_ms - 150)}|{max(0, kp_card_ms - 150)},volume=0.5[sfx2];"
+        f"[4:a]adelay={ans_card_ms}|{ans_card_ms},volume=0.6[sfx3];"
     )
 
     if has_kp_audio:
