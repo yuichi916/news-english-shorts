@@ -1,11 +1,13 @@
-"""Video generation pipeline v8.5 - Section transition cards.
+"""Video generation pipeline v8.6 - Smooth transitions + JA char limit.
 
-v8.5 changes:
-- Section transition cards at each phase boundary (dark overlay + title + JA)
-- 4 numbered sections: LISTEN / INSIGHT / KEY PHRASES / ANSWER
-- Replaces abrupt flash transitions with clear section dividers
-- New SectionTitle / SectionSub styles for centered card text
+v8.6 changes:
+- Section cards 0.8→1.5s for clear phase boundaries
+- All fad/animation speeds ~2x slower for smooth, calm transitions
+- Per-sentence flashes softened (alpha + duration)
+- JA subtitle auto font-size reduction for long text (>28 chars)
+- CAPTION_LINGER 0.6→0.8 for longer word display
 
+v8.5: Section transition cards (LISTEN/INSIGHT/KEY PHRASES/ANSWER)
 v8.4: WORDS_PER_GROUP 10, WordEN 42pt, JASub 30pt, layout overhaul
 """
 
@@ -23,8 +25,8 @@ KEY_PHRASES_FALLBACK = 6.0   # fallback when no KP audio
 ANSWER_DURATION = 3.5
 OUTRO_DURATION = 3.0
 WORDS_PER_GROUP = 10
-CAPTION_LINGER = 0.6         # extra display time per word group for readability
-SECTION_CARD_DURATION = 0.8  # section transition card overlay duration
+CAPTION_LINGER = 0.8         # extra display time per word group for readability
+SECTION_CARD_DURATION = 1.5  # section transition card overlay duration
 
 FONT_EN = "Arial"
 FONT_JA = "Noto Sans JP"
@@ -139,34 +141,34 @@ def _estimate_word_groups(timing_data: list, highlights: list, group_size: int =
 def _add_section_card(events, t, num, total, title_en, title_ja, accent):
     """Add a section transition card overlay (dark scrim + title + JA)."""
     t_end = t + SECTION_CARD_DURATION
-    fade_ms = int((SECTION_CARD_DURATION - 0.25) * 1000)
-    end_ms = int(SECTION_CARD_DURATION * 1000)
+    fade_out_start = int((SECTION_CARD_DURATION - 0.5) * 1000)
+    fade_out_end = int(SECTION_CARD_DURATION * 1000)
 
-    # Dark scrim (full screen, fades out at end)
+    # Dark scrim (full screen, gradual fade out over last 500ms)
     events.append(
-        f"Dialogue: 35,{_ass_time(t - 0.1)},{_ass_time(t_end)},Flash,,0,0,0,,"
-        f"{{\\alpha&H18&\\t({fade_ms},{end_ms},\\alpha&HFF&)\\p1}}"
+        f"Dialogue: 35,{_ass_time(t - 0.15)},{_ass_time(t_end)},Flash,,0,0,0,,"
+        f"{{\\alpha&H10&\\t({fade_out_start},{fade_out_end},\\alpha&HFF&)\\p1}}"
         f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
     )
 
     # Section number: "━━ 01 / 04 ━━"
     events.append(
-        f"Dialogue: 40,{_ass_time(t)},{_ass_time(t_end - 0.1)},SectionTitle,,0,0,0,,"
-        f"{{\\an5\\pos(540,840)\\fs22\\c{accent}\\fad(60,150)}}"
+        f"Dialogue: 40,{_ass_time(t + 0.1)},{_ass_time(t_end - 0.2)},SectionTitle,,0,0,0,,"
+        f"{{\\an5\\pos(540,840)\\fs22\\c{accent}\\fad(200,350)}}"
         f"\u2501\u2501  {num:02d} / {total:02d}  \u2501\u2501"
     )
 
-    # Main title (pop-in)
+    # Main title (gentle pop-in)
     events.append(
-        f"Dialogue: 40,{_ass_time(t)},{_ass_time(t_end - 0.05)},SectionTitle,,0,0,0,,"
-        f"{{\\an5\\pos(540,910)\\fscx130\\fscy130\\t(0,200,\\fscx100\\fscy100)\\fad(50,200)}}"
+        f"Dialogue: 40,{_ass_time(t + 0.1)},{_ass_time(t_end - 0.15)},SectionTitle,,0,0,0,,"
+        f"{{\\an5\\pos(540,910)\\fscx120\\fscy120\\t(0,450,\\fscx100\\fscy100)\\fad(150,400)}}"
         f"{title_en}"
     )
 
     # Japanese subtitle
     events.append(
-        f"Dialogue: 40,{_ass_time(t + 0.06)},{_ass_time(t_end - 0.05)},SectionSub,,0,0,0,,"
-        f"{{\\an5\\pos(540,985)\\fad(100,200)\\alpha&H40&}}"
+        f"Dialogue: 40,{_ass_time(t + 0.25)},{_ass_time(t_end - 0.15)},SectionSub,,0,0,0,,"
+        f"{{\\an5\\pos(540,985)\\fad(250,400)\\alpha&H40&}}"
         f"{title_ja}"
     )
 
@@ -298,23 +300,23 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # ================================================================
     he = _ass_time(HOOK_DURATION)
 
-    # Hook text (0.0 - 2.0s) - instant, dramatic, big pop-in
+    # Hook text (0.0 - 2.2s) - dramatic pop-in, gentler pace
     if hook_text:
         events.append(
-            f"Dialogue: 15,{_ass_time(0.0)},{_ass_time(2.0)},IntroHook,,0,0,0,,"
-            f"{{\\fscx140\\fscy140\\t(0,350,\\fscx100\\fscy100)\\fad(50,300)}}  {hook_text}  "
+            f"Dialogue: 15,{_ass_time(0.0)},{_ass_time(2.2)},IntroHook,,0,0,0,,"
+            f"{{\\fscx130\\fscy130\\t(0,600,\\fscx100\\fscy100)\\fad(150,500)}}  {hook_text}  "
         )
 
-    # CHALLENGE label (1.5 - 3.5s)
+    # CHALLENGE label (1.6 - 3.5s)
     events.append(
-        f"Dialogue: 10,{_ass_time(1.5)},{he},HookLabel,,0,0,0,,"
-        f"{{\\fscx130\\fscy130\\t(0,300,\\fscx100\\fscy100)\\fad(100,200)}}CHALLENGE"
+        f"Dialogue: 10,{_ass_time(1.6)},{he},HookLabel,,0,0,0,,"
+        f"{{\\fscx120\\fscy120\\t(0,500,\\fscx100\\fscy100)\\fad(250,400)}}CHALLENGE"
     )
 
-    # Mission question (1.8 - 3.5s)
+    # Mission question (2.0 - 3.5s)
     events.append(
-        f"Dialogue: 15,{_ass_time(1.8)},{he},HookQ,,0,0,0,,"
-        f"{{\\fscx110\\fscy110\\t(0,250,\\fscx100\\fscy100)\\fad(200,250)}}  {mission['ja']}  "
+        f"Dialogue: 15,{_ass_time(2.0)},{he},HookQ,,0,0,0,,"
+        f"{{\\fscx108\\fscy108\\t(0,400,\\fscx100\\fscy100)\\fad(350,400)}}  {mission['ja']}  "
     )
 
     # ================================================================
@@ -327,7 +329,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     _add_section_card(events, narr_start, 1, 4, "LISTEN", "\u30cb\u30e5\u30fc\u30b9\u3092\u8074\u3053\u3046", accent)
     events.append(
         f"Dialogue: 5,{_ass_time(narr_start + SECTION_CARD_DURATION)},{_ass_time(narr_end)},PhaseLabel,,0,0,0,,"
-        f"{{\\fad(200,200)}}LISTEN"
+        f"{{\\fad(400,300)}}LISTEN"
     )
 
     # Per-sentence: progress dots + source badge + role label + connector
@@ -344,7 +346,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 dots_parts.append("{\\c&H60FFFFFF&}\u25CB")
         events.append(
             f"Dialogue: 5,{_ass_time(s_start)},{_ass_time(s_end)},Progress,,0,0,0,,"
-            f"{{\\fad(150,100)}}{' '.join(dots_parts)}"
+            f"{{\\fad(300,200)}}{' '.join(dots_parts)}"
         )
 
         # Source badge
@@ -353,7 +355,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             src_color = source_color_map.get(src_name, accent)
             events.append(
                 f"Dialogue: 6,{_ass_time(s_start)},{_ass_time(s_end)},SourceCurrent,,0,0,0,,"
-                f"{{\\fad(200,150)\\c{src_color}}}  \u25C9 {src_name}  "
+                f"{{\\fad(350,250)\\c{src_color}}}  \u25C9 {src_name}  "
             )
 
         # Role label
@@ -362,24 +364,24 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             rl = ROLE_LABELS[role]
             events.append(
                 f"Dialogue: 6,{_ass_time(s_start)},{_ass_time(s_end)},SentRole,,0,0,0,,"
-                f"{{\\fad(200,150)\\c{rl['color']}}}{rl['icon']} {role}"
+                f"{{\\fad(350,250)\\c{rl['color']}}}{rl['icon']} {role}"
             )
 
         # Connector bar
         events.append(
             f"Dialogue: 4,{_ass_time(s_start)},{_ass_time(s_end)},ConnBar,,0,0,0,,"
-            f"{{\\fad(200,150)\\p1}}m 0 0 l 800 0 l 800 2 l 0 2{{\\p0}}"
+            f"{{\\fad(350,250)\\p1}}m 0 0 l 800 0 l 800 2 l 0 2{{\\p0}}"
         )
 
-    # Per-sentence colored flash
+    # Per-sentence colored flash (softened)
     for si in range(1, num_narr_sentences):
         flash_t = narr_timing[si]["start_s"] + NARRATION_OFFSET
         src_name = sent_source_map.get(si)
         flash_color = source_color_map.get(src_name, "&H00FFFFFF&") if src_name else "&H00FFFFFF&"
         events.append(
-            f"Dialogue: 25,{_ass_time(flash_t - 0.02)},{_ass_time(flash_t + 0.12)},Flash,,0,0,0,,"
+            f"Dialogue: 25,{_ass_time(flash_t - 0.02)},{_ass_time(flash_t + 0.22)},Flash,,0,0,0,,"
             f"{{\\c{flash_color}\\3c{flash_color}\\4c{flash_color}"
-            f"\\alpha&HB0&\\t(0,120,\\alpha&HFF&)\\p1}}"
+            f"\\alpha&HC8&\\t(0,220,\\alpha&HFF&)\\p1}}"
             f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
         )
 
@@ -419,7 +421,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         display_text = " ".join(parts)
         events.append(
             f"Dialogue: 10,{_ass_time(start)},{_ass_time(end)},WordEN,,0,0,0,,"
-            f"{{\\fscx108\\fscy108\\t(0,100,\\fscx100\\fscy100)}}{display_text}"
+            f"{{\\fscx105\\fscy105\\t(0,300,\\fscx100\\fscy100)\\fad(200,150)}}{display_text}"
         )
 
     # Data point overlays
@@ -430,14 +432,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             dp_end = narr_timing[si]["end_s"] + NARRATION_OFFSET
             events.append(
                 f"Dialogue: 20,{_ass_time(dp_start)},{_ass_time(dp_end)},DataVal,,0,0,0,,"
-                f"{{\\fscx140\\fscy140\\t(0,250,\\fscx100\\fscy100)\\fad(200,200)}}{dp['value']}"
+                f"{{\\fscx130\\fscy130\\t(0,500,\\fscx100\\fscy100)\\fad(400,350)}}{dp['value']}"
             )
             events.append(
-                f"Dialogue: 20,{_ass_time(dp_start + 0.15)},{_ass_time(dp_end)},DataLabel,,0,0,0,,"
-                f"{{\\fad(250,200)}}  {dp['label']}  "
+                f"Dialogue: 20,{_ass_time(dp_start + 0.2)},{_ass_time(dp_end)},DataLabel,,0,0,0,,"
+                f"{{\\fad(450,350)}}  {dp['label']}  "
             )
 
-    # --- Japanese subtitles (FIXED: use TTS timing instead of manual starts) ---
+    # --- Japanese subtitles (auto font-size for long text) ---
     for i, seg in enumerate(ja_segments):
         if i < len(narr_timing):
             start = narr_timing[i]["start_s"] + NARRATION_OFFSET
@@ -446,12 +448,19 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             else:
                 end = narr_end
         else:
-            # More JA segments than narr sentences: show until narr_end
             start = narr_end - 1.0
             end = narr_end
+        ja_text = seg["text"]
+        ja_len = len(ja_text)
+        if ja_len > 36:
+            fs_tag = "\\fs22"
+        elif ja_len > 28:
+            fs_tag = "\\fs26"
+        else:
+            fs_tag = ""
         events.append(
             f"Dialogue: 10,{_ass_time(start)},{_ass_time(end)},JASub,,0,0,0,,"
-            f"{{\\fad(120,80)}}  {seg['text']}  "
+            f"{{\\fad(300,200){fs_tag}}}  {ja_text}  "
         )
 
     # ================================================================
@@ -465,7 +474,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         _add_section_card(events, ins_start, 2, 4, "INSIGHT", "\u8003\u5bdf\u30bf\u30a4\u30e0", accent)
         events.append(
             f"Dialogue: 5,{_ass_time(ins_start + SECTION_CARD_DURATION)},{_ass_time(ins_end)},PhaseLabel,,0,0,0,,"
-            f"{{\\fad(150,150)}}INSIGHT"
+            f"{{\\fad(400,300)}}INSIGHT"
         )
 
         # Insight word groups (EN) with linger
@@ -480,20 +489,27 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             display = " ".join(group["words"])
             events.append(
                 f"Dialogue: 10,{_ass_time(g_start)},{_ass_time(g_end)},WordEN,,0,0,0,,"
-                f"{{\\fscx108\\fscy108\\t(0,100,\\fscx100\\fscy100)}}{display}"
+                f"{{\\fscx105\\fscy105\\t(0,300,\\fscx100\\fscy100)\\fad(200,150)}}{display}"
             )
 
-        # Insight JA subtitle (smaller font + wider margins to prevent overflow)
+        # Insight JA subtitle (auto-sized for long text)
         if insight_ja:
+            ins_ja_len = len(insight_ja)
+            if ins_ja_len > 40:
+                ins_fs = "\\fs20"
+            elif ins_ja_len > 30:
+                ins_fs = "\\fs24"
+            else:
+                ins_fs = "\\fs26"
             events.append(
-                f"Dialogue: 10,{_ass_time(ins_start + 0.1)},{_ass_time(ins_end)},JASub,,70,100,0,,"
-                f"{{\\fad(200,150)\\fs26}}  {insight_ja}  "
+                f"Dialogue: 10,{_ass_time(ins_start + 0.15)},{_ass_time(ins_end)},JASub,,70,100,0,,"
+                f"{{\\fad(400,300){ins_fs}}}  {insight_ja}  "
             )
 
         # Connector bar
         events.append(
             f"Dialogue: 4,{_ass_time(ins_start)},{_ass_time(ins_end)},ConnBar,,0,0,0,,"
-            f"{{\\fad(200,150)\\p1}}m 0 0 l 800 0 l 800 2 l 0 2{{\\p0}}"
+            f"{{\\fad(350,250)\\p1}}m 0 0 l 800 0 l 800 2 l 0 2{{\\p0}}"
         )
 
     # ================================================================
@@ -505,7 +521,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     _add_section_card(events, kp_start, 3, 4, "KEY PHRASES", "\u91cd\u8981\u30d5\u30ec\u30fc\u30ba", accent)
     events.append(
         f"Dialogue: 5,{_ass_time(kp_start + SECTION_CARD_DURATION)},{_ass_time(kp_end)},PhaseLabel,,0,0,0,,"
-        f"{{\\fad(150,150)}}KEY PHRASES"
+        f"{{\\fad(400,300)}}KEY PHRASES"
     )
 
     for idx, kp in enumerate(key_phrases):
@@ -521,24 +537,24 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         # Number
         events.append(
             f"Dialogue: 15,{_ass_time(ps)},{_ass_time(pe)},KPNum,,0,0,0,,"
-            f"{{\\fscx150\\fscy150\\t(0,200,\\fscx100\\fscy100)\\fad(60,100)}}{idx + 1}"
+            f"{{\\fscx140\\fscy140\\t(0,400,\\fscx100\\fscy100)\\fad(200,200)}}{idx + 1}"
         )
         # Phrase
         events.append(
-            f"Dialogue: 10,{_ass_time(ps + 0.06)},{_ass_time(pe)},KPPhrase,,0,0,0,,"
-            f"{{\\fscx110\\fscy110\\t(0,200,\\fscx100\\fscy100)\\fad(60,100)}}  {kp['en']}  "
+            f"Dialogue: 10,{_ass_time(ps + 0.1)},{_ass_time(pe)},KPPhrase,,0,0,0,,"
+            f"{{\\fscx108\\fscy108\\t(0,400,\\fscx100\\fscy100)\\fad(200,200)}}  {kp['en']}  "
         )
         # Translation
         events.append(
-            f"Dialogue: 10,{_ass_time(ps + 0.12)},{_ass_time(pe)},KPTrans,,0,0,0,,"
-            f"{{\\fad(120,100)}}  {kp['ja']}  "
+            f"Dialogue: 10,{_ass_time(ps + 0.2)},{_ass_time(pe)},KPTrans,,0,0,0,,"
+            f"{{\\fad(300,200)}}  {kp['ja']}  "
         )
         # Example sentence
         example = kp.get("example", "")
         if example:
             events.append(
-                f"Dialogue: 10,{_ass_time(ps + 0.20)},{_ass_time(pe)},KPEx,,0,0,0,,"
-                f"{{\\fad(200,100)}}  \"{example}\"  "
+                f"Dialogue: 10,{_ass_time(ps + 0.35)},{_ass_time(pe)},KPEx,,0,0,0,,"
+                f"{{\\fad(400,200)}}  \"{example}\"  "
             )
 
         # KP progress dots
@@ -550,7 +566,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 kp_dots.append("{\\c&H60FFFFFF&}\u25CB")
         events.append(
             f"Dialogue: 5,{_ass_time(ps)},{_ass_time(pe)},KPDots,,0,0,0,,"
-            f"{{\\fad(100,80)}}{' '.join(kp_dots)}"
+            f"{{\\fad(250,200)}}{' '.join(kp_dots)}"
         )
 
     # ================================================================
@@ -564,16 +580,16 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # Answer content appears after card fades
     card_end = ans_start + SECTION_CARD_DURATION
     events.append(
-        f"Dialogue: 15,{_ass_time(card_end - 0.15)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
-        f"{{\\fscx180\\fscy180\\t(0,500,\\fscx100\\fscy100)\\blur3\\t(0,500,\\blur0)}}ANSWER"
+        f"Dialogue: 15,{_ass_time(card_end - 0.1)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
+        f"{{\\fscx160\\fscy160\\t(0,800,\\fscx100\\fscy100)\\blur2\\t(0,800,\\blur0)}}ANSWER"
     )
     events.append(
-        f"Dialogue: 15,{_ass_time(card_end + 0.15)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
-        f"{{\\fscx85\\fscy85\\t(0,350,\\fscx100\\fscy100)\\fad(250,400)}}  {mission['answer_ja']}  "
+        f"Dialogue: 15,{_ass_time(card_end + 0.25)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
+        f"{{\\fscx90\\fscy90\\t(0,600,\\fscx100\\fscy100)\\fad(450,500)}}  {mission['answer_ja']}  "
     )
     events.append(
-        f"Dialogue: 10,{_ass_time(card_end + 0.5)},{_ass_time(ans_end)},CTA,,0,0,0,,"
-        f"{{\\fad(350,400)}}{cta}"
+        f"Dialogue: 10,{_ass_time(card_end + 0.7)},{_ass_time(ans_end)},CTA,,0,0,0,,"
+        f"{{\\fad(500,500)}}{cta}"
     )
 
     # ================================================================
@@ -585,33 +601,33 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # Replay CTA (centered)
     events.append(
         f"Dialogue: 15,{_ass_time(outro_start)},{_ass_time(outro_end - 0.5)},Replay,,0,0,0,,"
-        f"{{\\fscx108\\fscy108\\t(0,200,\\fscx100\\fscy100)\\fad(150,300)}}"
+        f"{{\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(350,500)}}"
         f"  聞き取れた？もう一度聴こう！  "
     )
 
     # KP recap list (compact, semi-transparent)
     kp_recap = " \u00b7 ".join(kp["en"] for kp in key_phrases)
     events.append(
-        f"Dialogue: 10,{_ass_time(outro_start + 0.2)},{_ass_time(outro_end - 0.3)},KPEx,,0,0,0,,"
-        f"{{\\fad(200,250)\\alpha&H40&}}  {kp_recap}  "
+        f"Dialogue: 10,{_ass_time(outro_start + 0.3)},{_ass_time(outro_end - 0.3)},KPEx,,0,0,0,,"
+        f"{{\\fad(400,400)\\alpha&H40&}}  {kp_recap}  "
     )
 
     # CTA
     if cta:
         events.append(
-            f"Dialogue: 10,{_ass_time(outro_start + 0.5)},{_ass_time(outro_end)},CTA,,0,0,0,,"
-            f"{{\\fad(350,400)}}{cta}"
+            f"Dialogue: 10,{_ass_time(outro_start + 0.6)},{_ass_time(outro_end)},CTA,,0,0,0,,"
+            f"{{\\fad(500,500)}}{cta}"
         )
 
     # Loop hint: hook fades back in for seamless loop
     if hook_text:
         events.append(
-            f"Dialogue: 10,{_ass_time(outro_end - 1.0)},{_ass_time(outro_end)},IntroHook,,0,0,0,,"
-            f"{{\\fad(500,0)\\alpha&H60&}}  {hook_text}  "
+            f"Dialogue: 10,{_ass_time(outro_end - 1.2)},{_ass_time(outro_end)},IntroHook,,0,0,0,,"
+            f"{{\\fad(800,0)\\alpha&H60&}}  {hook_text}  "
         )
     events.append(
-        f"Dialogue: 10,{_ass_time(outro_end - 0.6)},{_ass_time(outro_end)},HookLabel,,0,0,0,,"
-        f"{{\\fad(400,0)\\alpha&H40&}}CHALLENGE"
+        f"Dialogue: 10,{_ass_time(outro_end - 0.8)},{_ass_time(outro_end)},HookLabel,,0,0,0,,"
+        f"{{\\fad(600,0)\\alpha&H40&}}CHALLENGE"
     )
 
     return ass + "\n".join(events) + "\n"
