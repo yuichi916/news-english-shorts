@@ -260,9 +260,9 @@ Style: Progress,{FONT_EN},24,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,1
 Style: WordEN,{FONT_EN},42,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,4,2,8,50,50,660,1
 Style: JASub,{FONT_JA},30,&H0000FFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,50,80,800,1
 Style: KPNum,{FONT_EN},90,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,3,8,20,100,440,1
-Style: KPPhrase,{FONT_EN},50,{highlight_clr},&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,18,0,8,60,120,620,1
-Style: KPTrans,{FONT_JA},34,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,80,120,740,1
-Style: KPEx,{FONT_EN},24,&H80FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,1,0,0,100,100,0,0,3,10,0,8,100,120,840,1
+Style: KPPhrase,{FONT_EN},50,{highlight_clr},&H000000FF,&H80000000,&H80000000,1,0,0,0,100,100,0,0,1,4,2,8,60,120,620,1
+Style: KPTrans,{FONT_JA},34,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,2,8,80,120,740,1
+Style: KPEx,{FONT_EN},24,&H80FFFFFF,&H000000FF,&H80000000,&H80000000,0,1,0,0,100,100,0,0,1,2,1,8,100,120,840,1
 Style: KPDots,{FONT_EN},28,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,8,0,1,0,0,8,20,100,920,1
 Style: AnswerLabel,{FONT_EN},68,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,5,3,8,20,100,380,1
 Style: AnswerText,{FONT_JA},38,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,16,0,8,60,80,540,1
@@ -272,6 +272,8 @@ Style: SourceCurrent,{FONT_EN},20,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,
 Style: ConnBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,80,775,1
 Style: SectionTitle,{FONT_EN},56,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,4,0,1,4,3,5,0,0,0,1
 Style: SectionSub,{FONT_JA},28,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,1,5,0,0,0,1
+Style: OutroSub,{FONT_JA},28,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,1,5,60,60,0,1
+Style: OutroCTA,{FONT_JA},34,{accent},&H000000FF,&H80000000,&H80000000,1,0,0,0,100,100,0,0,1,3,1,5,40,40,0,1
 Style: Flash,{FONT_EN},10,&H00FFFFFF,&H00FFFFFF,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,0,0,5,0,0,0,1
 
 [Events]
@@ -478,10 +480,21 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         if kp_timing_data and idx < len(kp_timing_data):
             ps = kp_start + kp_timing_data[idx]["start_s"]
             pe = kp_start + kp_timing_data[idx]["end_s"] + 0.4
+            # Prevent overlap with next KP
+            if idx + 1 < len(kp_timing_data):
+                next_start = kp_start + kp_timing_data[idx + 1]["start_s"]
+                pe = min(pe, next_start - 0.1)
         else:
             per = (kp_end - kp_start) / kp_count
             ps = kp_start + idx * per
-            pe = ps + per
+            pe = ps + per - 0.1
+
+        # Fixed-width background card (consistent for all KPs)
+        events.append(
+            f"Dialogue: 8,{_ass_time(ps)},{_ass_time(pe)},Flash,,0,0,0,,"
+            f"{{\\an7\\pos(20,380)\\alpha&H40&\\fad(200,200)\\p1}}"
+            f"m 0 0 l 1040 0 l 1040 580 l 0 580{{\\p0}}"
+        )
 
         # Number
         events.append(
@@ -542,31 +555,31 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     )
 
     # ================================================================
-    # PHASE 5: OUTRO
+    # PHASE 5: OUTRO (viral-optimized for YouTube Shorts)
     # ================================================================
     outro_start = ans_end + 0.10
     outro_end = outro_start + OUTRO_DURATION
 
-    # Replay CTA (centered)
+    # All elements appear simultaneously for clean, unified presentation
+    # Main engagement question (centered, big)
     events.append(
         f"Dialogue: 15,{_ass_time(outro_start)},{_ass_time(outro_end - 0.5)},Replay,,0,0,0,,"
-        f"{{\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(350,500)}}"
-        f"  聞き取れた？もう一度聴こう！  "
+        f"{{\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(300,400)}}"
+        f"  何問聞き取れた？  "
     )
 
-    # KP recap list (compact, semi-transparent)
-    kp_recap = " \u00b7 ".join(kp["en"] for kp in key_phrases)
+    # KP recap with checkmarks (centered, below question)
+    kp_recap_lines = "  /  ".join(kp["en"] for kp in key_phrases)
     events.append(
-        f"Dialogue: 10,{_ass_time(outro_start + 0.3)},{_ass_time(outro_end - 0.3)},KPEx,,0,0,0,,"
-        f"{{\\fad(400,400)\\alpha&H40&}}  {kp_recap}  "
+        f"Dialogue: 10,{_ass_time(outro_start)},{_ass_time(outro_end - 0.3)},OutroSub,,0,0,0,,"
+        f"{{\\an5\\pos(540,1080)\\fad(300,400)}}  {kp_recap_lines}  "
     )
 
-    # CTA
-    if cta:
-        events.append(
-            f"Dialogue: 10,{_ass_time(outro_start + 0.6)},{_ass_time(outro_end)},CTA,,0,0,0,,"
-            f"{{\\fad(500,500)}}{cta}"
-        )
+    # Engagement CTA (comment + follow)
+    events.append(
+        f"Dialogue: 10,{_ass_time(outro_start)},{_ass_time(outro_end)},OutroCTA,,0,0,0,,"
+        f"{{\\an5\\pos(540,1200)\\fad(300,400)}}保存 + フォローで毎日英語！"
+    )
 
     # Loop hint: hook fades back in for seamless loop
     if hook_text:
@@ -580,6 +593,40 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     )
 
     return ass + "\n".join(events) + "\n"
+
+
+def generate_youtube_description(script: dict) -> str:
+    """Generate YouTube Shorts description text from script data."""
+    topic = script["topic"]
+    key_phrases = script["key_phrases"]
+    sources = script.get("sources", [])
+    hashtags = script.get("hashtags", [])
+    hook = script.get("hook_text", "")
+
+    lines = []
+    lines.append(hook if hook else topic)
+    lines.append("")
+    lines.append(f"--- {topic} ---")
+    lines.append("")
+
+    lines.append("KEY PHRASES:")
+    for i, kp in enumerate(key_phrases, 1):
+        lines.append(f"  {i}. {kp['en']} ({kp['ja']})")
+    lines.append("")
+
+    lines.append("30秒で英語ニュースを聞き取ろう！")
+    lines.append("毎日投稿 → フォローで英語力UP！")
+    lines.append("")
+
+    if sources:
+        src_names = ", ".join(s["name"] for s in sources)
+        lines.append(f"Sources: {src_names}")
+        lines.append("")
+
+    if hashtags:
+        lines.append(" ".join(hashtags))
+
+    return "\n".join(lines)
 
 
 def generate_video(script_path: str, audio_path: str, timing_path: str,
@@ -805,6 +852,14 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
 
     file_size = os.path.getsize(output_path) / (1024 * 1024)
     print(f"Video saved: {output_path} ({file_size:.1f} MB)")
+
+    # Generate YouTube description
+    desc_path = output_path.replace(".mp4", "_description.txt")
+    desc_text = generate_youtube_description(script)
+    with open(desc_path, "w", encoding="utf-8") as f:
+        f.write(desc_text)
+    print(f"Description: {desc_path}")
+
     return output_path
 
 
