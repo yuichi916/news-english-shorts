@@ -1,12 +1,12 @@
-"""Video generation pipeline v8.4 - Layout overhaul for 10-word groups.
+"""Video generation pipeline v8.5 - Section transition cards.
 
-v8.4 changes:
-- WORDS_PER_GROUP 4→10 (show ~10 English words at a time)
-- WordEN: 58pt→42pt, wider margins for 2-line wrapping
-- JASub: 34pt→30pt, adjusted position to prevent overlap
-- All vertical positions recalculated to prevent EN/JA overlap
-- Reduced animation scales for smaller font sizes
-- AnswerText/InsightJA adjusted for overflow prevention
+v8.5 changes:
+- Section transition cards at each phase boundary (dark overlay + title + JA)
+- 4 numbered sections: LISTEN / INSIGHT / KEY PHRASES / ANSWER
+- Replaces abrupt flash transitions with clear section dividers
+- New SectionTitle / SectionSub styles for centered card text
+
+v8.4: WORDS_PER_GROUP 10, WordEN 42pt, JASub 30pt, layout overhaul
 """
 
 import json
@@ -24,6 +24,7 @@ ANSWER_DURATION = 3.5
 OUTRO_DURATION = 3.0
 WORDS_PER_GROUP = 10
 CAPTION_LINGER = 0.6         # extra display time per word group for readability
+SECTION_CARD_DURATION = 0.8  # section transition card overlay duration
 
 FONT_EN = "Arial"
 FONT_JA = "Noto Sans JP"
@@ -135,6 +136,41 @@ def _estimate_word_groups(timing_data: list, highlights: list, group_size: int =
     return all_groups
 
 
+def _add_section_card(events, t, num, total, title_en, title_ja, accent):
+    """Add a section transition card overlay (dark scrim + title + JA)."""
+    t_end = t + SECTION_CARD_DURATION
+    fade_ms = int((SECTION_CARD_DURATION - 0.25) * 1000)
+    end_ms = int(SECTION_CARD_DURATION * 1000)
+
+    # Dark scrim (full screen, fades out at end)
+    events.append(
+        f"Dialogue: 35,{_ass_time(t - 0.1)},{_ass_time(t_end)},Flash,,0,0,0,,"
+        f"{{\\alpha&H18&\\t({fade_ms},{end_ms},\\alpha&HFF&)\\p1}}"
+        f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
+    )
+
+    # Section number: "━━ 01 / 04 ━━"
+    events.append(
+        f"Dialogue: 40,{_ass_time(t)},{_ass_time(t_end - 0.1)},SectionTitle,,0,0,0,,"
+        f"{{\\an5\\pos(540,840)\\fs22\\c{accent}\\fad(60,150)}}"
+        f"\u2501\u2501  {num:02d} / {total:02d}  \u2501\u2501"
+    )
+
+    # Main title (pop-in)
+    events.append(
+        f"Dialogue: 40,{_ass_time(t)},{_ass_time(t_end - 0.05)},SectionTitle,,0,0,0,,"
+        f"{{\\an5\\pos(540,910)\\fscx130\\fscy130\\t(0,200,\\fscx100\\fscy100)\\fad(50,200)}}"
+        f"{title_en}"
+    )
+
+    # Japanese subtitle
+    events.append(
+        f"Dialogue: 40,{_ass_time(t + 0.06)},{_ass_time(t_end - 0.05)},SectionSub,,0,0,0,,"
+        f"{{\\an5\\pos(540,985)\\fad(100,200)\\alpha&H40&}}"
+        f"{title_ja}"
+    )
+
+
 def _generate_ass(script: dict, timing_data: list, total_duration: float,
                   narr_sentence_count: int, kp_timing_data: list | None = None,
                   kp_phase_start: float = 0, insight_phase_start: float = 0) -> str:
@@ -226,6 +262,8 @@ Style: Replay,{FONT_JA},40,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,1
 Style: SourceCurrent,{FONT_EN},20,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,1,0,3,8,0,7,30,100,200,1
 Style: SentRole,{FONT_EN},16,&H80FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,2,0,1,1,0,7,30,100,228,1
 Style: ConnBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,80,775,1
+Style: SectionTitle,{FONT_EN},56,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,4,0,1,4,3,5,0,0,0,1
+Style: SectionSub,{FONT_JA},28,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,1,5,0,0,0,1
 Style: Flash,{FONT_EN},10,&H00FFFFFF,&H00FFFFFF,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,0,0,5,0,0,0,1
 
 [Events]
@@ -285,13 +323,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     narr_start = NARRATION_OFFSET
     narr_end = narr_timing[-1]["end_s"] + NARRATION_OFFSET if narr_timing else 28
 
-    # Flash at transition
+    # Section card: LISTEN
+    _add_section_card(events, narr_start, 1, 4, "LISTEN", "\u30cb\u30e5\u30fc\u30b9\u3092\u8074\u3053\u3046", accent)
     events.append(
-        f"Dialogue: 30,{_ass_time(narr_start - 0.03)},{_ass_time(narr_start + 0.18)},Flash,,0,0,0,,"
-        f"{{\\alpha&H50&\\t(0,180,\\alpha&HFF&)\\p1}}m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
-    )
-    events.append(
-        f"Dialogue: 5,{_ass_time(narr_start)},{_ass_time(narr_end)},PhaseLabel,,0,0,0,,"
+        f"Dialogue: 5,{_ass_time(narr_start + SECTION_CARD_DURATION)},{_ass_time(narr_end)},PhaseLabel,,0,0,0,,"
         f"{{\\fad(200,200)}}LISTEN"
     )
 
@@ -426,17 +461,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         ins_start = insight_timing[0]["start_s"] + NARRATION_OFFSET
         ins_end = insight_timing[-1]["end_s"] + NARRATION_OFFSET
 
-        # Flash transition
+        # Section card: INSIGHT
+        _add_section_card(events, ins_start, 2, 4, "INSIGHT", "\u8003\u5bdf\u30bf\u30a4\u30e0", accent)
         events.append(
-            f"Dialogue: 30,{_ass_time(ins_start - 0.03)},{_ass_time(ins_start + 0.18)},Flash,,0,0,0,,"
-            f"{{\\c{accent}\\3c{accent}\\4c{accent}"
-            f"\\alpha&H60&\\t(0,180,\\alpha&HFF&)\\p1}}"
-            f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
-        )
-
-        # Phase label
-        events.append(
-            f"Dialogue: 5,{_ass_time(ins_start)},{_ass_time(ins_end)},PhaseLabel,,0,0,0,,"
+            f"Dialogue: 5,{_ass_time(ins_start + SECTION_CARD_DURATION)},{_ass_time(ins_end)},PhaseLabel,,0,0,0,,"
             f"{{\\fad(150,150)}}INSIGHT"
         )
 
@@ -473,16 +501,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # ================================================================
     kp_start = kp_phase_start
 
-    # Flash transition
+    # Section card: KEY PHRASES
+    _add_section_card(events, kp_start, 3, 4, "KEY PHRASES", "\u91cd\u8981\u30d5\u30ec\u30fc\u30ba", accent)
     events.append(
-        f"Dialogue: 30,{_ass_time(kp_start - 0.03)},{_ass_time(kp_start + 0.18)},Flash,,0,0,0,,"
-        f"{{\\c{highlight_clr}\\3c{highlight_clr}\\4c{highlight_clr}"
-        f"\\alpha&H40&\\t(0,180,\\alpha&HFF&)\\p1}}"
-        f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
-    )
-
-    events.append(
-        f"Dialogue: 5,{_ass_time(kp_start)},{_ass_time(kp_end)},PhaseLabel,,0,0,0,,"
+        f"Dialogue: 5,{_ass_time(kp_start + SECTION_CARD_DURATION)},{_ass_time(kp_end)},PhaseLabel,,0,0,0,,"
         f"{{\\fad(150,150)}}KEY PHRASES"
     )
 
@@ -537,22 +559,20 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     ans_start = kp_end + 0.15
     ans_end = ans_start + ANSWER_DURATION
 
+    # Section card: ANSWER
+    _add_section_card(events, ans_start, 4, 4, "ANSWER", "\u7b54\u3048\u5408\u308f\u305b", accent)
+    # Answer content appears after card fades
+    card_end = ans_start + SECTION_CARD_DURATION
     events.append(
-        f"Dialogue: 30,{_ass_time(ans_start - 0.03)},{_ass_time(ans_start + 0.30)},Flash,,0,0,0,,"
-        f"{{\\c{accent}\\3c{accent}\\4c{accent}"
-        f"\\alpha&H20&\\t(0,300,\\alpha&HFF&)\\p1}}"
-        f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
-    )
-    events.append(
-        f"Dialogue: 15,{_ass_time(ans_start)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
+        f"Dialogue: 15,{_ass_time(card_end - 0.15)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
         f"{{\\fscx180\\fscy180\\t(0,500,\\fscx100\\fscy100)\\blur3\\t(0,500,\\blur0)}}ANSWER"
     )
     events.append(
-        f"Dialogue: 15,{_ass_time(ans_start + 0.35)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
+        f"Dialogue: 15,{_ass_time(card_end + 0.15)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
         f"{{\\fscx85\\fscy85\\t(0,350,\\fscx100\\fscy100)\\fad(250,400)}}  {mission['answer_ja']}  "
     )
     events.append(
-        f"Dialogue: 10,{_ass_time(ans_start + 0.8)},{_ass_time(ans_end)},CTA,,0,0,0,,"
+        f"Dialogue: 10,{_ass_time(card_end + 0.5)},{_ass_time(ans_end)},CTA,,0,0,0,,"
         f"{{\\fad(350,400)}}{cta}"
     )
 
