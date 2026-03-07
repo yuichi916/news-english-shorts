@@ -25,7 +25,7 @@
     {"sentence_idx": 4, "role": "OUTLOOK"}
   ],
   "mission": {
-    "ja": "AIサイバー攻撃は最短何分で完了する？英語で聞き取ろう",
+    "ja": "AIを使ったサイバー攻撃が急増、最短何分で企業システムを突破？英語で聞き取ろう！",
     "answer_ja": "答え: 72 minutes — from breach to data exfiltration（侵入からデータ窃取までわずか72分）"
   },
   "narration": {

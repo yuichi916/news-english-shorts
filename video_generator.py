@@ -21,13 +21,13 @@ WIDTH = 1080
 HEIGHT = 1920
 
 # Phase timing
-HOOK_DURATION = 3.5
-NARRATION_OFFSET = 5.0       # HOOK_DURATION + SECTION_CARD_DURATION (card finishes before audio)
-KEY_PHRASES_FALLBACK = 6.0   # fallback when no KP audio
-ANSWER_DURATION = 3.5
-OUTRO_DURATION = 3.0
+HOOK_DURATION = 5.0
+NARRATION_OFFSET = 6.5       # HOOK_DURATION + SECTION_CARD_DURATION (card finishes before audio)
+KEY_PHRASES_FALLBACK = 8.0   # fallback when no KP audio
+ANSWER_DURATION = 5.0
+OUTRO_DURATION = 4.0
 WORDS_PER_GROUP = 10
-CAPTION_LINGER = 0.8         # extra display time per word group for readability
+CAPTION_LINGER = 1.2         # extra display time per word group for readability
 SECTION_CARD_DURATION = 1.5  # section transition card overlay duration
 JA_CHARS_PER_LINE = 20       # max Japanese characters per line before wrapping
 
@@ -77,6 +77,17 @@ def _wrap_ja(text: str, limit: int = JA_CHARS_PER_LINE) -> str:
             for i in range(min(limit, len(text)) - 1, max(limit - 12, 0) - 1, -1):
                 if text[i] in "、！？）」』】～…・":
                     best = i + 1
+                    break
+        # Priority 3: break at boundary between Japanese and ASCII
+        if best == -1:
+            for i in range(min(limit, len(text)) - 1, max(limit - 12, 0) - 1, -1):
+                # Break before ASCII run starts (JA→ASCII boundary)
+                if i > 0 and ord(text[i]) < 128 and ord(text[i - 1]) >= 128:
+                    best = i
+                    break
+                # Break after ASCII run ends (ASCII→JA boundary)
+                if i > 0 and ord(text[i]) >= 128 and ord(text[i - 1]) < 128:
+                    best = i
                     break
         # Fallback: break at limit
         if best == -1:
@@ -221,8 +232,14 @@ def _add_section_card(events, t, num, total, title_en, title_ja, accent, duratio
 
 def _generate_ass(script: dict, timing_data: list, total_duration: float,
                   narr_sentence_count: int, kp_timing_data: list | None = None,
-                  kp_phase_start: float = 0, insight_offset: float = 0) -> str:
+                  kp_phase_start: float = 0, insight_offset: float = 0,
+                  narration_offset: float | None = None,
+                  ans_phase_start: float | None = None,
+                  hook_duration: float | None = None,
+                  outro_duration: float | None = None) -> str:
     """Generate v8 ASS subtitle file."""
+    if narration_offset is None:
+        narration_offset = NARRATION_OFFSET
     narration = script["narration"]
     ja_segments = script["japanese_subtitle_segments"]
     key_phrases = script["key_phrases"]
@@ -283,21 +300,24 @@ Style: Topic,{FONT_EN},30,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,10
 Style: AccentBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,100,120,1
 Style: Source,{FONT_EN},18,&HA0FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,1,30,30,48,1
 Style: SourceTag,{FONT_EN},20,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,1,0,7,30,100,176,1
-Style: IntroHook,{FONT_JA},48,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,100,100,0,0,3,20,0,8,60,120,500,1
-Style: HookQ,{FONT_JA},50,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,100,100,0,0,3,20,0,5,60,120,0,1
-Style: HookLabel,{FONT_EN},32,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,3,0,1,3,0,8,20,100,560,1
+Style: IntroHook,{FONT_JA},38,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,14,0,8,60,60,540,1
+Style: HookQ,{FONT_JA},36,&H0000CCFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,14,0,8,60,60,700,1
+Style: HookLabel,{FONT_EN},60,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,5,3,8,20,100,380,1
 Style: PhaseLabel,{FONT_EN},22,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,2,0,1,1,0,8,20,100,540,1
 Style: Progress,{FONT_EN},24,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,6,0,1,0,0,7,30,100,152,1
 Style: WordEN,{FONT_EN},42,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,4,2,8,50,50,660,1
-Style: JASub,{FONT_JA},36,&H0000FFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,50,80,800,1
+Style: JASub,{FONT_JA},36,&H0000FFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,50,50,800,1
 Style: KPNum,{FONT_EN},90,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,5,3,8,20,100,440,1
 Style: KPPhrase,{FONT_EN},50,{highlight_clr},&H000000FF,&H80000000,&H80000000,1,0,0,0,100,100,0,0,1,4,2,8,60,120,620,1
 Style: KPTrans,{FONT_JA},34,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,2,8,80,120,740,1
 Style: KPEx,{FONT_EN},24,&H80FFFFFF,&H000000FF,&H80000000,&H80000000,0,1,0,0,100,100,0,0,1,2,1,8,100,120,840,1
 Style: KPDots,{FONT_EN},28,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,8,0,1,0,0,8,20,100,920,1
 Style: AnswerLabel,{FONT_EN},68,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,5,3,8,20,100,380,1
-Style: AnswerText,{FONT_JA},38,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,16,0,8,60,80,540,1
+Style: AnswerText,{FONT_JA},38,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,16,0,8,60,60,540,1
 Style: CTA,{FONT_JA},30,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,0,8,20,100,740,1
+Style: Suspense,{FONT_JA},44,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,16,0,5,60,60,0,1
+Style: Bubble,{FONT_JA},26,&H00FFFFFF,&H000000FF,&HE0382818,&HE0382818,0,0,0,0,100,100,0,0,3,14,0,5,40,40,0,1
+Style: BubbleTail,{FONT_EN},10,&HE0382818,&HE0382818,&HE0382818,&HE0382818,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
 Style: Replay,{FONT_JA},40,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,16,0,5,60,120,0,1
 Style: SourceCurrent,{FONT_EN},20,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,1,0,3,8,0,7,30,100,200,1
 Style: ConnBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,80,775,1
@@ -335,34 +355,38 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         )
 
     # ================================================================
-    # PHASE 1: HOOK (0 ~ 3.5s) - IntroHook → CHALLENGE → mission
+    # PHASE 1: CHALLENGE (0 ~ hook_end)
+    # Layout mirrors ANSWER phase: Label → topic subtitle → question subtitle
     # ================================================================
-    he = _ass_time(HOOK_DURATION)
+    hook_end = hook_duration if hook_duration else HOOK_DURATION
+    he = _ass_time(hook_end)
 
-    # Hook text (0.0 - 2.2s) - dramatic pop-in, gentler pace
-    if hook_text:
-        events.append(
-            f"Dialogue: 15,{_ass_time(0.0)},{_ass_time(2.2)},IntroHook,,0,0,0,,"
-            f"{{\\fscx130\\fscy130\\t(0,600,\\fscx100\\fscy100)\\fad(150,500)}}  {hook_text}  "
-        )
-
-    # CHALLENGE label (1.6 - 3.5s)
+    # "CHALLENGE" label at y=380 (mirrors AnswerLabel)
     events.append(
-        f"Dialogue: 10,{_ass_time(1.6)},{he},HookLabel,,0,0,0,,"
-        f"{{\\fscx120\\fscy120\\t(0,500,\\fscx100\\fscy100)\\fad(250,400)}}CHALLENGE"
+        f"Dialogue: 15,{_ass_time(0.8)},{he},HookLabel,,0,0,0,,"
+        f"{{\\fad(400,400)}}CHALLENGE"
     )
 
-    # Mission question (2.0 - 3.5s)
+    # Hook text at y=540 — clean subtitle with box background (mirrors AnswerText)
+    if hook_text:
+        wrapped_hook = _wrap_ja(hook_text, 22)
+        events.append(
+            f"Dialogue: 15,{_ass_time(0.0)},{_ass_time(hook_end - 0.3)},IntroHook,,0,0,0,,"
+            f"{{\\fad(300,400)}}  {wrapped_hook}  "
+        )
+
+    # Mission question at y=700 — with headphone icon to indicate listening task
+    wrapped_mission = _wrap_ja(mission['ja'], 23)
     events.append(
         f"Dialogue: 15,{_ass_time(2.0)},{he},HookQ,,0,0,0,,"
-        f"{{\\fscx108\\fscy108\\t(0,400,\\fscx100\\fscy100)\\fad(350,400)}}  {mission['ja']}  "
+        f"{{\\fad(400,400)}}  Q. {wrapped_mission}  "
     )
 
     # ================================================================
     # PHASE 2: NARRATION - Word-by-word captions + progress dots
     # ================================================================
-    narr_start = NARRATION_OFFSET
-    narr_end = narr_timing[-1]["end_s"] + NARRATION_OFFSET if narr_timing else 28
+    narr_start = narration_offset
+    narr_end = narr_timing[-1]["end_s"] + narration_offset if narr_timing else 28
 
     # Section card: LISTEN (plays during gap before narration audio starts)
     _add_section_card(events, narr_start - SECTION_CARD_DURATION, 1, 4,
@@ -374,8 +398,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
     # Per-sentence: progress dots + source badge + role label + connector
     for si in range(num_narr_sentences):
-        s_start = narr_timing[si]["start_s"] + NARRATION_OFFSET
-        s_end = narr_timing[si]["end_s"] + NARRATION_OFFSET
+        s_start = narr_timing[si]["start_s"] + narration_offset
+        s_end = narr_timing[si]["end_s"] + narration_offset
 
         # Progress dots
         dots_parts = []
@@ -406,11 +430,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
     # Word-by-word English captions (with linger for readability)
     for gi, group in enumerate(word_groups):
-        start = group["start"] + NARRATION_OFFSET
-        raw_end = group["end"] + NARRATION_OFFSET
+        start = group["start"] + narration_offset
+        raw_end = group["end"] + narration_offset
         # Extend display but don't overlap too much with next group
         if gi + 1 < len(word_groups):
-            next_start = word_groups[gi + 1]["start"] + NARRATION_OFFSET
+            next_start = word_groups[gi + 1]["start"] + narration_offset
             end = min(raw_end + CAPTION_LINGER, next_start + 0.12)
         else:
             end = min(raw_end + CAPTION_LINGER, narr_end)
@@ -423,9 +447,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # --- Japanese subtitles (line-wrapped) ---
     for i, seg in enumerate(ja_segments):
         if i < len(narr_timing):
-            start = narr_timing[i]["start_s"] + NARRATION_OFFSET
+            start = narr_timing[i]["start_s"] + narration_offset
             if i + 1 < len(narr_timing):
-                end = narr_timing[i + 1]["start_s"] + NARRATION_OFFSET
+                end = narr_timing[i + 1]["start_s"] + narration_offset
             else:
                 end = narr_end
         else:
@@ -436,6 +460,61 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             f"Dialogue: 10,{_ass_time(start)},{_ass_time(end)},JASub,,0,0,0,,"
             f"{{\\fad(300,200)}}  {ja_text}  "
         )
+
+    # --- Zundamon speech bubble tips during LISTEN ---
+    # word_tips: [{sentence_idx, word, ja}, ...]
+    word_tips = script.get("word_tips", [])
+    # Fallback: generate from key_phrases if no word_tips
+    if not word_tips:
+        for idx_kp, kp in enumerate(key_phrases):
+            word_tips.append({"sentence_idx": min(idx_kp + 1, num_narr_sentences - 1),
+                              "word": kp["en"], "ja": kp["ja"]})
+
+    # Bubble position: center-bottom, with tail pointing right toward avatar
+    # Avatar top ~y=1148, face ~y=1250, bubble sits at face level
+    bubble_x = 350   # center-ish (left of avatar)
+    bubble_y = 1200  # near avatar face level
+    tail_x = 580     # right edge, near avatar
+
+    # Group tips by sentence_idx to handle multiple tips per sentence
+    from collections import defaultdict
+    tips_by_sentence: dict[int, list] = defaultdict(list)
+    for tip in word_tips:
+        si = tip.get("sentence_idx", 0)
+        if si < num_narr_sentences:
+            tips_by_sentence[si].append(tip)
+
+    for si, tips in tips_by_sentence.items():
+        sent_start = narr_timing[si]["start_s"] + narration_offset + 0.3
+        if si + 1 < len(narr_timing):
+            sent_end = narr_timing[si + 1]["start_s"] + narration_offset - 0.3
+        else:
+            sent_end = narr_end - 0.3
+        avail = sent_end - sent_start
+        if avail < 1.5:
+            continue
+
+        # Split available time evenly among tips in this sentence
+        per_tip = avail / len(tips)
+        for ti, tip in enumerate(tips):
+            b_start = sent_start + ti * per_tip
+            b_end = b_start + min(per_tip - 0.2, 4.5)
+            if b_end <= b_start + 1.0:
+                continue
+
+            tip_text = f"{tip['word']}  = {tip['ja']}"
+
+            # Speech bubble text (centered)
+            events.append(
+                f"Dialogue: 12,{_ass_time(b_start)},{_ass_time(b_end)},Bubble,,0,0,0,,"
+                f"{{\\an5\\pos({bubble_x},{bubble_y})\\fad(300,250)}}  {tip_text}  "
+            )
+            # Bubble tail triangle pointing right toward avatar
+            events.append(
+                f"Dialogue: 11,{_ass_time(b_start)},{_ass_time(b_end)},BubbleTail,,0,0,0,,"
+                f"{{\\an7\\pos({tail_x},{bubble_y - 18})\\fad(300,250)\\p1}}"
+                f"m 0 0 l 70 18 l 0 36{{\\p0}}"
+            )
 
     # ================================================================
     # PHASE 2.5: INSIGHT (after narration, before key phrases)
@@ -497,7 +576,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         # Dynamic timing from KP audio, or fallback to even split
         if kp_timing_data and idx < len(kp_timing_data):
             ps = kp_start + kp_timing_data[idx]["start_s"]
-            pe = kp_start + kp_timing_data[idx]["end_s"] + 0.4
+            pe = kp_start + kp_timing_data[idx]["end_s"] + 1.0
             # Prevent overlap with next KP
             if idx + 1 < len(kp_timing_data):
                 next_start = kp_start + kp_timing_data[idx + 1]["start_s"]
@@ -553,19 +632,34 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # PHASE 4: ANSWER
     # ================================================================
     # Card plays first, then answer content starts
-    ans_card_time = kp_end + 0.15
-    ans_start = ans_card_time + SECTION_CARD_DURATION
+    if ans_phase_start is not None:
+        ans_start = ans_phase_start
+        ans_card_time = ans_start - SECTION_CARD_DURATION
+    else:
+        ans_card_time = kp_end + 0.15
+        ans_start = ans_card_time + SECTION_CARD_DURATION
     ans_end = ans_start + ANSWER_DURATION
+
+    # Suspense prompt: "答えわかった？" appears just before ANSWER card
+    suspense_start = ans_card_time - 1.8
+    suspense_end = ans_card_time + 0.3
+    if suspense_start > kp_end:
+        events.append(
+            f"Dialogue: 20,{_ass_time(suspense_start)},{_ass_time(suspense_end)},Suspense,,0,0,0,,"
+            f"{{\\an5\\pos(540,860)\\fscx110\\fscy110\\t(0,300,\\fscx100\\fscy100)\\fad(300,300)}}"
+            f"  答えわかった？  "
+        )
 
     # Section card: ANSWER (card finishes at ans_start)
     _add_section_card(events, ans_card_time, 4, 4, "ANSWER", "\u7b54\u3048\u5408\u308f\u305b", accent)
     events.append(
         f"Dialogue: 15,{_ass_time(ans_start)},{_ass_time(ans_end)},AnswerLabel,,0,0,0,,"
-        f"{{\\fscx160\\fscy160\\t(0,800,\\fscx100\\fscy100)\\blur2\\t(0,800,\\blur0)}}ANSWER"
+        f"{{\\fad(400,400)}}ANSWER"
     )
+    wrapped_answer = _wrap_ja(mission['answer_ja'], 28)
     events.append(
         f"Dialogue: 15,{_ass_time(ans_start + 0.3)},{_ass_time(ans_end)},AnswerText,,0,0,0,,"
-        f"{{\\fscx90\\fscy90\\t(0,600,\\fscx100\\fscy100)\\fad(450,500)}}  {mission['answer_ja']}  "
+        f"{{\\fad(400,400)}}  {wrapped_answer}  "
     )
     events.append(
         f"Dialogue: 10,{_ass_time(ans_start + 0.7)},{_ass_time(ans_end)},CTA,,0,0,0,,"
@@ -575,39 +669,46 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     # ================================================================
     # PHASE 5: OUTRO (viral-optimized for YouTube Shorts)
     # ================================================================
+    _outro_dur = outro_duration if outro_duration else OUTRO_DURATION
     outro_start = ans_end + 0.10
-    outro_end = outro_start + OUTRO_DURATION
+    outro_end = outro_start + _outro_dur
 
     # All elements appear simultaneously for clean, unified presentation
     # Main engagement question (centered within dark overlay)
     events.append(
         f"Dialogue: 15,{_ass_time(outro_start)},{_ass_time(outro_end - 0.5)},Replay,,0,0,0,,"
-        f"{{\\an5\\pos(540,820)\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(300,400)}}"
-        f"  何問聞き取れた？  "
+        f"{{\\an5\\pos(540,780)\\fscx105\\fscy105\\t(0,400,\\fscx100\\fscy100)\\fad(300,400)}}"
+        f"  聞き取れた？コメントで教えて！  "
     )
 
     # KP recap (centered, below question, within dark overlay)
     kp_recap_lines = "  /  ".join(kp["en"] for kp in key_phrases)
     events.append(
         f"Dialogue: 10,{_ass_time(outro_start)},{_ass_time(outro_end - 0.3)},OutroSub,,0,0,0,,"
-        f"{{\\an5\\pos(540,940)\\fad(300,400)}}  {kp_recap_lines}  "
+        f"{{\\an5\\pos(540,900)\\fad(300,400)}}  {kp_recap_lines}  "
     )
 
     # Engagement CTA (centered, below KP recap, within dark overlay)
     events.append(
         f"Dialogue: 10,{_ass_time(outro_start)},{_ass_time(outro_end)},OutroCTA,,0,0,0,,"
-        f"{{\\an5\\pos(540,1020)\\fad(300,400)}}保存 + フォローで毎日英語！"
+        f"{{\\an5\\pos(540,1000)\\fad(300,400)}}フォロー + 保存で毎日30秒英語力UP！"
+    )
+
+    # Comment engagement prompt (appears slightly delayed for emphasis)
+    events.append(
+        f"Dialogue: 10,{_ass_time(outro_start + 1.0)},{_ass_time(outro_end)},OutroSub,,0,0,0,,"
+        f"{{\\an5\\pos(540,1080)\\fad(500,400)}}  明日もチャレンジしよう！  "
     )
 
     # Loop hint: hook fades back in for seamless loop
     if hook_text:
         events.append(
-            f"Dialogue: 10,{_ass_time(outro_end - 1.2)},{_ass_time(outro_end)},IntroHook,,0,0,0,,"
-            f"{{\\fad(800,0)\\alpha&H60&}}  {hook_text}  "
+            f"Dialogue: 10,{_ass_time(outro_end - 1.5)},{_ass_time(outro_end)},IntroHook,,0,0,0,,"
+            f"{{\\fad(1000,0)\\alpha&H60&}}  {hook_text}  "
         )
     events.append(
-        f"Dialogue: 10,{_ass_time(outro_end - 0.8)},{_ass_time(outro_end)},HookLabel,,0,0,0,,"
-        f"{{\\fad(600,0)\\alpha&H40&}}CHALLENGE"
+        f"Dialogue: 10,{_ass_time(outro_end - 1.0)},{_ass_time(outro_end)},HookLabel,,0,0,0,,"
+        f"{{\\fad(800,0)\\alpha&H40&}}CHALLENGE"
     )
 
     return ass + "\n".join(events) + "\n"
@@ -647,12 +748,119 @@ def generate_youtube_description(script: dict) -> str:
     return "\n".join(lines)
 
 
+# ── Avatar overlay constants ──────────────────────────────────────────────────
+AVATAR_TARGET_WIDTH = 350
+AVATAR_MARGIN_RIGHT = 30
+AVATAR_MARGIN_BOTTOM = 36   # above progress bar (6px bar)
+
+
+def compute_phase_timing(
+    timing_data: list[dict],
+    narr_sentence_count: int,
+    kp_timing_path: str | None = None,
+    narration_offset: float | None = None,
+    nav_durations: dict[str, float] | None = None,
+) -> dict:
+    """Compute all phase-timing values from timing data.
+
+    Args:
+        narration_offset: Override for NARRATION_OFFSET constant (seconds).
+        nav_durations: {time_key: duration_sec} from navigator clips.
+            Used to ensure phase audio starts after navigator speech finishes.
+
+    Returns a dict with keys:
+        narr_end, insight_offset, insight_audio_start, all_audio_end,
+        kp_phase_start, kp_end, total_duration, kp_timing_data, narration_offset
+    """
+    if narration_offset is None:
+        narration_offset = NARRATION_OFFSET
+    if nav_durations is None:
+        nav_durations = {}
+
+    # Dynamic hook phase duration: extends if Zundamon hook line is long
+    hook_duration = HOOK_DURATION
+    if "hook_start" in nav_durations:
+        hook_nav_end = 0.3 + nav_durations["hook_start"]
+        hook_duration = max(HOOK_DURATION, hook_nav_end + 0.5)
+
+    narr_timing = timing_data[:narr_sentence_count]
+    insight_timing = timing_data[narr_sentence_count:]
+
+    narr_end = narr_timing[-1]["end_s"] + narration_offset if narr_timing else 28
+    all_audio_end = timing_data[-1]["end_s"] + narration_offset if timing_data else 28
+
+    kp_timing_data = None
+    if kp_timing_path and os.path.exists(kp_timing_path):
+        with open(kp_timing_path, "r", encoding="utf-8") as f:
+            kp_timing_data = json.load(f)
+
+    insight_audio_start = None
+    if insight_timing:
+        insight_audio_start = insight_timing[0]["start_s"]
+        insight_offset = narr_end + SECTION_CARD_DURATION - insight_audio_start
+        all_audio_end = insight_timing[-1]["end_s"] + insight_offset
+    else:
+        insight_offset = narration_offset
+
+    kp_phase_start = all_audio_end + 0.15 + SECTION_CARD_DURATION
+
+    # Ensure KP audio starts after Zundamon kp_card line finishes
+    # kp_card nav line starts at all_audio_end + 0.3
+    if "kp_card" in nav_durations:
+        kp_nav_end = all_audio_end + 0.3 + nav_durations["kp_card"]
+        kp_phase_start = max(kp_phase_start, kp_nav_end + 0.3 + SECTION_CARD_DURATION)
+
+    if kp_timing_data:
+        kp_duration = kp_timing_data[-1]["end_s"] + 1.2
+    else:
+        kp_duration = KEY_PHRASES_FALLBACK
+
+    kp_end = kp_phase_start + kp_duration
+
+    # Ensure answer phase starts after Zundamon answer_card line finishes
+    # Extra 2s gap for suspense prompt ("答えわかった？") before ANSWER card
+    ans_phase_start = kp_end + 2.0 + SECTION_CARD_DURATION
+    if "answer_card" in nav_durations:
+        ans_nav_end = kp_end + 0.3 + nav_durations["answer_card"]
+        ans_phase_start = max(ans_phase_start, ans_nav_end + 0.3 + SECTION_CARD_DURATION)
+
+    # Dynamic outro duration: extends if Zundamon outro line is long
+    outro_duration = OUTRO_DURATION
+    if "outro_start" in nav_durations:
+        # outro nav line starts at total - outro_duration + 0.3
+        # ensure full clip can play
+        outro_duration = max(OUTRO_DURATION, nav_durations["outro_start"] + 1.0)
+
+    total_duration = ans_phase_start + ANSWER_DURATION + outro_duration + 0.25
+
+    return {
+        "hook_duration": hook_duration,
+        "outro_duration": outro_duration,
+        "narr_end": narr_end,
+        "insight_offset": insight_offset,
+        "insight_audio_start": insight_audio_start,
+        "all_audio_end": all_audio_end,
+        "kp_phase_start": kp_phase_start,
+        "kp_end": kp_end,
+        "ans_phase_start": ans_phase_start,
+        "total_duration": total_duration,
+        "kp_timing_data": kp_timing_data,
+        "narration_offset": narration_offset,
+    }
+
+
 def generate_video(script_path: str, audio_path: str, timing_path: str,
                     output_path: str, use_sd: bool = True,
                     smart_bg: bool = False,
                     narr_sentence_count: int | None = None,
                     kp_audio_path: str | None = None,
-                    kp_timing_path: str | None = None):
+                    kp_timing_path: str | None = None,
+                    avatar_video_path: str | None = None,
+                    navigator_audio_path: str | None = None,
+                    narration_offset: float | None = None,
+                    navigator_timing: list[dict] | None = None,
+                    avatar_size: tuple[int, int] | None = None,
+                    nav_durations: dict[str, float] | None = None):
     """Generate the final viral-ready video (v8)."""
     with open(script_path, "r", encoding="utf-8") as f:
         script = json.load(f)
@@ -665,40 +873,22 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     if narr_sentence_count is None:
         narr_sentence_count = len(timing_data)
 
+    # Use compute_phase_timing for all timing calculations
+    pt = compute_phase_timing(timing_data, narr_sentence_count, kp_timing_path,
+                              narration_offset=narration_offset,
+                              nav_durations=nav_durations)
+    narr_end = pt["narr_end"]
+    insight_offset = pt["insight_offset"]
+    all_audio_end = pt["all_audio_end"]
+    kp_phase_start = pt["kp_phase_start"]
+    kp_end = pt["kp_end"]
+    ans_phase_start = pt["ans_phase_start"]
+    total_duration = pt["total_duration"]
+    kp_timing_data = pt["kp_timing_data"]
+
     narr_timing = timing_data[:narr_sentence_count]
     insight_timing = timing_data[narr_sentence_count:]
-
-    narr_end = narr_timing[-1]["end_s"] + NARRATION_OFFSET if narr_timing else 28
-    all_audio_end = timing_data[-1]["end_s"] + NARRATION_OFFSET if timing_data else 28
-
-    # Load KP timing if available
-    kp_timing_data = None
-    if kp_timing_path and os.path.exists(kp_timing_path):
-        with open(kp_timing_path, "r", encoding="utf-8") as f:
-            kp_timing_data = json.load(f)
-
-    # Calculate insight offset (audio gap for section card)
-    if insight_timing:
-        insight_audio_start = insight_timing[0]["start_s"]
-        insight_offset = narr_end + SECTION_CARD_DURATION - insight_audio_start
-        all_audio_end = insight_timing[-1]["end_s"] + insight_offset
-    else:
-        insight_offset = NARRATION_OFFSET
-        # all_audio_end already set above
-
-    # Calculate phase starts (section card gaps included)
-    kp_phase_start = all_audio_end + 0.15 + SECTION_CARD_DURATION  # card, then KP content
-
-    # KP duration
-    if kp_timing_data:
-        kp_duration = kp_timing_data[-1]["end_s"] + 0.5
-    else:
-        kp_duration = KEY_PHRASES_FALLBACK
-
-    kp_end = kp_phase_start + kp_duration
-
-    # Answer: card gap + content + outro
-    total_duration = kp_end + 0.15 + SECTION_CARD_DURATION + ANSWER_DURATION + OUTRO_DURATION + 0.25
+    insight_audio_start = pt["insight_audio_start"]
 
     # Ensure background
     bg_path = None
@@ -726,7 +916,11 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     ass_content = _generate_ass(
         script, timing_data, total_duration,
         narr_sentence_count, kp_timing_data,
-        kp_phase_start, insight_offset
+        kp_phase_start, insight_offset,
+        narration_offset=pt["narration_offset"],
+        ans_phase_start=ans_phase_start,
+        hook_duration=pt["hook_duration"],
+        outro_duration=pt["outro_duration"],
     )
     ass_path = output_path.replace(".mp4", ".ass")
     with open(ass_path, "w", encoding="utf-8-sig") as f:
@@ -738,13 +932,13 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
     # ================================================================
     # AUDIO MIX (split narration/insight for proper transition gap)
     # ================================================================
-    narr_delay_ms = int(NARRATION_OFFSET * 1000)
+    narr_delay_ms = int(pt["narration_offset"] * 1000)
     # SFX plays when section card appears (before content starts)
-    listen_card_ms = int(HOOK_DURATION * 1000)
+    listen_card_ms = int(pt["hook_duration"] * 1000)
     insight_card_ms = int(narr_end * 1000) if insight_timing else 0
-    kp_card_ms = int((all_audio_end + 0.15) * 1000)
+    kp_card_ms = int((kp_phase_start - SECTION_CARD_DURATION) * 1000)
     kp_start_ms = int(kp_phase_start * 1000)
-    ans_card_ms = int((kp_end + 0.15) * 1000)
+    ans_card_ms = int((ans_phase_start - SECTION_CARD_DURATION) * 1000)
 
     has_kp_audio = kp_audio_path and os.path.exists(kp_audio_path)
     has_insight = bool(insight_timing)
@@ -824,12 +1018,47 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
                 f"apad=whole_dur={total_duration:.2f}[aout]"
             )
 
+    # ── Navigator audio (pre-mixed full-duration track) ──────────
+    has_nav = navigator_audio_path and os.path.exists(navigator_audio_path)
+    if has_nav:
+        nav_input_idx = len(audio_inputs) // 2
+        audio_inputs += ["-i", navigator_audio_path]
+        # Replace [aout] with [aout_pre], then duck + mix with navigator
+        audio_filter = audio_filter.replace("[aout]", "[aout_pre]")
+
+        # Fade out navigator before video end to prevent trailing noise
+        last_nav_end = max(t["end"] for t in navigator_timing) if navigator_timing else total_duration
+        fade_start = min(last_nav_end - 0.5, total_duration - 1.0)
+        nav_fadeout = f",afade=t=out:st={fade_start:.2f}:d=1.0"
+
+        # Mute all other audio during navigator speech intervals
+        if navigator_timing:
+            between_parts = [
+                f"between(t,{t['start']:.2f},{t['end']:.2f})"
+                for t in navigator_timing
+            ]
+            enable_expr = "+".join(between_parts)
+            audio_filter += (
+                f";[aout_pre]volume=0:enable='{enable_expr}'[aout_ducked]"
+                f";[{nav_input_idx}:a]volume=0.85,afade=t=in:d=0.015{nav_fadeout}[nav]"
+                f";[aout_ducked][nav]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,"
+                f"apad=whole_dur={total_duration:.2f}[aout]"
+            )
+        else:
+            audio_filter += (
+                f";[{nav_input_idx}:a]volume=0.85,afade=t=in:d=0.015{nav_fadeout}[nav]"
+                f";[aout_pre][nav]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,"
+                f"apad=whole_dur={total_duration:.2f}[aout]"
+            )
+
     # ================================================================
     # VIDEO: Background + zoom + dark overlay + ASS + progress bar
     # ================================================================
     zoom_scale = 1.06
     scaled_w = int(WIDTH * zoom_scale)
     scaled_h = int(HEIGHT * zoom_scale)
+
+    has_avatar = avatar_video_path and os.path.exists(avatar_video_path)
 
     video_filter = (
         f"movie='{bg_ffmpeg}',loop=999:1:0,"
@@ -845,8 +1074,31 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
         f":color=0x00CCFF@0.85:t=fill,"
         # ASS subtitles
         f"ass='{ass_ffmpeg}'"
-        f"[vout]"
     )
+
+    if has_avatar:
+        # Avatar overlay: scale (preserve aspect ratio) + composite over base
+        avatar_input_idx = len(audio_inputs) // 2  # each -i <file> is 2 elements
+
+        # Compute overlay dimensions and position
+        if avatar_size:
+            av_w, av_h = avatar_size
+            scale_factor = AVATAR_TARGET_WIDTH / av_w
+            overlay_h = int(av_h * scale_factor)
+        else:
+            overlay_h = AVATAR_TARGET_WIDTH  # square fallback
+
+        avatar_x = WIDTH - AVATAR_TARGET_WIDTH - AVATAR_MARGIN_RIGHT
+        avatar_y = HEIGHT - 6 - AVATAR_MARGIN_BOTTOM - overlay_h
+
+        video_filter += (
+            f"[base];"
+            f"[{avatar_input_idx}:v]scale={AVATAR_TARGET_WIDTH}:-1[avatar];"
+            f"[base][avatar]overlay=x={avatar_x}:y={avatar_y}:shortest=1[vout]"
+        )
+        audio_inputs += ["-i", avatar_video_path]
+    else:
+        video_filter += "[vout]"
 
     cmd = [
         "ffmpeg", "-y",

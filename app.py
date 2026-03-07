@@ -370,12 +370,22 @@ with tab_video:
         if use_sd and not sd_ok:
             st.warning("SD WebUI に接続できません。グラデーション背景にフォールバックする可能性があります。")
 
+        st.subheader("アバター設定")
+        col_av_on, col_av_char = st.columns(2)
+        with col_av_on:
+            v_avatar_enabled = st.checkbox("アバター表示（口パク）", value=True, key="v_avatar")
+        with col_av_char:
+            v_avatar_character = st.text_input("キャラクター", value="zundamon", key="v_avatar_char",
+                                                disabled=not v_avatar_enabled)
+
         if st.button("🎬 動画を生成", type="primary", key="v_run"):
             engine_arg = "elevenlabs" if tts_engine == "ElevenLabs" else "edge"
 
             with st.status("動画を生成中...", expanded=True) as status:
                 try:
                     st.write("🔊 TTS 音声を生成中...")
+                    if v_avatar_enabled:
+                        st.write("🤖 アバター動画を生成中...")
                     st.write("🎥 動画をレンダリング中...")
                     output_path = process_script(
                         selected_script,
@@ -384,6 +394,8 @@ with tab_video:
                         use_sd=use_sd,
                         smart_bg=smart_bg,
                         tts_engine=engine_arg,
+                        avatar_enabled=v_avatar_enabled,
+                        avatar_character=v_avatar_character,
                     )
                     status.update(label="生成完了", state="complete")
                     st.session_state["last_video"] = output_path
@@ -530,6 +542,14 @@ with tab_batch:
         if b_use_sd and not sd_ok:
             st.warning("SD WebUI に接続できません。グラデーション背景にフォールバックする可能性があります。")
 
+        st.subheader("アバター設定")
+        col_b_av_on, col_b_av_char = st.columns(2)
+        with col_b_av_on:
+            b_avatar_enabled = st.checkbox("アバター表示（口パク）", value=True, key="b_avatar")
+        with col_b_av_char:
+            b_avatar_character = st.text_input("キャラクター", value="zundamon", key="b_avatar_char",
+                                                disabled=not b_avatar_enabled)
+
         if st.button("⚡ バッチ処理を開始", type="primary", disabled=not selected_scripts, key="b_run"):
             b_engine_arg = "elevenlabs" if b_tts_engine == "ElevenLabs" else "edge"
             total = len(selected_scripts)
@@ -549,6 +569,8 @@ with tab_batch:
                             use_sd=b_use_sd,
                             smart_bg=b_smart_bg,
                             tts_engine=b_engine_arg,
+                            avatar_enabled=b_avatar_enabled,
+                            avatar_character=b_avatar_character,
                         )
                         status.update(label=f"完了: {script_name}", state="complete")
                         results.append({

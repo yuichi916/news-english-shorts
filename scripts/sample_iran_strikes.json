@@ -11,7 +11,7 @@
     {"name": "Bloomberg", "url": "bloomberg.com/news/articles/2026-02-28/iran-khamenei"}
   ],
   "mission": {
-    "ja": "米イスラエルの作戦名は？英語で聞き取ろう",
+    "ja": "米軍とイスラエルがイランを共同攻撃、その作戦名は？英語で聞き取ろう！",
     "answer_ja": "答え: Operation Epic Fury（エピック・フューリー作戦）"
   },
   "source_mentions": [
@@ -61,6 +61,10 @@
       "example": "The conflict could destabilize the entire region."
     }
   ],
+  "navigator": {
+    "intro": "今日は米イスラエルのイラン攻撃のニュースなのだ！世界情勢が大きく動いているのだ！英語で聞き取るのだ！",
+    "outro": "中東情勢は複雑だけど英語で理解できると世界が広がるのだ！チャンネル登録してほしいのだ！また明日なのだ！"
+  },
   "cta": "保存して3つのフレーズを覚えよう",
   "hashtags": ["#英語学習", "#英語ニュース", "#イラン", "#中東", "#TOEIC", "#英語リスニング", "#Shorts"]
 }

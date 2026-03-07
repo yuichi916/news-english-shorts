@@ -1,0 +1,23 @@
+[
+  {
+    "text": "Several countries closed their airspace to commercial flights.",
+    "start_ms": 100.0,
+    "end_ms": 4411.1112,
+    "start_s": 0.1,
+    "end_s": 4.41
+  },
+  {
+    "text": "Hundreds of thousands of travellers were left stranded at airports.",
+    "start_ms": 4361.1112,
+    "end_ms": 9125.0002,
+    "start_s": 4.36,
+    "end_s": 9.13
+  },
+  {
+    "text": "Major airlines suspended all operations indefinitely.",
+    "start_ms": 9125.0002,
+    "end_ms": 13611.111400000002,
+    "start_s": 9.13,
+    "end_s": 13.61
+  }
+]

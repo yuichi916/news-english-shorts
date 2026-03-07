@@ -1,0 +1,23 @@
+[
+  {
+    "text": "Iranian missiles broke through Israel's air defenses.",
+    "start_ms": 0,
+    "end_ms": 2821,
+    "start_s": 0.0,
+    "end_s": 2.82
+  },
+  {
+    "text": "Tanker traffic through the Strait of Hormuz has nearly stopped.",
+    "start_ms": 3205,
+    "end_ms": 6757,
+    "start_s": 3.21,
+    "end_s": 6.76
+  },
+  {
+    "text": "Tehran declared it will refuse to negotiate with the US.",
+    "start_ms": 7361,
+    "end_ms": 10682,
+    "start_s": 7.36,
+    "end_s": 10.68
+  }
+]

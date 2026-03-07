@@ -1,0 +1,82 @@
+{
+  "id": "2026-03-03_apple_iphone17e",
+  "date": "2026-03-03",
+  "topic": "Apple launches iPhone 17e at $599",
+  "theme": "purple",
+  "hook_text": "Appleが$599の新iPhone発表！",
+  "sources": [
+    {"name": "Apple", "url": "apple.com/newsroom/2026/03/apple-introduces-iphone-17e"},
+    {"name": "Bloomberg", "url": "bloomberg.com/news/apple-touch-macbook"},
+    {"name": "Tom's Guide", "url": "tomsguide.com/news/apple-march-event-2026"},
+    {"name": "The Journal Record", "url": "journalrecord.com/apple-iphone-17e-256gb"}
+  ],
+  "mission": {
+    "ja": "Appleが発表した新型iPhone 17eの驚きの価格とストレージ容量は？英語で聞き取ろう！",
+    "answer_ja": "答え: $599 with 256GB storage（599ドルで256GBストレージ）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Apple"},
+    {"sentence_idx": 1, "source": "Tom's Guide"},
+    {"sentence_idx": 2, "source": "Apple"},
+    {"sentence_idx": 3, "source": "Bloomberg"},
+    {"sentence_idx": 4, "source": "The Journal Record"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "Apple has officially launched the iPhone seventeen e, its most affordable new model, starting at five hundred ninety-nine dollars with two hundred fifty-six gigabytes of storage. The device features Apple's in-house modem chip, replacing Qualcomm for the first time in iPhone history. It also introduces a new aluminum design that is both thinner and lighter than previous models. However, Bloomberg notes the upcoming Touch MacBook will stop well short of a full Mac-iPad hybrid. Analysts say this product wave signals Apple's strategy to dominate every price tier in twenty twenty-six.",
+    "highlights": ["launched", "most affordable", "five hundred ninety-nine dollars", "in-house modem chip", "replacing Qualcomm", "for the first time", "thinner and lighter", "stop well short of", "dominate", "every price tier"]
+  },
+  "insight": {
+    "en": "Apple is no longer just a premium brand. By offering a powerful phone at five hundred ninety-nine dollars and building its own modem, the company is cutting costs while expanding its reach to millions of new customers worldwide.",
+    "ja": "Appleはもはやプレミアムブランドだけではない。599ドルの高性能モデルと自社製モデムで、コスト削減と世界中の新規顧客獲得を同時に狙う。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "AppleがiPhone 17eを正式発売。$599で256GB。", "start": 0.0},
+    {"text": "iPhone史上初の自社製モデムチップを搭載。", "start": 5.0},
+    {"text": "従来より薄く軽い新アルミデザインを採用。", "start": 9.5},
+    {"text": "ただしTouch MacBookはMac-iPad統合には程遠いとBloombergが指摘。", "start": 13.5},
+    {"text": "アナリストはAppleが全価格帯を制覇する戦略と分析。", "start": 18.0}
+  ],
+  "data_points": [
+    {"value": "$599", "label": "starting price", "sentence_idx": 0},
+    {"value": "256GB", "label": "base storage", "sentence_idx": 0},
+    {"value": "1st", "label": "in-house modem", "sentence_idx": 1}
+  ],
+  "key_phrases": [
+    {
+      "en": "in-house",
+      "ja": "自社製の、内製の",
+      "example": "Apple's in-house modem chip replaces Qualcomm."
+    },
+    {
+      "en": "stop short of",
+      "ja": "〜には至らない、〜に及ばない",
+      "example": "The MacBook stopped short of a full hybrid."
+    },
+    {
+      "en": "price tier",
+      "ja": "価格帯",
+      "example": "Apple aims to dominate every price tier."
+    }
+  ],
+  "word_tips": [
+    {"sentence_idx": 0, "word": "launched", "ja": "正式に発売した"},
+    {"sentence_idx": 0, "word": "affordable", "ja": "手頃な価格の"},
+    {"sentence_idx": 1, "word": "features", "ja": "搭載している（特徴）"},
+    {"sentence_idx": 2, "word": "introduces", "ja": "導入する・初採用する"},
+    {"sentence_idx": 3, "word": "notes", "ja": "指摘する・言及する"},
+    {"sentence_idx": 4, "word": "signals", "ja": "示す・示唆する"}
+  ],
+  "navigator": {
+    "intro": "今日はAppleの新型iPhone 17eのニュースなのだ！599ドルで256GBはすごいのだ！英語で聞き取りチャレンジなのだ！",
+    "outro": "Appleが全価格帯を攻める戦略、勉強になったのだ！キーフレーズを覚えて英語力アップなのだ！チャンネル登録してほしいのだ！"
+  },
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#Apple", "#iPhone17e", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

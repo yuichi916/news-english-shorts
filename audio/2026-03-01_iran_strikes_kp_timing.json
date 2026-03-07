@@ -1,0 +1,23 @@
+[
+  {
+    "text": "The US launched a massive military operation.",
+    "start_ms": 100.0,
+    "end_ms": 4050.0001,
+    "start_s": 0.1,
+    "end_s": 4.05
+  },
+  {
+    "text": "His death marked a historic turning point.",
+    "start_ms": 4000.0001,
+    "end_ms": 7333.333500000001,
+    "start_s": 4.0,
+    "end_s": 7.33
+  },
+  {
+    "text": "The conflict could destabilize the entire region.",
+    "start_ms": 7333.3335,
+    "end_ms": 11402.778,
+    "start_s": 7.33,
+    "end_s": 11.4
+  }
+]

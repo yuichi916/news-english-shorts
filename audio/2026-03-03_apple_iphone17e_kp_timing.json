@@ -1,0 +1,23 @@
+[
+  {
+    "text": "Apple's in-house modem chip replaces Qualcomm.",
+    "start_ms": 100.0,
+    "end_ms": 3966.6667,
+    "start_s": 0.1,
+    "end_s": 3.97
+  },
+  {
+    "text": "The MacBook stopped short of a full hybrid.",
+    "start_ms": 3916.6667,
+    "end_ms": 7388.889,
+    "start_s": 3.92,
+    "end_s": 7.39
+  },
+  {
+    "text": "Apple aims to dominate every price tier.",
+    "start_ms": 7388.889,
+    "end_ms": 10916.666799999999,
+    "start_s": 7.39,
+    "end_s": 10.92
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "text": "The global chip shortage is driving prices up.",
+    "start_ms": 100.0,
+    "end_ms": 3827.7778,
+    "start_s": 0.1,
+    "end_s": 3.83
+  },
+  {
+    "text": "Manufacturers pass rising costs to consumers.",
+    "start_ms": 3777.7778,
+    "end_ms": 8083.3333999999995,
+    "start_s": 3.78,
+    "end_s": 8.08
+  },
+  {
+    "text": "Companies shifted production toward AI memory.",
+    "start_ms": 8083.3335,
+    "end_ms": 11902.778,
+    "start_s": 8.08,
+    "end_s": 11.9
+  }
+]

@@ -26,53 +26,52 @@ GEN_HEIGHT = 1472
 FINAL_WIDTH = 1080
 FINAL_HEIGHT = 1920
 
-# Theme → SD prompt style mapping
+# Theme → SD prompt style mapping (anime/illustration style)
 THEME_PROMPTS = {
-    "midnight": "dark purple and blue cosmic atmosphere, nebula, starfield, deep space",
-    "ocean": "deep ocean underwater scene, bioluminescent, dark blue water, coral reef silhouette",
-    "ember": "dark volcanic landscape, glowing lava, ember particles, red and orange atmosphere",
-    "forest": "dark enchanted forest, misty trees, green bioluminescent plants, moonlight",
-    "purple": "dark purple crystal cave, amethyst formations, purple light rays, mystical",
+    "midnight": "deep indigo and navy night sky, city skyline silhouette, neon accent lights, anime background art",
+    "ocean": "calm ocean horizon at twilight, soft blue gradient sky, distant clouds, anime scenery",
+    "ember": "warm sunset cityscape, orange and amber glow, soft light rays, anime background art",
+    "forest": "lush green hillside, soft sunlight through trees, gentle breeze, anime nature scenery",
+    "purple": "evening twilight sky, purple and pink gradient, city lights below, anime background art",
 }
 
 NEGATIVE_PROMPT = (
     "text, watermark, logo, words, letters, numbers, signature, "
-    "person, face, human, hand, fingers, bright, overexposed, "
-    "blurry, low quality, cartoon, anime, 3d render"
+    "person, face, human, hand, fingers, "
+    "blurry, low quality, worst quality, jpeg artifacts, "
+    "3d render, photorealistic, photo, realistic"
 )
 
 SMART_PROMPT_MODEL = "claude-haiku-4-5-20251001"
 
 SMART_PROMPT_SYSTEM = """\
-You are an SDXL prompt engineer specializing in news-themed background images. \
-Your goal is to translate news topics into concrete, visually striking scenes \
-that immediately evoke the subject matter. Use natural language descriptions \
-(not tag-based). Output ONLY the prompt text, nothing else."""
+You are an SDXL prompt engineer creating anime-style background illustrations for a \
+Japanese English-learning YouTube Shorts channel featuring ずんだもん (Zundamon). \
+The backgrounds should look like anime scenery art — soft, colorful, and appealing. \
+They should subtly relate to the news topic through setting/mood, not literal depiction. \
+Output ONLY the prompt text, nothing else."""
 
 SMART_PROMPT_TEMPLATE = """\
-Generate an SDXL prompt for a background image that visually represents this news topic.
+Generate an SDXL prompt for an anime-style background that evokes this news topic's mood.
 
 NEWS TOPIC: {topic}
-NARRATION: {narration_text}
-KEY INSIGHT: {insight_en}
 KEY TERMS: {highlights}
 
-THEME PALETTE: {theme_style}
+COLOR MOOD: {theme_style}
 
 CRITICAL RULES:
-1. Identify the ICONIC OBJECTS, SYMBOLS, or SETTINGS of this topic and describe them concretely.
-   - Economy/finance → stock tickers, currency, trading floor, graphs
-   - Technology/AI → circuit boards, neural networks, server rooms, glowing data streams
-   - Climate/environment → glaciers, forests, weather phenomena, smokestacks
-   - Politics/diplomacy → capitol buildings, flags, conference tables, gavels
-   - Health/medicine → laboratory equipment, molecular structures, hospital scenes
-   - War/conflict → military equipment silhouettes, maps, barbed wire
-2. Place these objects in a DARK, MOODY scene with {theme_style} color palette.
-3. Use NATURAL LANGUAGE descriptions, not comma-separated tags.
-4. Include cinematic lighting with dramatic shadows and depth of field.
-5. The scene must be DARK enough for white text overlay.
-6. End with: masterpiece, best quality, no text, no people, no faces, no letters, no words
-7. Under 100 words, single paragraph."""
+1. Create a SCENIC ANIME BACKGROUND (no characters) that evokes the topic's mood or setting.
+   - Technology → futuristic city, glowing screens, modern office, server room corridor
+   - Economy/finance → city business district, stock exchange building, shopping street
+   - Climate → dramatic sky, weather scene, nature landscape
+   - Politics → government building, cityscape, formal interior
+   - War/conflict → stormy sky, ruined cityscape, dramatic clouds
+2. Use ANIME ILLUSTRATION style: soft lighting, clean lines, vibrant but not oversaturated colors.
+3. The scene should be slightly dim/evening-toned for text readability (not pure dark).
+4. Use {theme_style} as the color palette guide.
+5. Include depth with foreground blur or atmospheric perspective.
+6. End with: anime background, illustration, masterpiece, best quality, no text, no people, no characters
+7. Under 80 words, single paragraph."""
 
 
 def _load_cached_prompt(cache_path: str) -> str | None:
@@ -128,36 +127,35 @@ def _build_prompt(script: dict) -> str:
     topic_keywords = topic.lower().replace("'", "").replace('"', "")
 
     prompt = (
-        f"A dark cinematic scene representing {topic_keywords}, "
-        f"featuring symbolic objects and settings related to the topic, "
-        f"dramatic {base_style}, "
-        "moody atmosphere with volumetric lighting and deep shadows, "
-        "dark background suitable for text overlay, depth of field, "
-        "masterpiece, best quality, no text, no people, no faces"
+        f"An anime-style scenic background evoking {topic_keywords}, "
+        f"{base_style}, "
+        "soft evening lighting, atmospheric perspective, depth of field, "
+        "anime background, illustration, masterpiece, best quality, "
+        "no text, no people, no characters, no faces"
     )
     return prompt
 
 
 def _post_process(img: Image.Image) -> Image.Image:
-    """Post-process SD output for text readability: darken + blur + vignette."""
+    """Post-process SD output for text readability: moderate darken + soft blur + vignette."""
     # Resize to final dimensions
     img = img.resize((FINAL_WIDTH, FINAL_HEIGHT), Image.LANCZOS)
 
-    # Darken to 65% brightness
+    # Moderate darken (75% brightness — lighter than before to keep anime style)
     from PIL import ImageEnhance
     enhancer = ImageEnhance.Brightness(img)
-    img = enhancer.enhance(0.65)
+    img = enhancer.enhance(0.75)
 
-    # Light gaussian blur for softness
-    img = img.filter(ImageFilter.GaussianBlur(radius=2))
+    # Slight blur for softness (less than before)
+    img = img.filter(ImageFilter.GaussianBlur(radius=1.5))
 
-    # Vignette effect
+    # Soft vignette effect (lighter than before)
     vignette = Image.new("RGBA", (FINAL_WIDTH, FINAL_HEIGHT), (0, 0, 0, 0))
     vdraw = ImageDraw.Draw(vignette)
     cx, cy = FINAL_WIDTH // 2, FINAL_HEIGHT // 2
     max_dist = (cx ** 2 + cy ** 2) ** 0.5
     for ring in range(0, int(max_dist), 4):
-        alpha = int(min(255, (ring / max_dist) ** 1.5 * 160))
+        alpha = int(min(255, (ring / max_dist) ** 1.8 * 120))
         vdraw.ellipse(
             [cx - ring, cy - ring, cx + ring, cy + ring],
             outline=(0, 0, 0, alpha),
@@ -175,8 +173,8 @@ def _call_sd_api(prompt: str, negative_prompt: str = NEGATIVE_PROMPT) -> Image.I
         "negative_prompt": negative_prompt,
         "width": GEN_WIDTH,
         "height": GEN_HEIGHT,
-        "steps": 28,
-        "cfg_scale": 6,
+        "steps": 30,
+        "cfg_scale": 7,
         "sampler_name": "DPM++ 2M SDE",
         "scheduler": "Karras",
         "seed": -1,

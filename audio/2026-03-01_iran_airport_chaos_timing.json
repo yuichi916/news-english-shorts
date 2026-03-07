@@ -1,0 +1,51 @@
+[
+  {
+    "text": "Iranian retaliatory strikes hit Dubai International Airport and targets near Abu Dhabi, killing one person and injuring seven.",
+    "start_ms": 100.0,
+    "end_ms": 8563.8891,
+    "start_s": 0.1,
+    "end_s": 8.56
+  },
+  {
+    "text": "Hundreds of flights were cancelled across the Middle East as multiple countries closed their airspace to commercial aviation.",
+    "start_ms": 8513.8891,
+    "end_ms": 16000.0004,
+    "start_s": 8.51,
+    "end_s": 16.0
+  },
+  {
+    "text": "Hundreds of thousands of travellers were left stranded or diverted, with airports in the Gulf region overwhelmed by the sudden chaos.",
+    "start_ms": 16000.0004,
+    "end_ms": 24305.5561,
+    "start_s": 16.0,
+    "end_s": 24.31
+  },
+  {
+    "text": "Airlines including Emirates, Etihad, and Qatar Airways suspended all operations indefinitely, warning passengers to avoid booking new flights.",
+    "start_ms": 24305.5561,
+    "end_ms": 33777.7785,
+    "start_s": 24.31,
+    "end_s": 33.78
+  },
+  {
+    "text": "Aviation experts say it could take weeks to fully restore normal flight operations across the region.",
+    "start_ms": 33777.7786,
+    "end_ms": 40402.778699999995,
+    "start_s": 33.78,
+    "end_s": 40.4
+  },
+  {
+    "text": "Dubai handles over ninety million passengers a year, making it one of the world's busiest airports.",
+    "start_ms": 40402.7788,
+    "end_ms": 47291.6678,
+    "start_s": 40.4,
+    "end_s": 47.29
+  },
+  {
+    "text": "The disruption highlights how military conflict in the Middle East can instantly paralyze global air travel and supply chains.",
+    "start_ms": 47291.6679,
+    "end_ms": 55111.1125,
+    "start_s": 47.29,
+    "end_s": 55.11
+  }
+]

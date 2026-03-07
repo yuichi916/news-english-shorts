@@ -101,7 +101,7 @@ strictly follows the schema below. Do NOT output anything else.
   ],
 
   "mission": {
-    "ja": "<Japanese listening challenge question>",
+    "ja": "<Japanese listening challenge — 35-50 chars, include topic context + specific question, e.g. '2026年にAppleが発表した新型iPhoneの驚きの価格と容量は？英語で聞き取ろう！'>",
     "answer_ja": "答え: <English answer>（<Japanese transliteration>）"
   },
 
@@ -146,6 +146,19 @@ strictly follows the schema below. Do NOT output anything else.
     }
   ],
 
+  "word_tips": [                        // 4-6 vocabulary tips shown during narration
+    {
+      "sentence_idx": 0,                // which narration sentence (0-4) this tip appears at
+      "word": "<English word>",          // the target vocabulary word
+      "ja": "<Japanese explanation>"     // concise meaning (10 chars max)
+    }
+  ],
+
+  "navigator": {
+    "intro": "<Zundamon intro line — ずんだもん口調（〜なのだ）でニュースの要約・見どころを紹介。50-80字>",
+    "outro": "<Zundamon outro line — ずんだもん口調でニュースの感想・学びのまとめ + チャンネル登録のお願い。50-80字>"
+  },
+
   "cta": "保存して3つのフレーズを覚えよう",
   "hashtags": ["#英語学習", "#英語ニュース", "<topic tag>", ...]
 }
@@ -159,7 +172,7 @@ strictly follows the schema below. Do NOT output anything else.
 5. japanese_subtitle_segments MUST have exactly 5 items with text and start.
 6. source_mentions MUST have exactly 5 items with sentence_idx 0-4.
 7. narration_structure MUST have exactly 5 items; role MUST be one of: FACT, DETAIL, COUNTER, OUTLOOK.
-8. mission MUST have ja and answer_ja.
+8. mission MUST have ja and answer_ja. mission.ja MUST be 35-50 characters with topic context and a specific question ending with 「英語で聞き取ろう！」.
 9. insight MUST have en and ja.
 10. theme MUST be one of: midnight, ocean, ember, forest, purple.
 11. ALL numbers in narration.text MUST be spelled out for TTS (e.g. "two hundred million" not "200 million").
@@ -167,6 +180,9 @@ strictly follows the schema below. Do NOT output anything else.
 13. hook_text should be a short, catchy Japanese question/statement.
 14. id format: YYYY-MM-DD_lowercase_slug (max 30 char slug).
 15. Use today's date for the id and date fields.
+16. navigator.intro MUST be in ずんだもん speech style (ending with なのだ/のだ). It should briefly summarize the news topic and tease the listening challenge. 50-80 characters.
+17. navigator.outro MUST be in ずんだもん speech style. It should give a brief opinion/takeaway about the news AND ask viewers to subscribe. 50-80 characters.
+18. word_tips MUST have 4-6 items. Each must have sentence_idx (0-4), word (English vocabulary from narration), ja (concise Japanese meaning, max 10 chars). Distribute across different sentences. Pick practical, useful vocabulary words that appear in the narration.
 """
 
 
@@ -351,6 +367,13 @@ def validate_script(data: dict) -> list[str]:
     if "ja" not in insight:
         errors.append("insight missing 'ja'")
 
+    # --- navigator ---
+    nav = data.get("navigator", {})
+    if "intro" not in nav:
+        errors.append("navigator missing 'intro'")
+    if "outro" not in nav:
+        errors.append("navigator missing 'outro'")
+
     # --- Numbers spelled out in narration ---
     digit_pattern = re.compile(r"\b\d{2,}\b")  # 2+ digit numbers
     if digit_pattern.search(text):
@@ -459,8 +482,9 @@ def main():
     if articles:
         print(f"  Found {len(articles)} articles:")
         for a in articles:
-            source = f" — {a['source']}" if a.get("source") else ""
-            print(f"    - {a['title']}{source}")
+            source = f" - {a['source']}" if a.get("source") else ""
+            title = a['title'].encode('ascii', 'replace').decode('ascii')
+            print(f"    - {title}{source}")
     else:
         print("  No articles found. Generating from topic name only.")
 

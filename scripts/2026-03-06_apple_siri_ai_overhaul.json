@@ -1,0 +1,82 @@
+{
+  "id": "2026-03-06_apple_siri_ai",
+  "date": "2026-03-06",
+  "topic": "Apple's Siri AI overhaul delayed again",
+  "theme": "midnight",
+  "hook_text": "Siri大型AI刷新がまた延期！",
+  "sources": [
+    {"name": "Bloomberg", "url": "bloomberg.com/news/articles/2026-02-11/apple-s-ios-26-4-siri-update-runs-into-snags"},
+    {"name": "TechCrunch", "url": "techcrunch.com/2026/02/11/apples-siri-revamp-reportedly-delayed-again"},
+    {"name": "MacRumors", "url": "macrumors.com/2026/02/06/siri-ios-26-4-rumors"},
+    {"name": "9to5Mac", "url": "9to5mac.com/2026/01/05/new-siri-is-coming-this-year"}
+  ],
+  "mission": {
+    "ja": "AppleのSiri刷新でどんなAI技術が採用され、なぜ延期されたのか？英語で聞き取ろう！",
+    "answer_ja": "答え: GoogleのGeminiベースだが内部テストで問題発生し延期"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Bloomberg"},
+    {"sentence_idx": 1, "source": "MacRumors"},
+    {"sentence_idx": 2, "source": "9to5Mac"},
+    {"sentence_idx": 3, "source": "TechCrunch"},
+    {"sentence_idx": 4, "source": "Bloomberg"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "Apple's long-awaited Siri overhaul has hit another snag during internal testing, pushing the launch beyond the original March target. The revamped assistant will be powered by Google's Gemini model, marking a major shift from Apple's in-house approach. New features include on-screen awareness, letting Siri understand what you're viewing and act on it instantly. However, key capabilities like tapping into personal data and chaining multiple app actions have been delayed until later this year. Bloomberg reports some features may not arrive until iOS twenty-seven in September, raising questions about Apple's AI timeline.",
+    "highlights": ["long-awaited", "hit another snag", "internal testing", "powered by", "Gemini model", "major shift", "on-screen awareness", "act on it instantly", "tapping into", "chaining", "raising questions"]
+  },
+  "insight": {
+    "en": "Apple is betting big on Google's Gemini to finally make Siri competitive. But repeated delays show that integrating advanced AI into a privacy-focused ecosystem is far harder than building a chatbot from scratch.",
+    "ja": "AppleはGoogleのGeminiに大きく賭けてSiriを競争力のあるものにしようとしている。だが度重なる延期は、プライバシー重視のエコシステムに高度AIを統合する難しさを物語っている。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "AppleのSiri刷新が内部テストで問題発生、3月の目標を超えて延期。", "start": 0.0},
+    {"text": "新SiriはGoogleのGeminiモデルで動作、自社開発路線から大転換。", "start": 5.0},
+    {"text": "画面認識機能で、表示中のコンテンツを理解し即座に対応可能に。", "start": 10.0},
+    {"text": "ただし個人データ活用や複数アプリ連携は年内後半に延期。", "start": 14.5},
+    {"text": "一部機能は9月のiOS 27まで持ち越しの可能性とBloombergが報道。", "start": 18.5}
+  ],
+  "data_points": [
+    {"value": "iOS 26.4", "label": "target release", "sentence_idx": 0},
+    {"value": "Gemini", "label": "AI model", "sentence_idx": 1},
+    {"value": "iOS 27", "label": "fallback date", "sentence_idx": 4}
+  ],
+  "key_phrases": [
+    {
+      "en": "hit a snag",
+      "ja": "問題にぶつかる、障害が発生する",
+      "example": "The project hit a snag during testing."
+    },
+    {
+      "en": "on-screen awareness",
+      "ja": "画面認識（表示中の内容を理解する機能）",
+      "example": "Siri's on-screen awareness lets it read what you see."
+    },
+    {
+      "en": "tap into",
+      "ja": "〜を活用する、〜にアクセスする",
+      "example": "The new Siri can tap into your personal data."
+    }
+  ],
+  "word_tips": [
+    {"sentence_idx": 0, "word": "overhaul", "ja": "大改修・刷新"},
+    {"sentence_idx": 1, "word": "revamped", "ja": "刷新された"},
+    {"sentence_idx": 1, "word": "powered by", "ja": "〜で動く"},
+    {"sentence_idx": 2, "word": "instantly", "ja": "即座に"},
+    {"sentence_idx": 3, "word": "delayed", "ja": "延期された"},
+    {"sentence_idx": 4, "word": "raising", "ja": "引き起こす"}
+  ],
+  "navigator": {
+    "intro": "今日はAppleのSiri AI刷新のニュースなのだ！Googleの技術を使うのに延期になっちゃったのだ！英語で詳しく聞くのだ！",
+    "outro": "Siriの進化は大変そうだけど楽しみなのだ！キーフレーズを覚えて英語力アップなのだ！チャンネル登録してほしいのだ！"
+  },
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#Apple", "#Siri", "#AI", "#Gemini", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

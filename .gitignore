@@ -1,5 +1,8 @@
-# Generated audio (TTS output, large mp3 files)
+# Generated audio (TTS output, large files)
 audio/*.mp3
+audio/*.srt
+audio/*.webm
+audio/_backup/
 
 # Generated video output
 output/*.mp4
@@ -9,6 +12,17 @@ output/*.jpg
 
 # SD-generated backgrounds (large, reproducible)
 backgrounds/sd_*.jpg
+backgrounds/sd_*.prompt.txt
+
+# VOICEVOX Engine (large binary)
+voicevox/
+
+# Zundamon PSD source files (large)
+*.psd
+
+# Temporary/debug files
+_filtered_articles.json
+test_*.mp3
 
 # Python cache
 __pycache__/

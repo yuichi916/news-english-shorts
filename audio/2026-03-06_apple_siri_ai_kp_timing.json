@@ -1,0 +1,23 @@
+[
+  {
+    "text": "The project hit a snag during testing.",
+    "start_ms": 100.0,
+    "end_ms": 3438.8889,
+    "start_s": 0.1,
+    "end_s": 3.44
+  },
+  {
+    "text": "Siri's on-screen awareness lets it read what you see.",
+    "start_ms": 3388.8889,
+    "end_ms": 7541.6667,
+    "start_s": 3.39,
+    "end_s": 7.54
+  },
+  {
+    "text": "The new Siri can tap into your personal data.",
+    "start_ms": 7541.6668,
+    "end_ms": 11236.1113,
+    "start_s": 7.54,
+    "end_s": 11.24
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "text": "Apple has officially launched the iPhone seventeen e, its most affordable new model, starting at five hundred ninety-nine dollars with two hundred fifty-six gigabytes of storage.",
+    "start_ms": 100.0,
+    "end_ms": 10980.5558,
+    "start_s": 0.1,
+    "end_s": 10.98
+  },
+  {
+    "text": "The device features Apple's in-house modem chip, replacing Qualcomm for the first time in iPhone history.",
+    "start_ms": 10930.5558,
+    "end_ms": 17888.8893,
+    "start_s": 10.93,
+    "end_s": 17.89
+  },
+  {
+    "text": "It also introduces a new aluminum design that is both thinner and lighter than previous models.",
+    "start_ms": 17888.8893,
+    "end_ms": 24222.2228,
+    "start_s": 17.89,
+    "end_s": 24.22
+  },
+  {
+    "text": "However, Bloomberg notes the upcoming Touch MacBook will stop well short of a full Mac-iPad hybrid.",
+    "start_ms": 24222.2228,
+    "end_ms": 30916.6674,
+    "start_s": 24.22,
+    "end_s": 30.92
+  },
+  {
+    "text": "Analysts say this product wave signals Apple's strategy to dominate every price tier in twenty twenty-six.",
+    "start_ms": 30916.6674,
+    "end_ms": 38083.3342,
+    "start_s": 30.92,
+    "end_s": 38.08
+  },
+  {
+    "text": "Apple is no longer just a premium brand.",
+    "start_ms": 38083.3343,
+    "end_ms": 41763.8899,
+    "start_s": 38.08,
+    "end_s": 41.76
+  },
+  {
+    "text": "By offering a powerful phone at five hundred ninety-nine dollars and building its own modem, the company is cutting costs while expanding its reach to millions of new customers worldwide.",
+    "start_ms": 41763.8899,
+    "end_ms": 52847.2235,
+    "start_s": 41.76,
+    "end_s": 52.85
+  }
+]

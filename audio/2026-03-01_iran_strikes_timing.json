@@ -1,0 +1,51 @@
+[
+  {
+    "text": "The United States and Israel launched a massive joint military operation against Iran on Saturday, striking targets across the country.",
+    "start_ms": 100.0,
+    "end_ms": 8744.4446,
+    "start_s": 0.1,
+    "end_s": 8.74
+  },
+  {
+    "text": "The Pentagon confirmed that Operation Epic Fury hit Revolutionary Guard command centers, air defenses, and missile launch sites.",
+    "start_ms": 8694.4446,
+    "end_ms": 17152.778100000003,
+    "start_s": 8.69,
+    "end_s": 17.15
+  },
+  {
+    "text": "Iran's state media reported that Supreme Leader Ayatollah Khamenei was killed in the strikes, marking a historic turning point.",
+    "start_ms": 17152.7782,
+    "end_ms": 25027.778400000003,
+    "start_s": 17.15,
+    "end_s": 25.03
+  },
+  {
+    "text": "Tehran retaliated by firing missiles at Israel and at US bases across the Middle East, including Qatar and Bahrain.",
+    "start_ms": 25027.7784,
+    "end_ms": 33222.223,
+    "start_s": 25.03,
+    "end_s": 33.22
+  },
+  {
+    "text": "World leaders warned the escalation could destabilize the entire region, with France calling it a grave threat to international peace.",
+    "start_ms": 33222.2231,
+    "end_ms": 41763.8899,
+    "start_s": 33.22,
+    "end_s": 41.76
+  },
+  {
+    "text": "This is the largest US military operation in the Middle East since the Iraq War.",
+    "start_ms": 41763.8899,
+    "end_ms": 47583.3344,
+    "start_s": 41.76,
+    "end_s": 47.58
+  },
+  {
+    "text": "With Iran's supreme leader gone and retaliatory strikes spreading across the region, the risk of a wider conflict is now at its highest point in decades.",
+    "start_ms": 47583.3345,
+    "end_ms": 57097.2236,
+    "start_s": 47.58,
+    "end_s": 57.1
+  }
+]

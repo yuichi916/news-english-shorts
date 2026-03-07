@@ -1,0 +1,66 @@
+{
+  "id": "2026-03-02_iran_war_widens",
+  "date": "2026-03-02",
+  "topic": "Iran War Widens: Hezbollah Joins, Oil Prices Surge",
+  "theme": "ember",
+  "hook_text": "イラン戦争が拡大、ヒズボラも参戦",
+  "sources": [
+    {"name": "Al Jazeera", "url": "aljazeera.com/news/liveblog/2026/3/2/us-israel-attack-iran-live"},
+    {"name": "NBC News", "url": "nbcnews.com/world/middle-east/live-blog/live-updates-iran-war-israel-us-hezbollah-lebanon-khamenei-trump-rcna261259"},
+    {"name": "CNBC", "url": "cnbc.com/2026/03/02/iran-us-oil-strait-hormuz-war-middle-east-energy-brent-crude-wti-conflict.html"},
+    {"name": "Euronews", "url": "euronews.com/2026/03/02/war-widens-as-israel-us-strike-iran-and-clash-with-hezbollah"}
+  ],
+  "mission": {
+    "ja": "ヒズボラ参戦で中東戦争が拡大、原油価格はどこまで急騰した？英語で聞き取ろう！",
+    "answer_ja": "答え: across the entire Middle East（中東全域に）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Euronews"},
+    {"sentence_idx": 1, "source": "Al Jazeera"},
+    {"sentence_idx": 2, "source": "NBC News"},
+    {"sentence_idx": 3, "source": "CNBC"},
+    {"sentence_idx": 4, "source": "Al Jazeera"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "FACT"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "The Iran war has now entered its third day, with Hezbollah launching missiles at Israel from Lebanon and Israel striking back with a fresh campaign across southern Lebanon. Iran fired a massive retaliatory missile barrage at Israel, breaking through air defenses and killing eight people in the city of Beit Shemesh. Three American service members have been killed so far, with President Trump warning that casualties will likely climb higher as Operation Epic Fury continues. Oil prices surged nearly ten percent, with Brent crude approaching eighty dollars a barrel as tanker traffic through the Strait of Hormuz has nearly stopped. Tehran has declared it will not negotiate with the United States and has formed a temporary three-person leadership council after the death of Supreme Leader Khamenei.",
+    "highlights": ["third day", "Hezbollah", "launching missiles", "striking back", "retaliatory missile barrage", "breaking through", "air defenses", "Operation Epic Fury", "Oil prices surged", "Strait of Hormuz", "will not negotiate", "leadership council"]
+  },
+  "insight": {
+    "en": "With Hezbollah now actively engaged, this conflict has expanded far beyond Iran's borders. The disruption of oil shipping through the Strait of Hormuz threatens a global energy crisis, and Iran's refusal to negotiate suggests this war is far from over.",
+    "ja": "ヒズボラの参戦で紛争はイラン国境を大きく超えて拡大した。ホルムズ海峡の石油輸送の混乱は世界的なエネルギー危機を招きかねず、イランの交渉拒否は戦争の長期化を示唆している。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "イラン戦争3日目。ヒズボラがイスラエルにミサイル攻撃、イスラエルはレバノンを反撃。", "start": 0.0},
+    {"text": "イランの報復ミサイルがイスラエルの防空を突破。ベイトシェメシュで8人死亡。", "start": 5.0},
+    {"text": "米兵3人が死亡。トランプ大統領は死者増加を警告。作戦名「エピックフューリー」。", "start": 10.0},
+    {"text": "原油価格が約10%急騰。ホルムズ海峡のタンカー輸送がほぼ停止。", "start": 15.0},
+    {"text": "イランは米国との交渉を拒否。ハメネイ師死亡後、3人体制の暫定指導部を設立。", "start": 19.5}
+  ],
+  "data_points": [],
+  "key_phrases": [
+    {
+      "en": "break through defenses",
+      "ja": "防御を突破する",
+      "example": "Iranian missiles broke through Israel's air defenses."
+    },
+    {
+      "en": "Strait of Hormuz",
+      "ja": "ホルムズ海峡",
+      "example": "Tanker traffic through the Strait of Hormuz has nearly stopped."
+    },
+    {
+      "en": "refuse to negotiate",
+      "ja": "交渉を拒否する",
+      "example": "Tehran declared it will refuse to negotiate with the US."
+    }
+  ],
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#イラン戦争", "#ヒズボラ", "#中東危機", "#Shorts"]
+}

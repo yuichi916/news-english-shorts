@@ -1,0 +1,82 @@
+{
+  "id": "2026-03-07_ram_shortage_ai",
+  "date": "2026-03-07",
+  "topic": "AI boom causes global RAM shortage",
+  "theme": "ember",
+  "hook_text": "AIのせいでスマホもPCも値上げ!?",
+  "sources": [
+    {"name": "Bloomberg", "url": "bloomberg.com/news/articles/2026-02-15/rampant-ai-demand-for-memory-is-fueling-a-growing-chip-crisis"},
+    {"name": "CBC News", "url": "cbc.ca/news/business/ram-shortage-consumer-electronics-9.7102991"},
+    {"name": "IDC", "url": "idc.com/resource-center/blog/global-memory-shortage-crisis-market-analysis-and-the-potential-impact-on-the-smartphone-and-pc-markets-in-2026"},
+    {"name": "Tom's Hardware", "url": "tomshardware.com/pc-components/ram/memory-prices-now-shifting-hourly-as-smaller-firms-fight-over-scraps"}
+  ],
+  "mission": {
+    "ja": "AIブームによるRAM不足でPC出荷台数は何%減少すると予測されているか？英語で聞き取ろう！",
+    "answer_ja": "答え: up to eight point nine percent（最大8.9%の減少）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Bloomberg"},
+    {"sentence_idx": 1, "source": "CBC News"},
+    {"sentence_idx": 2, "source": "IDC"},
+    {"sentence_idx": 3, "source": "Tom's Hardware"},
+    {"sentence_idx": 4, "source": "IDC"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "A global memory chip shortage driven by the AI boom has sent RAM prices surging roughly ninety percent in the first quarter of twenty twenty-six. Only three companies manufacture RAM worldwide, Samsung, SK Hynix, and Micron, and all have shifted production toward more profitable AI memory chips. Apple CEO Tim Cook has warned that memory pricing will increase significantly, while HP and Dell are already raising their PC prices. The crisis has hit smaller companies hardest, with over one hundred ninety thousand small businesses struggling as the market shifts to an hourly pricing model. IDC projects PC shipments could drop up to eight point nine percent this year, while smartphone shipments may fall five point two percent as manufacturers pass rising costs to consumers.",
+    "highlights": ["memory chip shortage", "AI boom", "surging roughly ninety percent", "shifted production", "profitable AI memory", "increase significantly", "raising their PC prices", "hourly pricing model", "drop up to eight point nine percent", "pass rising costs"]
+  },
+  "insight": {
+    "en": "The AI revolution is creating winners and losers in the tech supply chain. While data center operators race to secure memory for AI training, everyday consumers face higher prices for basic electronics, turning a tech boom into a hidden tax on everyone.",
+    "ja": "AI革命はテック供給チェーンに勝者と敗者を生んでいる。データセンターがAI用メモリを確保する一方、一般消費者は基本的な電子機器の値上げに直面し、テクノロジーブームが見えない税金と化している。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "AIブームでRAM価格が2026年第1四半期に約90%急騰。", "start": 0.0},
+    {"text": "RAM製造はSamsung・SK Hynix・Micronの3社のみ、AI向けに生産をシフト。", "start": 5.0},
+    {"text": "Apple CEOがメモリ価格の大幅値上げを警告、HPとDellはPC値上げ開始。", "start": 10.0},
+    {"text": "19万以上の中小企業が打撃、市場は時間単位の価格変動制に。", "start": 14.5},
+    {"text": "IDCはPC出荷が最大8.9%減、スマホも5.2%減と予測。", "start": 18.5}
+  ],
+  "data_points": [
+    {"value": "90%", "label": "RAM price surge", "sentence_idx": 0},
+    {"value": "3", "label": "global RAM makers", "sentence_idx": 1},
+    {"value": "8.9%", "label": "PC shipment drop", "sentence_idx": 4}
+  ],
+  "key_phrases": [
+    {
+      "en": "shortage",
+      "ja": "不足、品不足",
+      "example": "The global chip shortage is driving prices up."
+    },
+    {
+      "en": "pass costs to",
+      "ja": "コストを〜に転嫁する",
+      "example": "Manufacturers pass rising costs to consumers."
+    },
+    {
+      "en": "shift production",
+      "ja": "生産をシフトする・切り替える",
+      "example": "Companies shifted production toward AI memory."
+    }
+  ],
+  "word_tips": [
+    {"sentence_idx": 0, "word": "surging", "ja": "急騰する"},
+    {"sentence_idx": 1, "word": "manufacture", "ja": "製造する"},
+    {"sentence_idx": 1, "word": "profitable", "ja": "利益の大きい"},
+    {"sentence_idx": 2, "word": "significantly", "ja": "大幅に"},
+    {"sentence_idx": 3, "word": "struggling", "ja": "苦戦している"},
+    {"sentence_idx": 4, "word": "projections", "ja": "予測・見通し"}
+  ],
+  "navigator": {
+    "intro": "今日はAIのせいでメモリが足りないニュースなのだ！スマホもパソコンも値上げで大変なのだ！英語で聞き取りチャレンジなのだ！",
+    "outro": "AIブームの影響が身近に来ているのだ！キーフレーズを覚えて英語ニュースを読めるようになるのだ！チャンネル登録してほしいのだ！"
+  },
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#RAM不足", "#AI", "#メモリ不足", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

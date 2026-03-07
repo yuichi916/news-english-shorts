@@ -1,0 +1,66 @@
+{
+  "id": "2026-03-01_iran_airport_chaos",
+  "date": "2026-03-01",
+  "topic": "Iran strikes disrupt flights across Middle East, Dubai airport hit",
+  "theme": "ember",
+  "hook_text": "ドバイ空港が攻撃で大混乱！何人が足止め？",
+  "sources": [
+    {"name": "BBC", "url": "bbc.com/news/world-middle-east-iran-flights-cancelled"},
+    {"name": "Reuters", "url": "reuters.com/world/middle-east/us-iran-conflict-disrupts-flights"},
+    {"name": "Bloomberg", "url": "bloomberg.com/news/articles/iran-strikes-dubai-airport"},
+    {"name": "The Guardian", "url": "theguardian.com/world/travellers-stranded-middle-east-airspace"}
+  ],
+  "mission": {
+    "ja": "イランの攻撃でドバイ空港が閉鎖、足止めされた旅行者は何十万人？英語で聞き取ろう！",
+    "answer_ja": "答え: hundreds of thousands（数十万人）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "Bloomberg"},
+    {"sentence_idx": 1, "source": "BBC"},
+    {"sentence_idx": 2, "source": "The Guardian"},
+    {"sentence_idx": 3, "source": "Reuters"},
+    {"sentence_idx": 4, "source": "BBC"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "FACT"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "Iranian retaliatory strikes hit Dubai International Airport and targets near Abu Dhabi, killing one person and injuring seven. Hundreds of flights were cancelled across the Middle East as multiple countries closed their airspace to commercial aviation. Hundreds of thousands of travellers were left stranded or diverted, with airports in the Gulf region overwhelmed by the sudden chaos. Airlines including Emirates, Etihad, and Qatar Airways suspended all operations indefinitely, warning passengers to avoid booking new flights. Aviation experts say it could take weeks to fully restore normal flight operations across the region.",
+    "highlights": ["retaliatory strikes", "Dubai International Airport", "killing one", "injuring seven", "cancelled", "closed their airspace", "stranded", "diverted", "overwhelmed", "suspended", "indefinitely", "restore"]
+  },
+  "insight": {
+    "en": "Dubai handles over ninety million passengers a year, making it one of the world's busiest airports. The disruption highlights how military conflict in the Middle East can instantly paralyze global air travel and supply chains.",
+    "ja": "ドバイ空港は年間九千万人以上が利用する世界有数の空港。今回の混乱は、中東の軍事衝突がいかに瞬時に世界の航空網と物流を麻痺させるかを浮き彫りにした。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "イランの報復攻撃がドバイ空港やアブダビ近郊に着弾。死傷者も。", "start": 0.0},
+    {"text": "中東各国が領空を閉鎖し、数百便が欠航に。", "start": 4.5},
+    {"text": "数十万人の旅行者が足止めや迂回を余儀なくされた。", "start": 9.0},
+    {"text": "エミレーツなど主要航空会社が全便を無期限運休に。", "start": 13.5},
+    {"text": "専門家は通常運航の回復に数週間かかると予測。", "start": 17.5}
+  ],
+  "data_points": [],
+  "key_phrases": [
+    {
+      "en": "close airspace",
+      "ja": "領空を閉鎖する",
+      "example": "Several countries closed their airspace to commercial flights."
+    },
+    {
+      "en": "left stranded",
+      "ja": "足止めされる、立ち往生する",
+      "example": "Hundreds of thousands of travellers were left stranded at airports."
+    },
+    {
+      "en": "suspend operations",
+      "ja": "運航を停止する",
+      "example": "Major airlines suspended all operations indefinitely."
+    }
+  ],
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#ドバイ", "#イラン", "#空港", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

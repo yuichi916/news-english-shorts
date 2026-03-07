@@ -1,0 +1,51 @@
+[
+  {
+    "text": "A global memory chip shortage driven by the AI boom has sent RAM prices surging roughly ninety percent in the first quarter of twenty twenty-six.",
+    "start_ms": 100.0,
+    "end_ms": 9327.778,
+    "start_s": 0.1,
+    "end_s": 9.33
+  },
+  {
+    "text": "Only three companies manufacture RAM worldwide, Samsung, SK Hynix, and Micron, and all have shifted production toward more profitable AI memory chips.",
+    "start_ms": 9277.778,
+    "end_ms": 19666.6671,
+    "start_s": 9.28,
+    "end_s": 19.67
+  },
+  {
+    "text": "Apple CEO Tim Cook has warned that memory pricing will increase significantly, while HP and Dell are already raising their PC prices.",
+    "start_ms": 19666.6671,
+    "end_ms": 28555.5562,
+    "start_s": 19.67,
+    "end_s": 28.56
+  },
+  {
+    "text": "The crisis has hit smaller companies hardest, with over one hundred ninety thousand small businesses struggling as the market shifts to an hourly pricing model.",
+    "start_ms": 28555.5563,
+    "end_ms": 38430.5565,
+    "start_s": 28.56,
+    "end_s": 38.43
+  },
+  {
+    "text": "IDC projects PC shipments could drop up to eight point nine percent this year, while smartphone shipments may fall five point two percent as manufacturers pass rising costs to consumers.",
+    "start_ms": 38430.5565,
+    "end_ms": 50013.8901,
+    "start_s": 38.43,
+    "end_s": 50.01
+  },
+  {
+    "text": "The AI revolution is creating winners and losers in the tech supply chain.",
+    "start_ms": 50013.8902,
+    "end_ms": 55236.1125,
+    "start_s": 50.01,
+    "end_s": 55.24
+  },
+  {
+    "text": "While data center operators race to secure memory for AI training, everyday consumers face higher prices for basic electronics, turning a tech boom into a hidden tax on everyone.",
+    "start_ms": 55236.1125,
+    "end_ms": 66722.2239,
+    "start_s": 55.24,
+    "end_s": 66.72
+  }
+]

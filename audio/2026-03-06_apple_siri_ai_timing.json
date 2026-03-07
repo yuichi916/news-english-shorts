@@ -1,0 +1,51 @@
+[
+  {
+    "text": "Apple's long-awaited Siri overhaul has hit another snag during internal testing, pushing the launch beyond the original March target.",
+    "start_ms": 100.0,
+    "end_ms": 8675.0002,
+    "start_s": 0.1,
+    "end_s": 8.68
+  },
+  {
+    "text": "The revamped assistant will be powered by Google's Gemini model, marking a major shift from Apple's in-house approach.",
+    "start_ms": 8625.0002,
+    "end_ms": 16250.0004,
+    "start_s": 8.63,
+    "end_s": 16.25
+  },
+  {
+    "text": "New features include on-screen awareness, letting Siri understand what you're viewing and act on it instantly.",
+    "start_ms": 16250.0004,
+    "end_ms": 23375.000500000002,
+    "start_s": 16.25,
+    "end_s": 23.38
+  },
+  {
+    "text": "However, key capabilities like tapping into personal data and chaining multiple app actions have been delayed until later this year.",
+    "start_ms": 23375.0006,
+    "end_ms": 31652.7785,
+    "start_s": 23.38,
+    "end_s": 31.65
+  },
+  {
+    "text": "Bloomberg reports some features may not arrive until iOS twenty-seven in September, raising questions about Apple's AI timeline.",
+    "start_ms": 31652.7786,
+    "end_ms": 39986.1121,
+    "start_s": 31.65,
+    "end_s": 39.99
+  },
+  {
+    "text": "Apple is betting big on Google's Gemini to finally make Siri competitive.",
+    "start_ms": 39986.1121,
+    "end_ms": 45388.89,
+    "start_s": 39.99,
+    "end_s": 45.39
+  },
+  {
+    "text": "But repeated delays show that integrating advanced AI into a privacy-focused ecosystem is far harder than building a chatbot from scratch.",
+    "start_ms": 45388.89,
+    "end_ms": 54416.668,
+    "start_s": 45.39,
+    "end_s": 54.42
+  }
+]
