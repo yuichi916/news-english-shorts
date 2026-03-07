@@ -316,8 +316,8 @@ Style: AnswerLabel,{FONT_EN},68,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,
 Style: AnswerText,{FONT_JA},38,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,16,0,8,60,60,540,1
 Style: CTA,{FONT_JA},30,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,0,8,20,100,740,1
 Style: Suspense,{FONT_JA},44,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,16,0,5,60,60,0,1
-Style: Bubble,{FONT_JA},26,&H00FFFFFF,&H000000FF,&HE0382818,&HE0382818,0,0,0,0,100,100,0,0,3,14,0,5,40,40,0,1
-Style: BubbleTail,{FONT_EN},10,&HE0382818,&HE0382818,&HE0382818,&HE0382818,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+Style: Bubble,{FONT_JA},30,&H00FFFFFF,&H000000FF,&HF0302010,&HF0302010,1,0,0,0,100,100,0,0,3,16,0,5,40,40,0,1
+Style: BubbleTail,{FONT_EN},10,&HF0302010,&HF0302010,&HF0302010,&HF0302010,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
 Style: Replay,{FONT_JA},40,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,16,0,5,60,120,0,1
 Style: SourceCurrent,{FONT_EN},20,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,1,0,3,8,0,7,30,100,200,1
 Style: ConnBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,80,775,1
@@ -502,12 +502,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             if b_end <= b_start + 1.0:
                 continue
 
-            tip_text = f"{tip['word']}  = {tip['ja']}"
+            # Accent color for English word, white for Japanese
+            tip_text = f"{{\\c{accent}}}{tip['word']}{{\\c&H00FFFFFF&}}  = {tip['ja']}"
 
             # Speech bubble text (centered)
             events.append(
                 f"Dialogue: 12,{_ass_time(b_start)},{_ass_time(b_end)},Bubble,,0,0,0,,"
-                f"{{\\an5\\pos({bubble_x},{bubble_y})\\fad(300,250)}}  {tip_text}  "
+                f"{{\\an5\\pos({bubble_x},{bubble_y})\\fad(300,250)}}"
+                f"  {tip_text}  "
             )
             # Bubble tail triangle pointing right toward avatar
             events.append(
@@ -714,6 +716,424 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     return ass + "\n".join(events) + "\n"
 
 
+# ── Long-form video support ────────────────────────────────────────────────
+
+LONG_FORM_INTRO = 3.5
+LONG_FORM_OUTRO = 5.0
+LONG_FORM_CHAPTER_CARD = 2.5  # seconds to display chapter card before narration
+
+
+def _compute_long_form_timing(chapters: list, chapter_ranges: list, timing_data: list) -> tuple[list[dict], float]:
+    """Compute per-chapter timing with gaps for section cards.
+
+    Returns:
+        (chapter_timing, total_duration)
+        chapter_timing: list of dicts with keys:
+            chapter_idx, sent_start_idx, sent_end_idx,
+            audio_start, audio_end, card_start,
+            narr_video_start, narr_video_end, offset
+    """
+    chapter_timing = []
+    current_video_time = LONG_FORM_INTRO
+
+    for ci, ch in enumerate(chapters):
+        if ci >= len(chapter_ranges):
+            break
+        sent_start_idx, sent_end_idx = chapter_ranges[ci]
+        if sent_start_idx >= len(timing_data):
+            break
+        n_sents = sent_end_idx - sent_start_idx
+        if n_sents == 0:
+            continue
+
+        audio_start = timing_data[sent_start_idx]["start_s"]
+        audio_end = timing_data[min(sent_end_idx - 1, len(timing_data) - 1)]["end_s"]
+
+        card_start = current_video_time
+        narr_video_start = current_video_time + LONG_FORM_CHAPTER_CARD
+        narr_video_end = narr_video_start + (audio_end - audio_start)
+
+        chapter_timing.append({
+            "chapter_idx": ci,
+            "sent_start_idx": sent_start_idx,
+            "sent_end_idx": sent_end_idx,
+            "audio_start": audio_start,
+            "audio_end": audio_end,
+            "card_start": card_start,
+            "narr_video_start": narr_video_start,
+            "narr_video_end": narr_video_end,
+            "offset": narr_video_start - audio_start,
+        })
+
+        current_video_time = narr_video_end + 0.3
+
+    total_duration = current_video_time + LONG_FORM_OUTRO
+    return chapter_timing, total_duration
+
+
+def _count_narration_sentences(text: str) -> int:
+    """Count expected TTS sentences in narration text."""
+    import re
+    cleaned = text.replace("U.S.", "U_S_").replace("U.K.", "U_K_")
+    cleaned = cleaned.replace("S.P.", "S_P_")
+    matches = re.findall(r'\.\s+[A-Z]', cleaned)
+    return len(matches) + 1
+
+
+def _map_chapters_to_sentences(chapters: list, total_sentences: int) -> list[tuple[int, int]]:
+    """Map chapters to (start_idx, end_idx) sentence ranges in timing_data."""
+    expected_counts = [_count_narration_sentences(ch["narration"]) for ch in chapters]
+    total_expected = sum(expected_counts)
+
+    if total_expected == total_sentences:
+        ranges = []
+        idx = 0
+        for count in expected_counts:
+            ranges.append((idx, idx + count))
+            idx += count
+        return ranges
+
+    # Fallback: proportional allocation by character count
+    char_counts = [len(ch["narration"]) for ch in chapters]
+    total_chars = sum(char_counts)
+    ranges = []
+    idx = 0
+    for ci, cc in enumerate(char_counts):
+        if ci == len(char_counts) - 1:
+            ranges.append((idx, total_sentences))
+        else:
+            proportion = cc / total_chars
+            n_sents = max(1, round(proportion * total_sentences))
+            end_idx = min(idx + n_sents, total_sentences)
+            ranges.append((idx, end_idx))
+            idx = end_idx
+    return ranges
+
+
+def _generate_ass_long_form(script: dict, timing_data: list, total_duration: float,
+                            chapter_timing: list[dict]) -> str:
+    """Generate ASS subtitles for long-form chapter-based video."""
+    chapters = script.get("chapters", [])
+    topic = script.get("topic", "")
+    topic_ja = script.get("topic_ja", topic)
+    theme = script.get("theme", "midnight")
+    date = script.get("date", "")
+    key_vocab = script.get("key_vocabulary", [])
+
+    colors = _get_theme_colors(theme)
+    accent = colors["accent"]
+    highlight_clr = colors["highlight"]
+
+    n_chapters = len(chapters)
+    total_sentences = len(timing_data)
+
+    ass = f"""[Script Info]
+Title: {BRAND_NAME} Long
+ScriptType: v4.00+
+PlayResX: {WIDTH}
+PlayResY: {HEIGHT}
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Brand,{FONT_EN},22,&H60FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,1,0,1,1,0,9,30,30,30,1
+Style: Topic,{FONT_EN},26,&H00FFFFFF,&H000000FF,&HA0101028,&HA0101028,1,0,0,0,100,100,1,0,3,12,0,8,30,100,70,1
+Style: AccentBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,100,120,1
+Style: PhaseLabel,{FONT_EN},22,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,2,0,1,1,0,8,20,100,540,1
+Style: Progress,{FONT_EN},20,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,4,0,1,0,0,7,30,100,152,1
+Style: WordEN,{FONT_EN},42,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,4,2,8,50,50,660,1
+Style: JASub,{FONT_JA},34,&H0000FFFF,&H000000FF,&HC0101028,&HC0101028,0,0,0,0,100,100,0,0,3,12,0,8,50,50,800,1
+Style: ConnBar,{FONT_EN},2,{accent},&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,8,80,80,775,1
+Style: SectionTitle,{FONT_EN},48,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,3,0,1,4,3,5,0,0,0,1
+Style: SectionSub,{FONT_JA},26,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,1,5,0,0,0,1
+Style: IntroHook,{FONT_JA},36,&H00FFFFFF,&H000000FF,&HC0101028,&HC0101028,1,0,0,0,100,100,0,0,3,14,0,8,60,60,540,1
+Style: HookLabel,{FONT_EN},52,{accent},&H000000FF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,5,3,8,20,100,380,1
+Style: Flash,{FONT_EN},10,&H00FFFFFF,&H00FFFFFF,&H00FFFFFF,&H00FFFFFF,0,0,0,0,100,100,0,0,3,0,0,5,0,0,0,1
+Style: OutroSub,{FONT_JA},28,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,1,5,60,60,0,1
+Style: OutroCTA,{FONT_JA},34,{accent},&H000000FF,&H80000000,&H80000000,1,0,0,0,100,100,0,0,1,3,1,5,40,40,0,1
+Style: VocabEN,{FONT_EN},34,{highlight_clr},&H000000FF,&H80000000,&H80000000,1,0,0,0,100,100,0,0,1,3,2,5,0,0,0,1
+Style: VocabJA,{FONT_JA},26,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,5,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+
+    events = []
+
+    # === Persistent elements ===
+    events.append(
+        f"Dialogue: 0,{_ass_time(0)},{_ass_time(total_duration)},Brand,,0,0,0,,"
+        f"{{\\fad(800,400)\\alpha&H60&}}{BRAND_NAME}"
+    )
+    events.append(
+        f"Dialogue: 1,{_ass_time(0)},{_ass_time(total_duration)},Topic,,0,0,0,,"
+        f"{{\\fad(200,400)}}  {topic}  "
+    )
+    events.append(
+        f"Dialogue: 1,{_ass_time(0)},{_ass_time(total_duration)},AccentBar,,0,0,0,,"
+        f"{{\\fad(400,400)\\p1}}m 0 0 l 820 0 l 820 3 l 0 3{{\\p0}}"
+    )
+
+    # === INTRO (0 ~ LONG_FORM_INTRO) ===
+    intro_end = LONG_FORM_INTRO
+
+    events.append(
+        f"Dialogue: 15,{_ass_time(0.3)},{_ass_time(intro_end)},HookLabel,,0,0,0,,"
+        f"{{\\fad(400,400)}}ANALYSIS"
+    )
+    wrapped_topic_ja = _wrap_ja(topic_ja, 22)
+    events.append(
+        f"Dialogue: 15,{_ass_time(0.0)},{_ass_time(intro_end)},IntroHook,,0,0,0,,"
+        f"{{\\fad(300,400)}}  {wrapped_topic_ja}  "
+    )
+    if date:
+        events.append(
+            f"Dialogue: 10,{_ass_time(0.5)},{_ass_time(intro_end)},SectionSub,,0,0,0,,"
+            f"{{\\an5\\pos(540,1000)\\fad(500,400)}}{date}"
+        )
+
+    # === CHAPTERS ===
+    for ct in chapter_timing:
+        ci = ct["chapter_idx"]
+        ch = chapters[ci]
+        sent_start_idx = ct["sent_start_idx"]
+        sent_end_idx = ct["sent_end_idx"]
+        n_sents = sent_end_idx - sent_start_idx
+        offset = ct["offset"]  # per-chapter offset: audio time → video time
+
+        ch_video_start = ct["narr_video_start"]
+        ch_video_end = ct["narr_video_end"]
+
+        # Section card during gap BEFORE narration starts
+        _add_section_card(events, ct["card_start"], ci + 1, n_chapters,
+                          ch.get("title_en", f"Chapter {ci + 1}"),
+                          ch.get("title_ja", ""),
+                          accent, duration=LONG_FORM_CHAPTER_CARD)
+
+        # Phase label (chapter number, appears after card)
+        events.append(
+            f"Dialogue: 5,{_ass_time(ch_video_start + 0.3)},{_ass_time(ch_video_end)},PhaseLabel,,0,0,0,,"
+            f"{{\\fad(400,300)}}CH.{ci + 1:02d}"
+        )
+
+        # Per-sentence elements
+        for si_local in range(n_sents):
+            si = sent_start_idx + si_local
+            if si >= total_sentences:
+                break
+            s_start = timing_data[si]["start_s"] + offset
+            s_end = timing_data[si]["end_s"] + offset
+
+            # Chapter progress dots
+            dots_parts = []
+            for di in range(n_chapters):
+                if di <= ci:
+                    dots_parts.append("{\\c" + accent + "}\u25CF")
+                else:
+                    dots_parts.append("{\\c&H60FFFFFF&}\u25CB")
+            events.append(
+                f"Dialogue: 5,{_ass_time(s_start)},{_ass_time(s_end)},Progress,,0,0,0,,"
+                f"{{\\fad(300,200)}}{' '.join(dots_parts)}"
+            )
+
+            # Connector bar
+            events.append(
+                f"Dialogue: 4,{_ass_time(s_start)},{_ass_time(s_end)},ConnBar,,0,0,0,,"
+                f"{{\\fad(350,250)\\p1}}m 0 0 l 800 0 l 800 2 l 0 2{{\\p0}}"
+            )
+
+        # Word-by-word EN captions (using per-chapter offset)
+        ch_timing_data = timing_data[sent_start_idx:sent_end_idx]
+        ch_word_groups = _estimate_word_groups(ch_timing_data, [], WORDS_PER_GROUP)
+
+        for gi, group in enumerate(ch_word_groups):
+            start = group["start"] + offset
+            raw_end = group["end"] + offset
+            if gi + 1 < len(ch_word_groups):
+                next_start = ch_word_groups[gi + 1]["start"] + offset
+                end = min(raw_end + CAPTION_LINGER, next_start + 0.12)
+            else:
+                end = min(raw_end + CAPTION_LINGER, ch_video_end)
+            display_text = " ".join(group["words"])
+            events.append(
+                f"Dialogue: 10,{_ass_time(start)},{_ass_time(end)},WordEN,,0,0,0,,"
+                f"{{\\fscx105\\fscy105\\t(0,300,\\fscx100\\fscy100)\\fad(200,150)}}{display_text}"
+            )
+
+        # JA subtitles from chapter narration_ja
+        narration_ja = ch.get("narration_ja", "")
+        if narration_ja:
+            ja_parts = [p.strip() + "\u3002" for p in narration_ja.split("\u3002") if p.strip()]
+            n_ja = len(ja_parts)
+            ch_duration = ch_video_end - ch_video_start
+            for ji, ja_text in enumerate(ja_parts):
+                ja_start = ch_video_start + (ji / n_ja) * ch_duration
+                ja_end = ch_video_start + ((ji + 1) / n_ja) * ch_duration
+                wrapped = _wrap_ja(ja_text)
+                events.append(
+                    f"Dialogue: 10,{_ass_time(ja_start)},{_ass_time(ja_end)},JASub,,0,0,0,,"
+                    f"{{\\fad(300,200)}}  {wrapped}  "
+                )
+
+    # === OUTRO ===
+    outro_start = total_duration - LONG_FORM_OUTRO
+
+    # Dark scrim for outro
+    events.append(
+        f"Dialogue: 35,{_ass_time(outro_start)},{_ass_time(total_duration)},Flash,,0,0,0,,"
+        f"{{\\alpha&H20&\\fad(500,0)\\p1}}"
+        f"m 0 0 l {WIDTH} 0 l {WIDTH} {HEIGHT} l 0 {HEIGHT}{{\\p0}}"
+    )
+
+    # Key vocabulary recap
+    if key_vocab:
+        vocab_start = outro_start + 0.3
+        vocab_end = total_duration - 0.5
+        n_show = min(6, len(key_vocab))
+        y_base = 400
+        y_step = 90
+        for vi in range(n_show):
+            kv = key_vocab[vi]
+            y_pos = y_base + vi * y_step
+            events.append(
+                f"Dialogue: 40,{_ass_time(vocab_start + vi * 0.15)},{_ass_time(vocab_end)},VocabEN,,0,0,0,,"
+                f"{{\\an5\\pos(540,{y_pos})\\fad(300,400)}}  {kv['en']}  "
+            )
+            events.append(
+                f"Dialogue: 40,{_ass_time(vocab_start + vi * 0.15 + 0.1)},{_ass_time(vocab_end)},VocabJA,,0,0,0,,"
+                f"{{\\an5\\pos(540,{y_pos + 38})\\fad(400,400)}}  {kv['ja']}  "
+            )
+
+    # CTA
+    events.append(
+        f"Dialogue: 40,{_ass_time(outro_start + 1.0)},{_ass_time(total_duration)},OutroCTA,,0,0,0,,"
+        f"{{\\an5\\pos(540,1050)\\fad(400,400)}}\u30c1\u30e3\u30f3\u30cd\u30eb\u767b\u9332\u3067\u82f1\u8a9e\u529b\uff35\uff30\uff01"
+    )
+    events.append(
+        f"Dialogue: 40,{_ass_time(outro_start + 1.5)},{_ass_time(total_duration)},OutroSub,,0,0,0,,"
+        f"{{\\an5\\pos(540,1120)\\fad(500,400)}}  KEY VOCABULARY  "
+    )
+
+    return ass + "\n".join(events) + "\n"
+
+
+def _generate_video_long_form(script: dict, timing_data: list, audio_path: str,
+                               output_path: str, use_sd: bool = True,
+                               smart_bg: bool = False):
+    """Generate long-form video from chapter-based script."""
+    theme = script.get("theme", "midnight")
+    chapters = script.get("chapters", [])
+
+    # Compute chapter-to-sentence mapping and per-chapter timing with gaps
+    chapter_ranges = _map_chapters_to_sentences(chapters, len(timing_data))
+    ch_timing, total_duration = _compute_long_form_timing(chapters, chapter_ranges, timing_data)
+
+    print(f"  Chapters: {len(ch_timing)}, Total duration: {total_duration:.1f}s")
+    for ct in ch_timing:
+        ci = ct["chapter_idx"]
+        print(f"    CH.{ci+1:02d} card={ct['card_start']:.1f}s narr={ct['narr_video_start']:.1f}-{ct['narr_video_end']:.1f}s")
+
+    # Background
+    bg_path = None
+    if use_sd:
+        try:
+            from sd_bg_generator import ensure_sd_bg
+            bg_path = ensure_sd_bg(script, BG_DIR, smart_bg=smart_bg)
+        except Exception as e:
+            print(f"SD background unavailable ({e}), using gradient fallback")
+    if bg_path is None:
+        from bg_generator import ensure_theme_bg
+        bg_path = ensure_theme_bg(theme, BG_DIR)
+
+    # Generate ASS
+    ass_content = _generate_ass_long_form(script, timing_data, total_duration, ch_timing)
+    ass_path = output_path.replace(".mp4", ".ass")
+    with open(ass_path, "w", encoding="utf-8-sig") as f:
+        f.write(ass_content)
+
+    ass_ffmpeg = ass_path.replace("\\", "/").replace(":", "\\:")
+    bg_ffmpeg = bg_path.replace("\\", "/").replace(":", "\\:")
+
+    # Audio paths
+    def _pick(name):
+        v2 = os.path.join(AUDIO_DIR, f"{name}_v2.mp3")
+        v1 = os.path.join(AUDIO_DIR, f"{name}.mp3")
+        return v2 if os.path.exists(v2) else v1
+
+    bgm_path = _pick("bgm_ambient")
+
+    # Build per-chapter audio filter: split source audio, delay each chapter
+    audio_filter_parts = []
+    ch_labels = []
+    for i, ct in enumerate(ch_timing):
+        delay_ms = int(ct["narr_video_start"] * 1000)
+        audio_filter_parts.append(
+            f"[0:a]atrim=start={ct['audio_start']:.3f}:end={ct['audio_end']:.3f},"
+            f"asetpts=PTS-STARTPTS,"
+            f"adelay={delay_ms}|{delay_ms},"
+            f"apad=whole_dur={total_duration:.2f}[ch{i}]"
+        )
+        ch_labels.append(f"[ch{i}]")
+
+    # Mix all chapter audio segments
+    n_ch = len(ch_labels)
+    audio_filter_parts.append(
+        f"{''.join(ch_labels)}amix=inputs={n_ch}:duration=longest:dropout_transition=0:normalize=0[narr]"
+    )
+    # BGM (looped via -stream_loop)
+    audio_filter_parts.append(
+        f"[1:a]volume=0.08,"
+        f"afade=t=in:d=2.0,afade=t=out:st={total_duration - 3.0:.1f}:d=3.0[bgm]"
+    )
+    # Final mix
+    audio_filter_parts.append(
+        f"[narr][bgm]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,"
+        f"apad=whole_dur={total_duration:.2f}[aout]"
+    )
+    audio_filter = ";".join(audio_filter_parts)
+
+    # Video filter (gentler zoom for longer video)
+    zoom_scale = 1.03
+    scaled_w = int(WIDTH * zoom_scale)
+    scaled_h = int(HEIGHT * zoom_scale)
+    zoom_frames = int(total_duration * 30)
+
+    video_filter = (
+        f"movie='{bg_ffmpeg}',loop=999:1:0,"
+        f"scale={scaled_w}:{scaled_h},"
+        f"zoompan=z='{zoom_scale}-0.00005*on':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+        f":d={zoom_frames}:s={WIDTH}x{HEIGHT}:fps=30,"
+        f"drawbox=x=0:y=100:w={WIDTH}:h=950:color=0x000000@0.45:t=fill,"
+        f"drawbox=x=0:y={HEIGHT - 6}:w={WIDTH}:h=6:color=0xFFFFFF@0.12:t=fill,"
+        f"drawbox=x=0:y={HEIGHT - 6}:w='(t/{total_duration:.2f})*{WIDTH}':h=6"
+        f":color=0x00CCFF@0.85:t=fill,"
+        f"ass='{ass_ffmpeg}'[vout]"
+    )
+
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", audio_path,
+        "-stream_loop", "-1", "-i", bgm_path,
+        "-filter_complex",
+        f"{video_filter};{audio_filter}",
+        "-map", "[vout]",
+        "-map", "[aout]",
+        "-c:v", "libx264",
+        "-preset", "fast",
+        "-crf", "20",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-ar", "44100",
+        "-shortest",
+        "-t", f"{total_duration:.2f}",
+        output_path,
+    ]
+
+    print(f"Generating long-form video ({total_duration:.1f}s, {len(chapters)} chapters)...")
+    subprocess.run(cmd, check=True)
+    print(f"Video saved: {output_path}")
+
+
 def generate_youtube_description(script: dict) -> str:
     """Generate YouTube Shorts description text from script data."""
     topic = script["topic"]
@@ -777,10 +1197,14 @@ def compute_phase_timing(
     if nav_durations is None:
         nav_durations = {}
 
-    # Dynamic hook phase duration: extends if Zundamon hook line is long
+    # Dynamic hook phase duration: extends if Zundamon hook + challenge lines are long
     hook_duration = HOOK_DURATION
+    hook_nav_end = 0.0
     if "hook_start" in nav_durations:
         hook_nav_end = 0.3 + nav_durations["hook_start"]
+    if "hook_challenge" in nav_durations:
+        hook_nav_end = hook_nav_end + 0.3 + nav_durations["hook_challenge"]
+    if hook_nav_end > 0:
         hook_duration = max(HOOK_DURATION, hook_nav_end + 0.5)
 
     narr_timing = timing_data[:narr_sentence_count]
@@ -846,6 +1270,7 @@ def compute_phase_timing(
         "total_duration": total_duration,
         "kp_timing_data": kp_timing_data,
         "narration_offset": narration_offset,
+        "_nav_durations": nav_durations,
     }
 
 
@@ -866,6 +1291,13 @@ def generate_video(script_path: str, audio_path: str, timing_path: str,
         script = json.load(f)
     with open(timing_path, "r", encoding="utf-8") as f:
         timing_data = json.load(f)
+
+    # Long-form: use separate pipeline
+    if script.get("format") == "long_form":
+        return _generate_video_long_form(
+            script, timing_data, audio_path, output_path,
+            use_sd=use_sd, smart_bg=smart_bg,
+        )
 
     theme = script.get("theme", "midnight")
 

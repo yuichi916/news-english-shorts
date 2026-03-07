@@ -1,0 +1,81 @@
+{
+  "id": "2026-03-07_oil_surge_market",
+  "date": "2026-03-07",
+  "topic": "Oil price surge triggers stock market crash",
+  "theme": "ember",
+  "hook_text": "原油急騰で株大暴落！ダウ800ポイント下落",
+  "sources": [
+    {"name": "CNN Business", "url": "cnn.com/2026/03/05/investing/us-stocks-oil-iran"},
+    {"name": "CNBC", "url": "cnbc.com/2026/03/04/stock-market-today-live-updates-iran-war.html"},
+    {"name": "NPR", "url": "npr.org/2026/03/06/g-s1-112788/oil-prices-stocks-jobs-report"},
+    {"name": "The Motley Fool", "url": "fool.com/coverage/stock-market-today/2026/03/05/stock-market-today-mar-5-oil-surge-and-ai-export-fears-drag-down-major-indexes/"}
+  ],
+  "mission": {
+    "ja": "原油価格は1週間で何%上昇したか？英語で聞き取ろう！",
+    "answer_ja": "答え: thirty-five percent（35%上昇、1983年以来最大の週間上昇率）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "CNN Business"},
+    {"sentence_idx": 1, "source": "CNBC"},
+    {"sentence_idx": 2, "source": "The Motley Fool"},
+    {"sentence_idx": 3, "source": "NPR"},
+    {"sentence_idx": 4, "source": "CNN Business"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "West Texas Intermediate crude oil has surged past ninety dollars a barrel, posting its biggest weekly gain of thirty-five percent since oil futures trading began in nineteen eighty-three. The spike was triggered by the escalating U.S.-Iran conflict after President Trump declared there would be no deal without an unconditional surrender. The Dow Jones tumbled nearly eight hundred points on Wednesday, and finished the week down three percent, its worst performance since April. A weak jobs report on Friday added to fears of stagflation, a toxic mix of slow growth and rising inflation that leaves the Federal Reserve with no good tools to respond. Analysts warn the combination of high energy costs and economic uncertainty could push the U.S. closer to recession if oil prices remain elevated.",
+    "highlights": ["surged past ninety dollars", "biggest weekly gain", "thirty-five percent", "escalating U.S.-Iran conflict", "unconditional surrender", "tumbled nearly eight hundred points", "worst performance since April", "stagflation", "slow growth and rising inflation", "push the U.S. closer to recession"]
+  },
+  "insight": {
+    "en": "When oil prices spike, it acts like a tax on the entire economy. Every product that needs to be shipped costs more, every commute gets pricier, and businesses face tough choices between raising prices or cutting jobs.",
+    "ja": "原油価格の急騰は経済全体への税金のように機能する。輸送が必要な全ての製品が値上がりし、通勤コストも上昇、企業は値上げかリストラかの厳しい選択を迫られる。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "WTI原油が90ドル突破、週間上昇率35%は1983年以来最大。", "start": 0.0},
+    {"text": "トランプ大統領がイランの「無条件降伏」を要求し原油が急騰。", "start": 5.0},
+    {"text": "ダウは水曜に約800ポイント下落、週間で3%安は4月以来最悪。", "start": 9.5},
+    {"text": "弱い雇用統計がスタグフレーション懸念を増幅、FRBは打つ手なし。", "start": 14.0},
+    {"text": "原油高が続けば米国はリセッションに近づくとアナリストが警告。", "start": 18.5}
+  ],
+  "data_points": [
+    {"value": "35%", "label": "oil weekly gain", "sentence_idx": 0},
+    {"value": "$90", "label": "WTI crude price", "sentence_idx": 0},
+    {"value": "800pt", "label": "Dow drop", "sentence_idx": 2}
+  ],
+  "key_phrases": [
+    {
+      "en": "surge",
+      "ja": "急騰する・急上昇する",
+      "example": "Oil prices surged past ninety dollars a barrel."
+    },
+    {
+      "en": "stagflation",
+      "ja": "スタグフレーション（景気停滞+インフレ）",
+      "example": "Fears of stagflation are growing among investors."
+    },
+    {
+      "en": "recession",
+      "ja": "景気後退・リセッション",
+      "example": "High oil prices could push the economy into recession."
+    }
+  ],
+  "word_tips": [
+    {"sentence_idx": 0, "word": "crude oil", "ja": "原油"},
+    {"sentence_idx": 1, "word": "escalating", "ja": "激化する"},
+    {"sentence_idx": 2, "word": "tumbled", "ja": "急落した"},
+    {"sentence_idx": 3, "word": "inflation", "ja": "インフレ"},
+    {"sentence_idx": 4, "word": "elevated", "ja": "高い水準の"}
+  ],
+  "navigator": {
+    "intro": "今日は原油と株価の大ニュースなのだ！お金に関わる大事な話なのだ！英語で聞き取りチャレンジなのだ！",
+    "outro": "経済ニュースの英語はビジネスでも役立つのだ！キーフレーズを覚えてニュースを読めるようになるのだ！チャンネル登録よろしくなのだ！"
+  },
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#原油価格", "#株式市場", "#スタグフレーション", "#TOEIC", "#英語リスニング", "#Shorts"]
+}

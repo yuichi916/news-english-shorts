@@ -65,12 +65,31 @@ def _build_navigator_lines(script: dict) -> list[dict]:
     else:
         outro_text = "面白かったらチャンネル登録してほしいのだ！また明日なのだ！"
 
+    # Challenge question: read aloud the mission question
+    mission = script.get("mission", {})
+    mission_ja = mission.get("ja", "")
+    # Trim trailing "英語で聞き取ろう！" to avoid redundancy with intro
+    challenge_text = mission_ja
+    if challenge_text.endswith("英語で聞き取ろう！"):
+        challenge_text = challenge_text[:-len("英語で聞き取ろう！")]
+    # Add Zundamon-style ending
+    if challenge_text and not challenge_text.endswith("のだ"):
+        challenge_text = challenge_text.rstrip("？?。、") + "？聞き取れるかなのだ！"
+
     lines = [
         {
             "phase": "hook",
             "text": intro_text,
             "time_key": "hook_start",
         },
+    ]
+    if challenge_text:
+        lines.append({
+            "phase": "challenge",
+            "text": challenge_text,
+            "time_key": "hook_challenge",
+        })
+    lines += [
         {
             "phase": "listen",
             "text": "英語をよく聞くのだ！",
@@ -106,8 +125,15 @@ def _compute_line_offsets(phase_timing: dict) -> dict[str, float]:
     kp_end = phase_timing["kp_end"]
     total = phase_timing["total_duration"]
 
+    # hook_challenge starts right after hook_start finishes
+    hook_challenge_offset = 0.3
+    nav_durations = phase_timing.get("_nav_durations", {})
+    if "hook_start" in nav_durations:
+        hook_challenge_offset = 0.3 + nav_durations["hook_start"] + 0.3
+
     return {
         "hook_start": 0.3,
+        "hook_challenge": hook_challenge_offset,
         "listen_card": hook_duration + 0.2,
         "kp_card": phase_timing["all_audio_end"] + 0.3,
         "answer_card": kp_end + 0.3,
@@ -246,15 +272,24 @@ def generate_navigator_clips(
         import shutil
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # Dynamic hook phase: extend if Zundamon hook line is long
+    # Dynamic hook phase: extend if Zundamon hook + challenge lines are long
     hook_duration = HOOK_DURATION
+    hook_nav_end = 0.0
     if "hook_start" in nav_durations:
         hook_nav_end = 0.3 + nav_durations["hook_start"]
+    if "hook_challenge" in nav_durations:
+        hook_nav_end = hook_nav_end + 0.3 + nav_durations["hook_challenge"]
+    if hook_nav_end > 0:
         hook_duration = max(HOOK_DURATION, hook_nav_end + 0.5)
 
     # Pre-narration line offsets (using dynamic hook_duration)
+    hook_challenge_offset = 0.3
+    if "hook_start" in nav_durations:
+        hook_challenge_offset = 0.3 + nav_durations["hook_start"] + 0.3
+
     pre_narration_offsets = {
         "hook_start": 0.3,
+        "hook_challenge": hook_challenge_offset,
         "listen_card": hook_duration + 0.2,
     }
     pre_narration_end = 0.0

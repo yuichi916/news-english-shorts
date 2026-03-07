@@ -1,0 +1,129 @@
+{
+  "id": "2026-03-08_iran_war_analysis",
+  "date": "2026-03-08",
+  "format": "long_form",
+  "topic": "2026 Iran War: Multi-Angle Analysis",
+  "topic_ja": "2026年イラン戦争：軍事・経済・地政学の多角的分析",
+  "theme": "midnight",
+
+  "sources": [
+    {"name": "Al Jazeera", "url": "aljazeera.com/news/liveblog/2026/3/6/iran-live"},
+    {"name": "CNN", "url": "cnn.com/world/live-news/iran-war-us-israel-trump-03-05-26"},
+    {"name": "CNBC", "url": "cnbc.com/2026/03/04/stock-market-today-live-updates-iran-war.html"},
+    {"name": "NPR", "url": "npr.org/2026/03/06/nx-s1-5737627/iran-us-military-poll-trump-approval"},
+    {"name": "TIME", "url": "time.com/7382335/iran-war-trump-energy-crisis/"},
+    {"name": "Brookings", "url": "brookings.edu/articles/after-the-strike-the-danger-of-war-in-iran/"},
+    {"name": "LSE", "url": "blogs.lse.ac.uk/usappblog/2026/03/03/"},
+    {"name": "IAEA", "url": "iaea.org/newscenter/statements/"},
+    {"name": "Oxford Economics", "url": "oxfordeconomics.com/resource/the-2026-iran-war/"},
+    {"name": "Amnesty International", "url": "amnesty.org/en/latest/news/2026/03/"}
+  ],
+
+  "chapters": [
+    {
+      "chapter": 1,
+      "title_en": "The Opening Strike",
+      "title_ja": "開戦 — 何が起きたか",
+      "narration": "On February twenty-eighth, twenty twenty-six, the United States and Israel launched a massive joint air campaign against Iran, beginning with a decapitation strike that killed Supreme Leader Ali Khamenei. Within the first week, coalition forces struck more than three thousand targets across Iran and destroyed forty-three Iranian warships. B-2 stealth bombers dropped dozens of two-thousand-pound bunker-busting bombs on buried ballistic missile launchers, which the U.S. Central Command says reduced Iranian missile attacks by ninety percent. Israel's military chief announced they had carried out twenty-five hundred strikes using more than six thousand weapons. The White House indicated the campaign could run four to six weeks, though the Pentagon declined to give a specific timeline. This is the largest U.S. military operation in the Middle East since the two thousand three invasion of Iraq.",
+      "narration_ja": "2026年2月28日、米国とイスラエルはイランに対する大規模な共同空爆を開始。最高指導者ハメネイ師を殺害する斬首作戦から始まった。最初の1週間で3,000以上の標的を攻撃し、イラン軍艦43隻を破壊。B-2ステルス爆撃機がバンカーバスター爆弾を投下し、イランのミサイル攻撃能力を90%削減。イスラエル軍は6,000発以上の兵器で2,500回の攻撃を実施。ホワイトハウスは作戦期間を4〜6週間と示唆したが、国防総省は具体的な期限を示さず。2003年のイラク侵攻以来、最大規模の中東軍事作戦である。",
+      "key_data": ["3,000+ targets struck", "43 warships destroyed", "90% missile reduction", "Largest since Iraq 2003"],
+      "analysis": "The scale of the opening strike reveals a level of pre-planning that suggests this was not a reactive decision. The simultaneous decapitation of Iran's leadership and degradation of its military infrastructure indicates months of intelligence preparation. The choice to lead with Khamenei's assassination commits both the U.S. and Israel to regime change, whether they publicly admit it or not."
+    },
+    {
+      "chapter": 2,
+      "title_en": "Iran's Asymmetric Retaliation",
+      "title_ja": "イランの非対称な反撃",
+      "narration": "Iran's response was not limited to defending its own territory. Tehran launched missile and drone strikes not only against U.S. and Israeli targets, but also against Gulf states hosting American military bases, including Bahrain, Kuwait, Oman, Saudi Arabia, Qatar, the United Arab Emirates, and Azerbaijan. Six U.S. servicemen have been killed. But the most devastating element of Iran's retaliation was economic. Attacks on energy infrastructure in the Gulf and threats to close the Strait of Hormuz, through which twenty percent of global oil supply passes daily, sent shockwaves through energy markets. Hezbollah in Lebanon joined the fight on March second, firing on northern Israel and opening a dangerous second front. In response, Israel expanded strikes into Lebanon, killing at least two hundred seventeen people and displacing over one hundred thousand.",
+      "narration_ja": "イランの反撃は自国防衛にとどまらなかった。米軍基地を置くバーレーン、クウェート、オマーン、サウジアラビア、カタール、UAE、アゼルバイジャンへの攻撃を実行。米兵6名が死亡。しかし最も破壊的だったのは経済的報復だ。湾岸のエネルギーインフラへの攻撃とホルムズ海峡封鎖の脅威がエネルギー市場に衝撃を与えた。3月2日にはヒズボラが参戦しイスラエル北部を攻撃。イスラエルはレバノンへの攻撃を拡大し、217人以上が死亡、10万人以上が避難した。",
+      "key_data": ["8+ countries attacked", "6 US servicemen killed", "20% global oil via Hormuz", "217+ killed in Lebanon"],
+      "analysis": "Iran's strategy reveals a sophisticated understanding of asymmetric warfare. Tehran cannot win conventionally, so it fights an economic war — holding the world's oil supply hostage through the Strait of Hormuz. The message is clear: even if you destroy our military, the economic cost will be unbearable."
+    },
+    {
+      "chapter": 3,
+      "title_en": "The Humanitarian Cost",
+      "title_ja": "人道的代償",
+      "narration": "The human toll has been staggering. At least thirteen hundred thirty-two civilians have been killed in Iran in the first eight days, with schools, hospitals, and critical infrastructure destroyed. One of the most devastating incidents occurred on the first day, when around one hundred fifty schoolchildren were among one hundred sixty-five people killed as a school in the southern city of Minab was struck. The World Health Organization has identified thirteen health facilities in Iran that have been hit. Iran's healthcare system, already strained by years of sanctions, is now overwhelmed. Before the war, basic food prices had already risen sharply, with eggs up nineteen percent and cooking oil up fifty percent year over year. The Iranian government shut down internet access on February twenty-eighth, cutting millions of people off from essential information.",
+      "narration_ja": "人的被害は甚大だ。開戦8日間でイラン民間人少なくとも1,332人が死亡。学校、病院、重要インフラが破壊された。最も悲惨な事件は初日に発生、南部ミナーブ市の学校への攻撃で約150人の児童を含む165人が死亡。WHOはイラン国内13カ所の医療施設が被弾したと確認。制裁で疲弊していた医療システムは完全に逼迫。戦前から食料価格は急騰し、卵は前年比19%増、食用油は50%増。イラン政府は2月28日にインターネットを遮断し、数百万人が情報を失った。",
+      "key_data": ["1,332+ civilian deaths", "~150 schoolchildren killed", "13 health facilities hit", "Internet shutdown since Feb 28"],
+      "analysis": "The civilian casualty rate of 1,300+ in eight days exceeds the pace of the 2003 Iraq invasion. The Minab school incident will likely become a defining image of this conflict. History shows that such incidents erode international support faster than any battlefield setback."
+    },
+    {
+      "chapter": 4,
+      "title_en": "The Strait of Hormuz Crisis",
+      "title_ja": "ホルムズ海峡危機",
+      "narration": "The Strait of Hormuz has become the most consequential battleground of this war, not for military reasons, but economic ones. Twenty million barrels of oil normally transit this narrow waterway every day. Since the war began, tanker traffic has dropped by seventy percent, with crude tanker transits falling from an average of twenty-four vessels per day to just four on March first. Hundreds of ships are stranded on both sides. The benchmark freight rate for supertankers hit an all-time high of four hundred twenty-three thousand dollars per day, a ninety-four percent increase. European gas prices surged fifty percent after Qatar halted production following Iranian drone attacks. China has entered separate negotiations with Iran to secure safe passage for its oil shipments through the strait.",
+      "narration_ja": "ホルムズ海峡がこの戦争で最も重要な戦場となった。日量2,000万バレルの石油がこの水路を通過する。開戦以降、タンカー通航量は70%減少。原油タンカーは1日平均24隻から3月1日にはわずか4隻に。数百隻が海峡の両側で立ち往生。スーパータンカーの運賃は1日42万3千ドルの史上最高値、94%上昇。カタールがイランのドローン攻撃を受けLNG生産を停止し、欧州ガス価格は50%急騰。中国はイランと自国の石油輸送の安全な通過について個別交渉を開始した。",
+      "key_data": ["70% drop in tanker traffic", "24 to 4 tankers/day", "$423K/day supertanker rate", "50% surge in EU gas"],
+      "analysis": "The Hormuz crisis reveals the fundamental vulnerability of the global energy system. China's separate negotiations with Iran signal pragmatic self-interest rather than ideological solidarity. Oil at $90 is dangerously close to the $100 threshold that could add 0.8% to global inflation and push the U.S. toward recession."
+    },
+    {
+      "chapter": 5,
+      "title_en": "Global Market Fallout",
+      "title_ja": "世界市場への衝撃",
+      "narration": "The financial markets have delivered a clear verdict. The Dow Jones dropped nearly eight hundred points in a single day and finished the week down three percent, its worst week since April. The S. and P. five hundred fell two percent for the week. But it is not just oil. The combination of surging energy costs and a weak U.S. jobs report has revived fears of stagflation, a toxic economic scenario where growth stalls while prices keep rising. This leaves the Federal Reserve in an impossible position. Raising interest rates would fight inflation but crush an already weakening economy, while cutting rates would boost growth but fuel even higher prices. Oxford Economics projects eurozone growth could be reduced by zero point one percent with inflation rising zero point five percent.",
+      "narration_ja": "金融市場は明確な判決を下した。ダウは1日で約800ポイント下落、週間3%安は4月以来最悪。S&P500も週間2%下落。しかし原油だけの問題ではない。エネルギーコスト急騰と弱い米雇用統計がスタグフレーション懸念を復活させた。成長が停滞しながら物価が上がり続ける最悪のシナリオだ。FRBは不可能な選択を迫られる。利上げはインフレを抑えるが経済を潰し、利下げは成長を促すが物価を押し上げる。オックスフォード・エコノミクスはユーロ圏成長率0.1%低下、インフレ0.5%上昇を予測。",
+      "key_data": ["Dow -800 points", "Worst week since April", "Stagflation fears", "Fed has no good tools"],
+      "analysis": "The 1970s oil crisis parallel is uncomfortably precise: a supply-side oil shock combined with a slowing economy. But 2026 may be worse — the U.S. is simultaneously dealing with trillion-dollar deficits, elevated interest rates, and a global trade war. The Fed's toolbox is effectively empty."
+    },
+    {
+      "chapter": 6,
+      "title_en": "The Nuclear Question",
+      "title_ja": "核問題の真実",
+      "narration": "One of the primary justifications for the strikes was Iran's nuclear program. Yet the reality revealed by the International Atomic Energy Agency is more nuanced than the political narrative. IAEA Director Rafael Grossi confirmed that Iran had enriched uranium to sixty percent purity, far beyond civilian needs. However, the agency's inspectors explicitly stated they had not found evidence of a coordinated Iranian program to manufacture nuclear weapons. The Natanz enrichment facility suffered significant damage to its entrance buildings, making the underground facility inaccessible, but the IAEA confirmed no radiological release occurred. Russian Foreign Minister Lavrov warned that the strikes could actually accelerate nuclear proliferation, arguing that forces will emerge in Iran in favor of acquiring a nuclear bomb.",
+      "narration_ja": "攻撃の主要な正当化理由の一つはイランの核計画だった。しかしIAEAが明らかにした現実は政治的説明よりも複雑だ。グロッシ事務局長はイランが純度60%までウランを濃縮していたことを確認。しかし査察官は核兵器製造のための組織的計画の証拠は発見していないと明言した。ナタンツ濃縮施設は入口が大きく損傷し地下施設へのアクセスが不能に。ただし放射性物質の漏洩はなかった。ラブロフ外相はこの攻撃がむしろ核拡散を加速させる可能性を警告した。",
+      "key_data": ["60% uranium enrichment", "No weapons program evidence", "Natanz entrance destroyed", "Proliferation risk warning"],
+      "analysis": "There is a well-documented 'security dilemma spiral': when a state faces existential threats, the incentive for nuclear deterrence increases. North Korea drew this lesson from Iraq — Saddam had no nukes and was overthrown. Iran's future leadership will likely draw the same conclusion. By damaging inspection infrastructure, the strikes may have traded a known, inspected program for an unknown one."
+    },
+    {
+      "chapter": 7,
+      "title_en": "Russia and China's Calculated Distance",
+      "title_ja": "ロシアと中国の計算された距離感",
+      "narration": "Despite close ties with Iran, neither Russia nor China has offered military intervention beyond diplomatic statements. They jointly requested an emergency UN Security Council session and condemned the strikes. Putin called Khamenei's assassination a cynical violation of all norms of human morals. China described it as a grave violation of Iran's sovereignty that tramples on the UN Charter. But words are where the support ends. Russia, bogged down in Ukraine with an overstretched military and sanctions-hit economy, simply lacks the capacity to project power into a new theater. China has taken a pragmatic approach, quietly negotiating with Iran for safe passage of its oil shipments rather than confronting the U.S. Former Commerce Secretary Wilbur Ross openly stated that the operation has demonstrated to both China and Russia the power of the U.S. military.",
+      "narration_ja": "イランとの緊密な関係にもかかわらず、ロシアも中国も外交声明以上の軍事介入を行っていない。両国は国連安保理の緊急会合を要請し攻撃を非難。プーチンはハメネイ師暗殺を「人間の道徳の規範に対する冷笑的な違反」と呼んだ。中国は「国連憲章を踏みにじる重大な違反」と表現。しかし支援は言葉止まりだ。ウクライナ戦争で消耗したロシアには新たな戦場に力を投射する余力がない。中国は米国に対抗するのではなく、自国の石油輸送の安全確保についてイランと静かに交渉。ロス元商務長官はイラン作戦が中露両国に米軍の力を示したと明言した。",
+      "key_data": ["No military support from Russia/China", "Joint UN emergency session", "Russia overstretched from Ukraine", "China negotiating oil passage"],
+      "analysis": "The Russia-China response shatters the notion of a unified anti-Western axis. Russia cannot even protect its most important regional ally. China treats the war as a supply chain problem, not an ideological battle. The lesson for future states: Russian and Chinese security guarantees are worthless when tested against American military power."
+    },
+    {
+      "chapter": 8,
+      "title_en": "American Public Opinion",
+      "title_ja": "アメリカ世論の分断",
+      "narration": "The war is deeply unpopular at home. A PBS, NPR, and Marist poll found fifty-six percent of Americans oppose the military action, with only forty-four percent in support. An even more striking Reuters Ipsos poll showed just twenty-seven percent approval. The partisan divide is extreme. Eighty-four percent of Republicans support the action while eighty-six percent of Democrats oppose it. Among independents, roughly six in ten disapprove. Nearly seventy percent of all Americans say Trump needs Congressional authorization to continue, which he does not have. Anti-war protests have erupted across the country. Perhaps most significantly, the war is fraying the MAGA coalition itself, with its anti-interventionist wing expressing disappointment and anger that analysts warn could amplify a Democratic wave in the twenty twenty-six midterm elections.",
+      "narration_ja": "この戦争は国内で極めて不人気だ。PBS/NPR/マリスト調査で56%が反対、支持は44%。ロイター/イプソスではさらに低く支持はわずか27%。党派の分断は極端。共和党員84%が支持、民主党員86%が反対。無党派層の約6割が反対。全米国民の約70%がトランプに議会承認が必要と回答しているが承認は得ていない。全米で反戦デモが拡大。最も注目すべきは、MAGA連合内部の反介入主義派が失望と怒りを表明し連合に亀裂が入っていることだ。2026年中間選挙への影響は甚大と分析されている。",
+      "key_data": ["56% oppose (PBS/Marist)", "27% approve (Reuters/Ipsos)", "70% say need Congress approval", "MAGA coalition fracturing"],
+      "analysis": "This war lacks democratic legitimacy. Initial Iraq War support was 72% — Iran starts from a much lower baseline. The independent voter numbers are a political earthquake: six in ten opposing is catastrophic for Republicans heading into midterms. The political sustainability of this war is measured in weeks, not months."
+    },
+    {
+      "chapter": 9,
+      "title_en": "The Endgame Problem",
+      "title_ja": "出口なき戦争",
+      "narration": "The most troubling aspect of this conflict is the absence of a coherent exit strategy. The White House has stated four objectives: eliminating Iran's missile threat, destroying its naval capacity, disrupting weapons production, and ending its path to a nuclear weapon. Yet Trump has also demanded Iran's unconditional surrender and suggested he should have a role in choosing the country's next leader. In interviews, Trump has contradicted himself, saying the war was planned for about four weeks in one statement, while suggesting it could end in days in another. For regime change to succeed, analysts at Brookings say one of three conditions must be met: the regime's security forces must fracture, top leaders must refuse to authorize force, or there must be elite defections. None of these conditions currently exist. U.S. officials have privately warned this could turn Iran into a failed state like post-invasion Iraq.",
+      "narration_ja": "この紛争で最も懸念すべきは一貫した出口戦略の不在だ。ホワイトハウスはミサイル脅威の排除、海軍力の破壊、兵器生産の中断、核開発阻止の4目標を掲げた。しかしトランプは無条件降伏も要求し次の指導者選びへの関与も示唆。インタビューでは矛盾する発言。ある時は4週間の計画、別の時は数日で終わると。ブルッキングスは体制転換には治安部隊の分裂、幹部の武力行使拒否、エリート離反のいずれかが必要と指摘するが、現時点でいずれも満たされていない。米国当局者はイラクのような破綻国家になるリスクを非公式に警告している。",
+      "key_data": ["4 stated objectives", "Demands 'unconditional surrender'", "Contradictory timelines", "3 conditions for regime change (none met)"],
+      "analysis": "Every major U.S. intervention since WWII has shown that destroying a regime is far easier than building what comes after. Afghanistan 2001-2021 is most relevant: two decades ending with the Taliban's return. A war planned for four weeks to achieve what took twenty years and failed suggests either extraordinary confidence or extraordinary naivety."
+    },
+    {
+      "chapter": 10,
+      "title_en": "The World After Iran",
+      "title_ja": "結論 — イラン後の世界",
+      "narration": "Eight days into this war, the contours of its consequences are already visible. The military campaign has achieved its immediate tactical objectives, degrading Iran's conventional capabilities and eliminating its top leadership. But tactical success and strategic success are not the same thing. The economic damage is global and accelerating. The humanitarian cost is mounting with each passing day. American public support is thin and eroding. International legitimacy is contested. The exit strategy is unclear at best, contradictory at worst. And the nuclear nonproliferation regime, the very thing this war was supposed to protect, may emerge weaker, not stronger. What is clear is that the Middle East after this war will look fundamentally different. The question that remains unanswered is whether that difference will make the world safer or more dangerous.",
+      "narration_ja": "開戦8日目にしてこの戦争の帰結の輪郭は既に見えている。軍事作戦は戦術目標を達成した。しかし戦術的成功と戦略的成功は同義ではない。経済的被害はグローバルに拡大し加速している。人道的コストは日々増大。米国民の支持は薄く減少傾向。国際的正当性は争われている。出口戦略は不明確で矛盾している。そしてこの戦争が守るはずだった核不拡散体制は強化されるどころか弱体化する可能性がある。この戦争後の中東は根本的に異なるものになる。未だ答えの出ない問いは、それが世界をより安全にするのか、より危険にするのかということだ。",
+      "key_data": ["Tactical success ≠ strategic success", "Economic damage accelerating", "Nonproliferation regime weakened"],
+      "analysis": "The decisions being made in these early days will determine the path forward for decades. History's verdict on this war will not come for years, but the patterns of past interventions — Iraq, Afghanistan, Libya — offer sobering lessons about the gap between military victory and lasting peace."
+    }
+  ],
+
+  "key_vocabulary": [
+    {"en": "decapitation strike", "ja": "斬首作戦（指導者を標的とする攻撃）"},
+    {"en": "asymmetric warfare", "ja": "非対称戦争"},
+    {"en": "stagflation", "ja": "スタグフレーション（景気停滞+インフレ）"},
+    {"en": "Strait of Hormuz", "ja": "ホルムズ海峡"},
+    {"en": "regime change", "ja": "レジームチェンジ（体制転換）"},
+    {"en": "unconditional surrender", "ja": "無条件降伏"},
+    {"en": "nonproliferation", "ja": "核不拡散"},
+    {"en": "exit strategy", "ja": "出口戦略"},
+    {"en": "chokepoint", "ja": "チョークポイント（要衝・急所）"},
+    {"en": "humanitarian law", "ja": "国際人道法"},
+    {"en": "security dilemma", "ja": "安全保障のジレンマ"},
+    {"en": "failed state", "ja": "破綻国家"}
+  ]
+}

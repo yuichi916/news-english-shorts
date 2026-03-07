@@ -1,0 +1,82 @@
+{
+  "id": "2026-03-07_china_tech_plan",
+  "date": "2026-03-07",
+  "topic": "China five-year plan targets AI and quantum leadership",
+  "theme": "purple",
+  "hook_text": "中国がAI・量子・6Gで世界トップ宣言！",
+  "sources": [
+    {"name": "The Quantum Insider", "url": "thequantuminsider.com/2026/03/05/chinas-new-five-year-plan-specifically-targets-quantum-leadership-and-ai-expansion/"},
+    {"name": "GIGAZINE", "url": "gigazine.net/gsc_news/en/20260306-china-five-year-plan/"},
+    {"name": "BusinessWorld", "url": "bworldonline.com/world/2026/03/05/734429/chinas-new-five-year-plan-calls-for-ai-throughout-its-economy-tech-breakthroughs/"},
+    {"name": "IMD", "url": "imd.org/ibyimd/asian-hub/chinas-2026-playbook-redefining-global-tech-industry-and-governance/"}
+  ],
+  "mission": {
+    "ja": "中国の5カ年計画でAIは何回以上言及されているか？英語で聞き取ろう！",
+    "answer_ja": "答え: more than fifty times（50回以上）"
+  },
+  "source_mentions": [
+    {"sentence_idx": 0, "source": "GIGAZINE"},
+    {"sentence_idx": 1, "source": "The Quantum Insider"},
+    {"sentence_idx": 2, "source": "BusinessWorld"},
+    {"sentence_idx": 3, "source": "The Quantum Insider"},
+    {"sentence_idx": 4, "source": "IMD"}
+  ],
+  "narration_structure": [
+    {"sentence_idx": 0, "role": "FACT"},
+    {"sentence_idx": 1, "role": "DETAIL"},
+    {"sentence_idx": 2, "role": "DETAIL"},
+    {"sentence_idx": 3, "role": "COUNTER"},
+    {"sentence_idx": 4, "role": "OUTLOOK"}
+  ],
+  "narration": {
+    "text": "China has unveiled its fifteenth five-year plan, mentioning artificial intelligence more than fifty times and launching a sweeping AI plus action plan to integrate the technology across all industries. The blueprint identifies quantum computing, humanoid robots, sixth-generation communications, and brain-machine interfaces as priority areas for national investment. Beijing plans to deploy AI agents that perform tasks with minimal human guidance and experiment with robots in sectors facing labor shortages. The government has also pledged breakthroughs in nuclear fusion, reusable rockets, and a space-earth quantum communication network. Experts say the plan signals China's determination to achieve technological self-reliance and challenge U.S. dominance in the global tech race.",
+    "highlights": ["fifteenth five-year plan", "more than fifty times", "AI plus action plan", "quantum computing", "humanoid robots", "sixth-generation communications", "brain-machine interfaces", "minimal human guidance", "nuclear fusion", "technological self-reliance"]
+  },
+  "insight": {
+    "en": "China's tech blueprint reads like science fiction, but with massive state funding behind it. The race between the U.S. and China in AI and quantum computing will shape not just technology, but global power dynamics for decades.",
+    "ja": "中国のテクノロジー計画はSFのようだが、巨額の国家予算が裏付けにある。米中間のAI・量子コンピューティング競争は、技術だけでなく今後数十年の世界の力関係を左右する。"
+  },
+  "japanese_subtitle_segments": [
+    {"text": "中国が第15次5カ年計画を発表、AIを50回以上言及。", "start": 0.0},
+    {"text": "量子コンピュータ・人型ロボット・6G・脳機械インターフェースを重点分野に。", "start": 5.0},
+    {"text": "人の指示なしで動くAIエージェントやロボットの実用化を計画。", "start": 10.0},
+    {"text": "核融合・再利用ロケット・宇宙地上量子通信網でもブレークスルーを宣言。", "start": 14.5},
+    {"text": "専門家は米国に対抗する技術自立への強い決意と分析。", "start": 18.5}
+  ],
+  "data_points": [
+    {"value": "50+", "label": "AI mentions", "sentence_idx": 0},
+    {"value": "6G", "label": "next-gen comms", "sentence_idx": 1},
+    {"value": "15th", "label": "five-year plan", "sentence_idx": 0}
+  ],
+  "key_phrases": [
+    {
+      "en": "self-reliance",
+      "ja": "自立・自給自足",
+      "example": "China aims to achieve technological self-reliance."
+    },
+    {
+      "en": "blueprint",
+      "ja": "計画・青写真",
+      "example": "The blueprint identifies quantum computing as a priority."
+    },
+    {
+      "en": "breakthrough",
+      "ja": "ブレークスルー・画期的進展",
+      "example": "They pledged breakthroughs in nuclear fusion technology."
+    }
+  ],
+  "word_tips": [
+    {"sentence_idx": 0, "word": "unveiled", "ja": "公表した"},
+    {"sentence_idx": 0, "word": "sweeping", "ja": "大規模な"},
+    {"sentence_idx": 1, "word": "interfaces", "ja": "接続装置"},
+    {"sentence_idx": 2, "word": "deploy", "ja": "配備する"},
+    {"sentence_idx": 3, "word": "pledged", "ja": "約束した"},
+    {"sentence_idx": 4, "word": "dominance", "ja": "優位・支配"}
+  ],
+  "navigator": {
+    "intro": "今日は中国のすごい技術計画のニュースなのだ！量子コンピュータとかAIとか未来の話なのだ！英語で聞き取りチャレンジなのだ！",
+    "outro": "テクノロジーの英語は将来絶対役に立つのだ！キーフレーズを覚えて世界のニュースを読めるようになるのだ！チャンネル登録してほしいのだ！"
+  },
+  "cta": "保存して3つのフレーズを覚えよう",
+  "hashtags": ["#英語学習", "#英語ニュース", "#中国", "#AI", "#量子コンピュータ", "#6G", "#英語リスニング", "#Shorts"]
+}

@@ -38,8 +38,14 @@ def process_script(script_path: str, voice: str = DEFAULT_VOICE,
         script = json.load(f)
 
     sid = script["id"]
+    is_long_form = script.get("format") == "long_form"
+
+    # Long-form videos don't use avatar/navigator (no hook/KP/answer phases)
+    if is_long_form:
+        avatar_enabled = False
+
     print(f"\n{'='*60}")
-    print(f"Processing: {sid}")
+    print(f"Processing: {sid} {'[LONG-FORM]' if is_long_form else ''}")
     print(f"Topic: {script['topic']}")
     print(f"{'='*60}")
 

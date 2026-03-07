@@ -274,24 +274,28 @@ def generate_from_script(script_path: str, output_dir: str, voice: str = DEFAULT
             elevenlabs_voice_id = ELEVENLABS_VOICES[DEFAULT_ELEVENLABS_VOICE]
             print(f"  Voice '{voice}' not in ElevenLabs voices, using {DEFAULT_ELEVENLABS_VOICE}")
 
-    # Build narration text (narration + optional insight)
-    narr_text = script["narration"]["text"]
-    insight_en = script.get("insight", {}).get("en", "")
-    if insight_en:
-        full_text = narr_text + " " + insight_en
-    else:
-        full_text = narr_text
+    # Long-form vs short-form narration handling
+    is_long_form = script.get("format") == "long_form"
 
-    # Count narration-only sentences from narration_structure
-    narr_sentence_count = len(script.get("narration_structure", []))
+    if is_long_form:
+        chapters = script.get("chapters", [])
+        narr_text = " ".join(ch["narration"] for ch in chapters)
+        full_text = narr_text
+        insight_en = ""
+        narr_sentence_count = 0  # determined after TTS
+        kp_text = ""
+    else:
+        narr_text = script["narration"]["text"]
+        insight_en = script.get("insight", {}).get("en", "")
+        full_text = narr_text + " " + insight_en if insight_en else narr_text
+        narr_sentence_count = len(script.get("narration_structure", []))
+        examples = [kp.get("example", "") for kp in script.get("key_phrases", []) if kp.get("example")]
+        kp_text = " ".join(examples) if examples else ""
 
     audio_path = os.path.join(output_dir, f"{script_id}.mp3")
     srt_path = os.path.join(output_dir, f"{script_id}.srt")
     timing_path = os.path.join(output_dir, f"{script_id}_timing.json")
 
-    # Build KP example text
-    examples = [kp.get("example", "") for kp in script.get("key_phrases", []) if kp.get("example")]
-    kp_text = " ".join(examples) if examples else ""
     kp_audio_path = os.path.join(output_dir, f"{script_id}_kp.mp3") if kp_text else None
     kp_timing_path = os.path.join(output_dir, f"{script_id}_kp_timing.json") if kp_text else None
 
@@ -309,7 +313,10 @@ def generate_from_script(script_path: str, output_dir: str, voice: str = DEFAULT
 
     # Fallback: if narration_structure missing, use total boundaries minus insight
     if narr_sentence_count == 0:
-        narr_sentence_count = len(boundaries) - (1 if insight_en else 0)
+        if is_long_form:
+            narr_sentence_count = len(boundaries)
+        else:
+            narr_sentence_count = len(boundaries) - (1 if insight_en else 0)
 
     print(f"  Narration: {narr_sentence_count} sentences, Insight: {len(boundaries) - narr_sentence_count}")
     if kp_boundaries:

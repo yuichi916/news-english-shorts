@@ -37,7 +37,9 @@ THEME_PROMPTS = {
 
 NEGATIVE_PROMPT = (
     "text, watermark, logo, words, letters, numbers, signature, "
-    "person, face, human, hand, fingers, "
+    "person, people, face, human, man, woman, boy, girl, child, "
+    "hand, fingers, body, silhouette, character, figure, "
+    "text on screen, words on monitor, UI elements, screen content, "
     "blurry, low quality, worst quality, jpeg artifacts, "
     "3d render, photorealistic, photo, realistic"
 )
@@ -117,19 +119,119 @@ def _build_smart_prompt(script: dict) -> str:
     return message.content[0].text.strip()
 
 
+# Keyword → concrete visual elements mapping for topic-aware backgrounds
+_VISUAL_KEYWORDS = {
+    # Technology / devices
+    "iphone": "smartphone on a desk, blank dark screen, modern tech store interior",
+    "phone": "smartphone display, modern electronics shop, glass shelves",
+    "apple": "sleek modern tech store, glass architecture, minimalist product display",
+    "samsung": "electronics showroom, curved display screens, modern retail space",
+    "galaxy": "electronics store, smartphone display wall, neon blue accents",
+    "laptop": "laptop on a wooden desk, cozy cafe interior, warm lighting",
+    "pc": "desktop computer setup, dual monitors, modern home office",
+    "macbook": "laptop on a clean desk, minimalist workspace, large window view",
+    # AI / Computing
+    "ai": "futuristic server room corridor, glowing blue data streams, neural network visualization",
+    "siri": "smart speaker on a table, voice wave visualization, modern living room",
+    "chatgpt": "holographic interface floating in air, digital brain, dark tech lab",
+    "openai": "futuristic research lab, holographic displays, clean white interior",
+    "robot": "robotic arm in a factory, industrial automation, blue LED lights",
+    "chip": "close-up of circuit board, glowing microchip, semiconductor fab clean room",
+    "semiconductor": "silicon wafer, clean room facility, blue ultraviolet lighting",
+    "ram": "close-up of memory modules, circuit board traces glowing, server rack interior",
+    "memory": "RAM sticks arranged neatly, circuit board with glowing traces, data center",
+    "shortage": "empty store shelves, supply warehouse, shipping containers at port",
+    "server": "long corridor of server racks, blinking LED lights, cool blue atmosphere",
+    "data center": "massive server farm, rows of racks, blue cooling lights",
+    # Economy / Business
+    "price": "stock market trading floor, digital price ticker, financial district",
+    "market": "bustling stock exchange, digital screens with graphs, city financial district",
+    "economy": "city skyline with office towers, glass buildings, busy intersection",
+    "billion": "towering skyscrapers, financial district at night, golden lights",
+    "invest": "modern office with panoramic city view, financial charts on screens",
+    "trade": "container port with cranes, cargo ships, industrial waterfront",
+    # Politics / Government
+    "government": "grand capitol building, marble columns, national flags",
+    "president": "white house or parliament building, formal garden, flags waving",
+    "election": "voting booth, campaign posters, civic building interior",
+    "law": "courthouse interior, gavel, scales of justice, marble hall",
+    "sanction": "border checkpoint, diplomatic building, formal meeting room",
+    # War / Conflict
+    "war": "dramatic stormy sky over ruined city, smoke rising, dark atmosphere",
+    "military": "military vehicles silhouette at dusk, dramatic sky, barren landscape",
+    "strike": "explosion light on distant horizon, night sky, city silhouette",
+    "conflict": "barbed wire fence, watchtower, dramatic sunset clouds",
+    "iran": "middle eastern cityscape, mosque domes, dramatic desert sky",
+    # Climate / Environment
+    "climate": "dramatic weather over ocean, storm clouds, lightning on horizon",
+    "temperature": "thermometer rising, heatwave over cracked earth, red sunset",
+    "carbon": "industrial smokestacks, factory skyline, orange polluted sky",
+    "renewable": "wind turbines on green hills, solar panels, blue sky",
+    # Space / Science
+    "space": "space station orbiting earth, starfield, cosmic nebula",
+    "nasa": "rocket launchpad, space shuttle, starry night sky",
+    "mars": "red rocky martian landscape, dusty atmosphere, distant sun",
+    # Health / Medicine
+    "health": "modern hospital corridor, medical equipment, clean white interior",
+    "vaccine": "medical laboratory, test tubes, microscope, sterile environment",
+    "pandemic": "empty city street, hospital exterior, medical masks",
+    # General
+    "launch": "product stage with spotlight, modern presentation venue, dramatic lighting",
+    "delay": "hourglass, clock tower, waiting room, overcast sky",
+    "record": "trophy case, stadium, celebration confetti, bright lights",
+}
+
+
+def _extract_visual_elements(script: dict) -> str:
+    """Extract concrete visual elements from script content using keyword matching."""
+    topic = script.get("topic", "").lower()
+    highlights = script.get("narration", {}).get("highlights", [])
+    narration = script.get("narration", {}).get("text", "").lower()
+
+    # Collect all text to search
+    search_text = f"{topic} {' '.join(highlights).lower()} {narration}"
+
+    # Find matching visual elements, scored by specificity
+    matches = []
+    for keyword, visuals in _VISUAL_KEYWORDS.items():
+        if keyword in search_text:
+            # Score: exact topic match > highlight match > narration match
+            score = 0
+            if keyword in topic:
+                score = 3
+            elif any(keyword in h.lower() for h in highlights):
+                score = 2
+            else:
+                score = 1
+            matches.append((score, keyword, visuals))
+
+    # Sort by score (highest first), take top 2
+    matches.sort(key=lambda x: -x[0])
+    if matches:
+        # Use the top match's visuals as primary, blend with second if available
+        elements = [matches[0][2]]
+        if len(matches) > 1 and matches[1][0] >= 2:
+            # Add secondary visual if it's a strong match
+            secondary = matches[1][2].split(", ")[:2]
+            elements.append(", ".join(secondary))
+        return ", ".join(elements)
+
+    # Fallback: generic tech/news scene
+    return "modern city skyline at evening, glass office buildings, subtle neon reflections"
+
+
 def _build_prompt(script: dict) -> str:
-    """Build SD prompt from script topic and theme."""
-    topic = script.get("topic", "")
+    """Build SD prompt from script content with topic-aware visual elements."""
     theme = script.get("theme", "midnight")
     base_style = THEME_PROMPTS.get(theme, THEME_PROMPTS["midnight"])
 
-    # Create contextual prompt from topic keywords
-    topic_keywords = topic.lower().replace("'", "").replace('"', "")
+    # Extract topic-specific visual elements
+    visual_elements = _extract_visual_elements(script)
 
     prompt = (
-        f"An anime-style scenic background evoking {topic_keywords}, "
+        f"{visual_elements}, "
         f"{base_style}, "
-        "soft evening lighting, atmospheric perspective, depth of field, "
+        "soft atmospheric lighting, depth of field, "
         "anime background, illustration, masterpiece, best quality, "
         "no text, no people, no characters, no faces"
     )
